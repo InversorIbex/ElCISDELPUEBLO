@@ -59,7 +59,7 @@ export function CommunityMap({ features }: { features: Feature[] }) {
         <svg
           viewBox="0 0 760 680"
           style={{ width: `${zoom * 100}%` }}
-          role="img"
+          role="group"
           aria-labelledby="map-svg-title map-svg-desc"
         >
           <title id="map-svg-title">
