@@ -29,6 +29,9 @@ const additional: Readonly<Record<string,string>> = {
   "PARTIT DELS SOCIALISTES DE CATALUNYA (PSC-PSOE) (PSC)": "psc",
   "PARTIT COMUNISTA DELS TREBALLADORS DE CATALUNYA (PCTC)": "pctc",
   "TERUEL EXISTE (TERUEL EXISTE)": "teruelexiste",
+  "PARTIDO DRAGO CANARIAS (D.R.G)": "drago",
+  "SORIA ¡YA! (SY)": "soriaya",
+  "CONVERGENTS (CNV)": "convergents",
 };
 export const logoInfo = {
   asOf: external.reviewedAt,
