@@ -14,6 +14,7 @@ test("logos locales: integridad, fuentes oficiales y SVG sin contenido activo", 
   const ids = new Set(logoAssets.map((l) => l.id));
   for (const id of Object.values(associations)) assert.ok(ids.has(id));
   for (const logo of local) {
+    if (!("assetSha256" in logo)) throw new Error("MISSING_LOCAL_CHECKSUM");
     assert.match(logo.path, /^\/logos\/[a-z]+\.(png|jpg|svg)$/);
     assert.equal(logo.sourceType, "formation_official_website");
     assert.ok(logo.sourcePage.startsWith("https://"));
