@@ -1,8 +1,8 @@
 // LETRIXA LABS is the promoter's trade name, not a constituted legal entity.
-// Do not publish a legal identity without explicit confirmation by the controller.
+// Controller name declared by promoter; independent identity / GDPR review remains pending.
 export const legalContact = {
   tradeName: "LETRIXA LABS",
-  controllerName: null as string | null,
+  controllerName: "Inversor Ibex" as string | null,
   email: "letrixagame@gmail.com",
   reviewApproved: false,
 } as const;
