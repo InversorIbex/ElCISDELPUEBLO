@@ -141,6 +141,36 @@
       "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logotipo%20de%20Teruel%20Existe%20(2022).svg",
       "background": "light",
       "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "drago",
+      "file": "Logo Drago Canarias 2025.svg",
+      "partyPage": "https://www.dragocanarias.com/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logo_Drago_Canarias_2025.svg",
+      "path": "/api/party-logo/drago",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20Drago%20Canarias%202025.svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "soriaya",
+      "file": "Logo Soria Ya 2022.svg",
+      "partyPage": "https://soriaya.org/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logo_Soria_Ya_2022.svg",
+      "path": "/api/party-logo/soriaya",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20Soria%20Ya%202022.svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "convergents",
+      "file": "Logo convergents.svg",
+      "partyPage": "https://www.convergents.org/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logo_convergents.svg",
+      "path": "/api/party-logo/convergents",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20convergents.svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
     }
   ]
 }
