@@ -184,11 +184,11 @@
     },
     {
       "id": "prepal",
-      "file": "Logo PREPAL.JPG",
+      "file": "PREPAL (sigloide).svg",
       "partyPage": "https://commons.wikimedia.org/wiki/Category:Partido_Regionalista_del_Pa%C3%ADs_Leon%C3%A9s",
-      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logo_PREPAL.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:PREPAL_(sigloide).svg",
       "path": "/api/party-logo/prepal",
-      "sourceAsset": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Logo_PREPAL.JPG/276px-Logo_PREPAL.JPG",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/PREPAL%20(sigloide).svg",
       "background": "light",
       "sourceType": "wikimedia-commons-sourced-from-party"
     }
