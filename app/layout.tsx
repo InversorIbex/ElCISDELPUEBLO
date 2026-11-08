@@ -6,15 +6,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_ES",
-    siteName: "El CIS del Pueblo",
-    title: "El CIS del Pueblo · La política, con contexto",
+    siteName: "El Pueblo Opina",
+    title: "El Pueblo Opina · La política, con contexto",
     description:
       "Candidaturas por circunscripción, simulador de escaños y comparación con 2023. Observatorio independiente; participación todavía no abierta.",
   },
   twitter: { card: "summary_large_image" },
   title: {
-    default: "El CIS del Pueblo · Observatorio ciudadano",
-    template: "%s · El CIS del Pueblo",
+    default: "El Pueblo Opina · Observatorio ciudadano",
+    template: "%s · El Pueblo Opina",
   },
   description:
     "Candidaturas por circunscripción, simulador de escaños y fuentes oficiales. Observatorio independiente. Participación todavía no abierta.",
@@ -37,13 +37,13 @@ export default function Layout({
           <Link
             className="brand"
             href="/"
-            aria-label="El CIS del Pueblo, inicio"
+            aria-label="El Pueblo Opina, inicio"
           >
             <span className="brand-icon">
-              c<span>·</span>
+              p<span>·</span>
             </span>
             <span>
-              EL CIS <small>DEL PUEBLO</small>
+              EL PUEBLO <small>OPINA</small>
             </span>
           </Link>
           <nav aria-label="Navegación principal">
@@ -63,7 +63,7 @@ export default function Layout({
         <footer>
           <div className="footer-top">
             <Link className="wordmark" href="/">
-              EL CIS DEL PUEBLO<span>Un espacio para escuchar.</span>
+              EL PUEBLO OPINA<span>Un espacio para escuchar.</span>
             </Link>
             <div>
               <Link href="/metodologia">Metodología y transparencia ↗</Link>
