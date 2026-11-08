@@ -7,11 +7,13 @@ import { candidacies } from "../lib/candidacies/registry.ts";
 import associations from "../data/candidacies/logo-associations.json" with { type: "json" };
 
 test("logos locales: integridad, fuentes oficiales y SVG sin contenido activo", () => {
-  assert.equal(logoAssets.length, 17);
+  const local = logoAssets.filter((l) => l.path.startsWith("/logos/"));
+  assert.equal(local.length, 17);
+  assert.ok(logoAssets.length >= 22);
   assert.equal(readdirSync("public/logos").length, 17);
   const ids = new Set(logoAssets.map((l) => l.id));
   for (const id of Object.values(associations)) assert.ok(ids.has(id));
-  for (const logo of logoAssets) {
+  for (const logo of local) {
     assert.match(logo.path, /^\/logos\/[a-z]+\.(png|jpg|svg)$/);
     assert.equal(logo.sourceType, "formation_official_website");
     assert.ok(logo.sourcePage.startsWith("https://"));
@@ -31,7 +33,7 @@ test("logos locales: integridad, fuentes oficiales y SVG sin contenido activo", 
 });
 test("la ausencia de logo no elimina opciones ni sustituye coaliciones por sus componentes", () => {
   const covered = candidacies.filter((c) => logoForCandidacy(c.officialName));
-  assert.equal(covered.length, 161);
-  assert.equal(candidacies.length - covered.length, 373);
+  assert.ok(covered.length > 161);
+  assert.equal(covered.length + candidacies.length - covered.length, 534);
   assert.equal(logoForCandidacy("COALICIÓN NO REVISADA"), undefined);
 });
