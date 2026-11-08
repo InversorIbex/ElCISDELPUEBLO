@@ -23,6 +23,12 @@ const additional: Readonly<Record<string,string>> = {
   "JUNTS PER CATALUNYA (JxCat)": "junts",
   "ESQUERRA REPUBLICANA DE CATALUNYA (ERC)": "erc",
   "EUZKO ALDERDI JELTZALEA-PARTIDO NACIONALISTA VASCO (EAJ-PNV)": "pnv",
+  "POR UN MUNDO MAS JUSTO (MUNDO+JUSTO)": "mundojusto",
+  "POR UN MUNDO MAIS XUSTO (MUNDO+JUSTO)": "mundojusto",
+  "POR UN MUNDO MÁS JUSTO (MUNDO+JUSTO)": "mundojusto",
+  "PARTIT DELS SOCIALISTES DE CATALUNYA (PSC-PSOE) (PSC)": "psc",
+  "PARTIT COMUNISTA DELS TREBALLADORS DE CATALUNYA (PCTC)": "pctc",
+  "TERUEL EXISTE (TERUEL EXISTE)": "teruelexiste",
 };
 export const logoInfo = {
   asOf: external.reviewedAt,
