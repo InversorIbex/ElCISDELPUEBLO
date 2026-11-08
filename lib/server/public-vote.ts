@@ -6,7 +6,11 @@ export const voteLimits = Object.freeze({desktopPerIpPerDay:2, desktopPerBrowser
 type Mode = "mobile" | "desktop";
 type Vote = { provinceCode:string; candidacyId:string; browserToken:string; ip:string; mode:Mode; requestToken:string };
 export function madridCalendarDate(now:Date) {
-  return new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/Madrid",year:"numeric",month:"2-digit",day:"2-digit"}).format(now);
+  const parts=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/Madrid",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(now);
+  const read=(type:string)=>parts.find(p=>p.type===type)?.value;
+  const [year,month,day]=[read("year"),read("month"),read("day")];
+  if(!year||!month||!day)throw new Error("INVALID_CALENDAR_DATE");
+  return `${year}-${month}-${day}`;
 }
 function hmac(secret:string, scope:string,value:string) {
   return createHmac("sha256",secret).update(scope).update("\0").update(value).digest("hex");
