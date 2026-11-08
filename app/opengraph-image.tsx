@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 export const alt =
-  "El CIS del Pueblo. Candidaturas, territorio y matemática electoral. Participación todavía no abierta.";
+  "El Pueblo Opina. Candidaturas, territorio y matemática electoral. Participación todavía no abierta.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export default function Image() {
@@ -20,7 +20,7 @@ export default function Image() {
       }}
     >
       <div style={{ display: "flex", fontSize: 24, letterSpacing: 5 }}>
-        EL CIS DEL PUEBLO
+        EL PUEBLO OPINA
       </div>
       <div
         style={{
