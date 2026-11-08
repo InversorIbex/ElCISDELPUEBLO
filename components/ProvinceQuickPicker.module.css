@@ -1,0 +1,14 @@
+.panel{margin:2rem auto;padding:clamp(1.25rem,3vw,2.5rem);border-radius:24px;background:#f8f7f4;color:#29343b;border:1px solid #e8e4ed;max-width:1200px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap}
+.top h2{font-size:clamp(1.65rem,3vw,2.6rem);letter-spacing:-.035em;line-height:1.1;margin:.5rem 0}
+.top p{color:#52616c;max-width:55ch}
+.eyebrow{font-size:.75rem;letter-spacing:.09em;font-weight:700;color:#62587b}
+.count{background:#ddd6f3;border-radius:999px;padding:.45rem .8rem;font-size:.8rem;font-weight:700}
+.label{display:block;font-weight:650;font-size:.875rem;margin:1.1rem 0 .45rem}
+.input{box-sizing:border-box;display:block;width:100%;border:1px solid #b8bdc4;border-radius:12px;min-height:48px;padding:.75rem 1rem;background:#fff;color:#29343b;font:inherit}
+.input:focus-visible,.cta:focus-visible{outline:3px solid #776b9b;outline-offset:3px}
+.cta{display:inline-flex;align-items:center;margin-top:1.2rem;min-height:48px;padding:.75rem 1.2rem;border-radius:12px;background:#ddd6f3;color:#29343b;font-weight:700;text-decoration:none}
+.cta:hover{background:#cfc4ec}
+.hint{color:#52616c;font-size:.88rem;margin-top:1rem}
+.disclaimer{font-size:.8rem;color:#52616c;border-top:1px solid #e5e0e9;margin-top:1.5rem;padding-top:1rem}
+@media(max-width:600px){.panel{border-radius:16px;margin:1rem 0}.cta{display:flex;justify-content:center;text-align:center}}
