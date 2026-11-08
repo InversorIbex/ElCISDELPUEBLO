@@ -5,7 +5,7 @@ import { approvedProvinceResult } from "@/lib/published-provincial";
 import Link from "next/link";
 import previous from "@/data/elections/congress-2023-results.json";
 import { provinces, provinceByCode, displayName } from "@/lib/territories";
-export const metadata = { title: "Resultados por circunscripción" };
+export const metadata = { title: "Resultados por circunscripción · Sin publicación del sondeo", robots: { index: false, follow: true } };
 export default async function Results({
   searchParams,
 }: {
