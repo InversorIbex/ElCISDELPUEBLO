@@ -1,6 +1,5 @@
 import { ProvinceQuickPicker } from "@/components/ProvinceQuickPicker";
-import { CommunityMap } from "@/components/CommunityMap";
-import mapData from "@/data/cartography/communities-svg.json";
+import { ProvinceMap } from "@/components/ProvinceMap";
 import { TerritorySelector } from "@/components/TerritorySelector";
 import { communities, provinces, municipalities, displayName } from "@/lib/territories";
 import Link from "next/link";
@@ -110,15 +109,7 @@ export default function Home() {
         </div>
       </section>
       <ProvinceQuickPicker provinces={provinces.map((p) => ({ code: p.code, name: displayName(p.name) }))} />
-      <section className="section">
-        <CommunityMap
-          features={mapData.features.map((f) => ({
-            ...f,
-            href: `/participar?comunidad=${f.code}#circunscripcion`,
-          }))}
-          selectionMode
-        />
-      </section>
+      <ProvinceMap provinces={provinces.map((p) => ({ code: p.code, name: displayName(p.name) }))} />
       <section
         className="section launch-tools"
         aria-labelledby="herramientas-title"
