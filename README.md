@@ -1,6 +1,6 @@
-# El CIS del Pueblo
+# EL PUEBLO OPINA
 
-Aplicación Next.js con catálogo INE 2026, mapa autonómico IGN, simulador manual y motor PostgreSQL aislado de pruebas, sin recogida de opiniones ni resultados ficticios. Interfaz informativa publicada en https://elcisdelpueblo.vercel.app/. La recogida de opiniones sigue cerrada; no es una versión de producción del motor de votos.
+Proyecto público «EL PUEBLO OPINA». Aplicación Next.js con catálogo INE 2026, mapa autonómico IGN, simulador manual y motor PostgreSQL aislado de pruebas, sin recogida de opiniones ni resultados ficticios. Interfaz informativa publicada en https://elcisdelpueblo.vercel.app/. La recogida de opiniones sigue cerrada; no es una versión de producción del motor de votos.
 
 Requisitos: Node >=20.9 (validado con 24.22.1), npm 11.
 
