@@ -1,3 +1,5 @@
+import { ProvinceMap } from "@/components/ProvinceMap";
+import { approvedProvincialWinners } from "@/lib/results/provincial-winners";
 import { ParticipationAnalysis } from "@/components/ParticipationAnalysis";
 import { CandidacyResults } from "@/components/CandidacyResults";
 import { candidaciesForProvince } from "@/lib/candidacies/registry";
@@ -61,6 +63,7 @@ export default async function Results({
           Consultar resultados →
         </button>
       </form>
+      <ProvinceMap provinces={provinces.map(p=>({code:p.code,name:displayName(p.name)}))} winners={approvedProvincialWinners()} />
       {query.provincia && !province && (
         <p role="alert" className="form-error">
           Código de circunscripción no válido. Se muestra España; selecciona un
@@ -73,7 +76,7 @@ export default async function Results({
         <span className="pill">SONDEO CIUDADANO · SIN PUBLICACIÓN</span>
         <h2>{province && approvedProvinceResult(province.code) ? "Los resultados provinciales publicados figuran arriba." : "Todavía no hay resultados del sondeo."}</h2>
         <p>
-          La recogida aún no está abierta. Cuando exista una publicación provincial aprobada, aparecerá arriba. No se dibujan porcentajes inventados, ni se presenta la ausencia de datos como cero votos. Las futuras publicaciones necesitan revisión legal, muestras suficientes y protección frente a la identificación de participantes.
+          Cuando exista una publicación provincial aprobada, aparecerá arriba y su candidatura con más respuestas se reflejará en el mapa. Las provincias sin resultados publicables permanecerán grises. No se muestran porcentajes inventados ni se presenta la falta de datos como cero votos.
         </p>
         <Link
           className="secondary"
