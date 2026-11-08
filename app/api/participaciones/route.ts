@@ -3,7 +3,7 @@ import { Pool } from "pg";
 import { cookies } from "next/headers";
 import { saveApprovedVote } from "@/lib/server/public-vote";
 import { closedParticipationResponse, launchStatus } from "@/lib/server/privacy-gates";
-import { isLiveVoteConfigured, voteConsentVersion } from "@/lib/server/live-vote-configuration";
+import { isLiveVoteConfigured, missingLiveVoteSettings, voteConsentVersion } from "@/lib/server/live-vote-configuration";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -47,6 +47,7 @@ export function GET() {
   const status=launchStatus();
   return json({...status,enabled:isLiveVoteConfigured(),mode:isLiveVoteConfigured()?"open":"closed",
     consentVersion:CONSENT_VERSION,
+    missingSettings:missingLiveVoteSettings(),
     siteKey:isLiveVoteConfigured()?process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY:undefined});
 }
 export async function POST(req:Request) {
