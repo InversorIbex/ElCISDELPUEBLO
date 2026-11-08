@@ -18,12 +18,12 @@ El workspace no contenía código de producto, package.json ni instrucciones AGE
 
 ## Flujo de participación propuesto
 
-1. Campaña validada y abierta por servidor. Municipio INE seleccionado manualmente, nunca detectado. Candidaturas cargadas desde la papeleta provincial verificada.
+1. Campaña validada y abierta por servidor. Circunscripción seleccionada manualmente, nunca detectada. El Congreso no requiere municipio. Candidaturas cargadas desde la papeleta provincial verificada.
 2. Información de tratamiento específica; consentimiento explícito separado si la revisión determina arts. 6.1.a y 9.2.a como base adecuada. No recoger nada antes de completar esta fase.
 3. Token de autorización de un uso, efímero, validado en servidor, Turnstile y rate limiting. La IP, si se usa temporalmente en el borde, no se vincula ni exporta al registro de opinión; retención mínima y contrato con proveedor. Evaluar datos y transferencias de Turnstile antes de adoptarlo.
-4. Generar secreto aleatorio de 256 bits exclusivo de esa campaña. Mostrarlo una vez, entregable de forma privada sin herramientas de terceros. Guardar solo hash HMAC con clave versionada. Sin credencial global entre encuestas.
+4. Generar secreto aleatorio de 256 bits exclusivo de esa campaña. Contrato futuro: cookie privada HttpOnly/Secure/SameSite y ruta específica del sondeo; no conectado aún a las rutas cerradas. Guardar solo hash HMAC con clave versionada. Sin credencial global entre encuestas.
 5. En una transacción: consumir token, crear respuesta y credencial, registrar versión de consentimiento. La credencial enlaza a esa respuesta: es seudonimización, no anonimato. Separación de esquemas, roles y cifrado limita accesos pero no elimina el enlace.
-6. Sustituir: bloquear credencial y respuesta; validar revisión esperada; actualizar opción y municipio y deltas de agregación atómicamente. Reintentos idempotentes. No guardar historial individual de opciones. Dos peticiones concurrentes con igual revisión: una gana, otra conflicto 409.
+6. Sustituir: bloquear credencial y respuesta; validar revisión esperada; actualizar opción y circunscripción y deltas de agregación atómicamente. Reintentos idempotentes. No guardar historial individual de opciones. Dos peticiones concurrentes con igual revisión: una gana, otra conflicto 409.
 7. Retirar: eliminar registro sensible y credencial en transacción, decrementar agregado interno y conservar solo comprobante mínimo no enlazable cuando sea necesario. Sin credencial no garantizar recuperación. Debe existir vía de derechos del responsable antes de abrir.
 
 El sistema no garantiza persona única. Una persona puede obtener varias credenciales; las capas antifraude reducen abuso sin resolver identidad. No usar fingerprinting ni cuentas políticas persistentes. Las credenciales de preguntas independientes no se correlacionan. Resolver también registros de proxy, trazas, errores, copias de seguridad y accesos privilegiados antes de activar recogida.
@@ -65,13 +65,13 @@ Futuro: validación server-side, POST con Origin/CSRF, rate limiting compartido,
 
 ## Fuentes electorales
 
-La convocatoria del 29/11/2026 y el reparto de 350 escaños entre 52 circunscripciones se han comprobado en BOE-A-2026-20742 (RD 806/2026) y se han importado con huella de origen. Candidaturas aún pendientes de revisión BOE/JEC. La simulación manual utiliza artículo 163 LOREG: cocientes exactos, 3%, blanco en denominador, nulo excluido, empate por votos y sorteo explícito con alternancia para dos candidaturas. Más de dos empatadas o empate mayoritario de Ceuta/Melilla no se resuelve automáticamente. No hay sorteo electoral oficial ni predicción. Modo basado en sondeo bloqueado.
+La convocatoria del 29/11/2026 y el reparto de 350 escaños entre 52 circunscripciones se han comprobado en BOE-A-2026-20742 (RD 806/2026) y se han importado con huella de origen. Instantánea de 534 candidaturas proclamadas importada desde BOE-A-2026-23103 y su corrección BOE-A-2026-23383, revisada a 8/11/2026; cambios posteriores pendientes. La simulación manual utiliza artículo 163 LOREG: cocientes exactos, 3%, blanco en denominador, nulo excluido, empate por votos y sorteo explícito con alternancia para dos candidaturas. Más de dos empatadas o empate mayoritario de Ceuta/Melilla no se resuelve automáticamente. No hay sorteo electoral oficial ni predicción. Modo basado en sondeo bloqueado.
 
 ## Implementación de la continuación
 
 - PostgreSQL 17 desechable probado; migraciones con checksum/lock, importación INE transaccional y sin borrar códigos ausentes silenciosamente.
 - El motor usa bloqueo de campaña para simplificar consistencia de tokens, correcciones y publicación. Es conservador y serializa escrituras de una campaña: no se ha medido escala de miles de escrituras y no se declara lista para ello.
-- Las respuestas contienen solo campaña y payload AEAD de municipio/opción; las credenciales HMAC y consentimientos se separan por esquema. Esta separación no equivale aún a roles de producción, porque las pruebas usan rol propietario.
+- Las respuestas contienen solo campaña y payload AEAD de circunscripción/opción; las credenciales HMAC y consentimientos se separan por esquema. Esta separación no equivale aún a roles de producción, porque las pruebas usan rol propietario.
 - Las primarias/FK mantienen campaña, opción y territorio en los agregados; las opciones cifradas de cada respuesta se validan en servidor contra la papeleta provincial de pruebas. No existe una FK dentro de texto cifrado.
 - No hay claves persistentes ni KMS configurado; nuevas ejecuciones del runner crean campañas independientes. Un servicio real necesitaría rotación y recuperación de claves, evitando perder capacidad de retirada.
 - Prototipo de publicación limitado a una versión nacional de campaña cerrada y sintética, con cada celda no nula >=50 y revisión de laboratorio. No habilita múltiples territorios/periodos, tendencias ni protección completa contra información auxiliar.

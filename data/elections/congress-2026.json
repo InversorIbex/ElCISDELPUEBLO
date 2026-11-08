@@ -7,7 +7,7 @@
     "retrievedAt": "2026-11-08T10:34:47.450197+00:00"
   },
   "legalRulesSource": "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#acientosesentaytres",
-  "candidaciesVerified": false,
+  "candidaciesVerified": true,
   "constituencies": [
     {
       "provinceCode": "01",

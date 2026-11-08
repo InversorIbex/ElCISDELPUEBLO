@@ -2077,3 +2077,404 @@ caption {
     font-size: 9px;
   }
 }
+.ballot-consultation-note {
+  padding: 22px 25px;
+  background: #edf1e7;
+  border: 1px solid #d0dcc7;
+  margin: 25px 0;
+}
+.ballot-consultation-note p {
+  font-size: 12px;
+  margin: 12px 0 0;
+}
+.ballot-consultation-note a {
+  text-decoration: underline;
+}
+.constituency-form {
+  display: flex;
+  gap: 18px;
+  align-items: end;
+  border: 1px solid var(--line);
+  background: #fcfcf8;
+  padding: 25px;
+  margin: 30px 0;
+}
+.constituency-form > div {
+  flex: 1;
+}
+.constituency-form label {
+  font-size: 11px;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 8px;
+}
+.constituency-form select {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #c4d0bc;
+  background: white;
+  font-size: 14px;
+  color: var(--ink);
+  min-height: 50px;
+}
+.constituency-form .button {
+  border: 0;
+  font-family: Arial;
+  cursor: pointer;
+  min-height: 50px;
+}
+.candidacy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+.candidacy-card {
+  border: 1px solid var(--line);
+  background: #fdfdf9;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.candidacy-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}
+.candidacy-card-top .eyebrow {
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+.candidacy-status {
+  font-size: 8px;
+  color: var(--green);
+  white-space: nowrap;
+}
+.candidacy-logo {
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: white;
+  border: 1px solid #e4e8df;
+  margin: 22px 0;
+}
+.candidacy-logo.logo-dark {
+  background: #263b35;
+  border-color: #263b35;
+}
+.candidacy-logo img {
+  display: block;
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 75px;
+}
+.logo-missing {
+  font-size: 10px;
+  color: #6b7767;
+  text-align: center;
+  max-width: 150px;
+}
+.candidacy-card h3 {
+  font-family: Arial;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  flex: 1;
+  margin-bottom: 24px;
+}
+.candidacy-links {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+  font-size: 9px;
+}
+.candidacy-links a:hover {
+  text-decoration: underline;
+}
+.candidacy-correction {
+  font-size: 9px;
+  margin: 12px 0 0;
+}
+.candidacy-start {
+  text-align: center;
+  padding: 55px 20px;
+  background: #edf1e7;
+  border: 1px solid #d4ddcd;
+}
+.candidacy-start > span {
+  font: 80px var(--serif);
+  color: #93a98a;
+  line-height: 1;
+}
+.candidacy-start h2 {
+  font-size: 32px;
+}
+.candidacy-start p {
+  font-size: 13px;
+  max-width: 520px;
+  margin: 15px auto 24px;
+}
+.logo-transparency {
+  margin-top: 40px;
+  padding: 25px;
+  border-top: 1px solid var(--line);
+  background: #f0f2eb;
+}
+.logo-transparency summary {
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.logo-transparency p {
+  font-size: 12px;
+  max-width: 850px;
+  margin: 18px 0 0;
+}
+.logo-transparency a {
+  text-decoration: underline;
+}
+@media (max-width: 1000px) {
+  .candidacy-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .candidacy-grid {
+    grid-template-columns: 1fr;
+  }
+  .candidacy-card {
+    padding: 20px;
+  }
+  .candidacy-card h3 {
+    font-size: 14px;
+  }
+  .candidacy-links {
+    font-size: 11px;
+  }
+  .candidacy-logo {
+    height: 115px;
+  }
+  .constituency-form {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px;
+  }
+  .constituency-form select {
+    font-size: 16px;
+  }
+  .constituency-form button {
+    justify-content: center;
+  }
+  .candidacy-status {
+    font-size: 10px;
+  }
+  .candidacy-card-top .eyebrow {
+    font-size: 9px;
+  }
+  .logo-missing {
+    font-size: 12px;
+  }
+  .logo-transparency summary {
+    font-size: 12px;
+  }
+}
+.territory-candidacies {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 25px;
+  background: #edf1e7;
+  border: 1px solid #d0dcc7;
+  margin: 30px 0;
+}
+.territory-candidacies h2 {
+  font-size: 28px;
+}
+.territory-candidacies p {
+  font-size: 12px;
+  margin: 0;
+}
+.territory-candidacies .button {
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .territory-candidacies {
+    flex-direction: column;
+    align-items: start;
+  }
+}
+.parliament-comparison {
+  margin-top: 50px;
+  border-top: 1px solid var(--line);
+  padding-top: 35px;
+}
+.parliament-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+.parliament-panel {
+  border: 1px solid var(--line);
+  background: #fcfcf8;
+  padding: 22px;
+}
+.hemicycle {
+  margin: 20px 0 0;
+}
+.hemicycle svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.hemicycle-number {
+  font: 35px Georgia;
+  fill: #142c3b;
+}
+.hemicycle-caption {
+  font: 9px Arial;
+  fill: #627079;
+  letter-spacing: 1px;
+}
+.hemicycle figcaption {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+}
+.hemicycle-key {
+  margin-top: 25px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 18px;
+}
+.hemicycle-key > div {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  font-size: 10px;
+}
+.hemicycle-key strong {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 600;
+}
+.seat-color {
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+.modeled-districts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+.modeled-districts > span {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #e6ecdf;
+  border: 1px solid #ccd6c3;
+  padding: 6px 10px;
+  font-size: 11px;
+}
+.modeled-districts button {
+  background: none;
+  border: 0;
+  color: var(--ink);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 3px;
+}
+.scenario-history {
+  margin-top: 35px;
+  padding: 28px;
+  background: #eef1e8;
+  border: 1px solid var(--line);
+}
+.scenario-history h2 {
+  font-size: 29px;
+}
+.scenario-history .button {
+  font-family: Arial;
+  border: 0;
+  cursor: pointer;
+  font-size: 11px;
+}
+.scenario-history button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.chart-empty {
+  padding: 35px 15px;
+  text-align: center;
+  border: 1px dashed #c1ceb9;
+  font-size: 13px;
+  margin-bottom: 0;
+}
+.scenario-line-chart {
+  width: 100%;
+  display: block;
+  background: #fafbf7;
+  border: 1px solid var(--line);
+  padding: 12px;
+}
+.scenario-line-chart text {
+  font: 11px Arial;
+  fill: #627079;
+}
+.save-district {
+  margin: 0 0 25px;
+  width: 100%;
+  font-size: 11px;
+  justify-content: center;
+}
+.scenario-history .section-head {
+  align-items: center;
+}
+.scenario-history .section-head p {
+  font-size: 12px;
+}
+@media (max-width: 850px) {
+  .parliament-pair {
+    grid-template-columns: 1fr;
+  }
+  .hemicycle svg {
+    max-width: 500px;
+    margin: auto;
+  }
+}
+@media (max-width: 600px) {
+  .parliament-panel,
+  .scenario-history {
+    padding: 20px;
+  }
+  .hemicycle-key {
+    grid-template-columns: 1fr;
+  }
+  .hemicycle-key > div {
+    font-size: 12px;
+  }
+  .scenario-history .section-head {
+    align-items: start;
+  }
+  .scenario-history .button {
+    width: 100%;
+    justify-content: center;
+    white-space: normal;
+  }
+  .modeled-districts button {
+    min-width: 28px;
+    min-height: 32px;
+  }
+  .hemicycle figcaption {
+    font-size: 12px;
+  }
+}

@@ -29,8 +29,9 @@ export default function Page() {
           <span>01 / DECIDES EL LUGAR</span>
           <h3>Sin geolocalización</h3>
           <p>
-            El municipio se elige manualmente. No usamos GPS ni localización por
-            IP y no verificamos residencia.
+            La circunscripción del Congreso se elige manualmente; no se necesita
+            el municipio. No usamos GPS ni localización por IP y no verificamos
+            residencia.
           </p>
         </div>
         <div>
@@ -90,10 +91,11 @@ export default function Page() {
           <summary>Ver el texto de trabajo, aún sin validez operativa</summary>
           <p>
             <strong>Borrador para revisión:</strong> consiento explícitamente el
-            tratamiento de la respuesta de esta campaña y del municipio que
-            declaro, con el fin de producir estadísticas agregadas del sondeo.
-            Entiendo que mi respuesta puede revelar opiniones políticas, que
-            participar es voluntario y que puedo retirarla usando mi credencial.
+            tratamiento de la respuesta de esta campaña y de la circunscripción
+            que declaro, con el fin de producir estadísticas agregadas del
+            sondeo. Entiendo que mi respuesta puede revelar opiniones políticas,
+            que participar es voluntario y que puedo retirarla usando mi
+            credencial.
           </p>
           <p>
             Este texto todavía debe completarse con responsable, bases

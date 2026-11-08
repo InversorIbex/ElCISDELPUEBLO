@@ -26,7 +26,7 @@ export const launchRequirements = [
   },
   {
     id: "ballots",
-    label: "Candidaturas provinciales verificadas",
+    label: "Revisión final de papeletas y actualizaciones posteriores",
     state: "pending",
   },
   {

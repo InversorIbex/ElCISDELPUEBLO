@@ -1,3 +1,4 @@
+import { importTestCandidacyRegistry } from "../../lib/server/import-candidacies.ts";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { randomBytes, randomUUID } from "node:crypto";
@@ -5,7 +6,7 @@ import { createTestPool } from "../../lib/server/db.ts";
 import { migrateTestDatabase } from "../../lib/server/migrations.ts";
 import { importTestTerritories } from "../../lib/server/import-territories.ts";
 import { TestParticipationService } from "../../lib/server/participation.ts";
-import { privateSecret, digest } from "../../lib/server/crypto.ts";
+import { privateSecret, digest, unseal } from "../../lib/server/crypto.ts";
 import { consumeTestRateLimit } from "../../lib/server/rate-limit.ts";
 import { createTestRelease } from "../../lib/server/publication.ts";
 const url = process.env.TEST_DATABASE_URL;
@@ -45,7 +46,7 @@ async function response(
     campaignId: c.id,
     token: await service.issueToken(c.id),
     credential: privateSecret(),
-    municipalityCode: "27027",
+    provinceCode: "27",
     optionId: c.a,
     consentVersion: "TEST-CONSENT-v1",
     explicitConsent: true,
@@ -89,8 +90,21 @@ test("PostgreSQL real: migraciones, catálogo, participación privada y publicac
               "SELECT count(*)::int AS n FROM operations.schema_migrations",
             )
           ).rows[0].n,
-          2,
+          4,
         );
+      },
+    );
+    await t.test(
+      "catálogo oficial: importación de 534 candidaturas sin abrir campañas",
+      async () => {
+        const result = await importTestCandidacyRegistry(pool);
+        assert.equal(result.count, 534);
+        assert.deepEqual(await importTestCandidacyRegistry(pool), result);
+        const rows = await pool.query(
+          "SELECT count(*)::int AS n,count(distinct province_code)::int AS provinces FROM catalog.registered_congress_candidacies WHERE edition_id=$1",
+          [result.edition],
+        );
+        assert.deepEqual(rows.rows[0], { n: 534, provinces: 52 });
       },
     );
     await t.test(
@@ -119,7 +133,17 @@ test("PostgreSQL real: migraciones, catálogo, participación privada y publicac
           )
         ).rows[0];
         assert.ok(!row.encrypted_payload.includes(input.optionId));
-        assert.ok(!row.encrypted_payload.includes("27027"));
+        assert.deepEqual(
+          unseal(encryptionKey, c.id, row.id, row.encrypted_payload),
+          { provinceCode: "27", optionId: input.optionId },
+        );
+        const columns = await pool.query(
+          "SELECT column_name FROM information_schema.columns WHERE table_schema='aggregation_private' AND table_name='counts'",
+        );
+        assert.ok(columns.rows.some((r) => r.column_name === "province_code"));
+        assert.ok(
+          !columns.rows.some((r) => r.column_name === "municipality_code"),
+        );
         assert.ok(!JSON.stringify(row).includes(input.credential));
         const credentials = (
           await pool.query(
@@ -166,7 +190,7 @@ test("PostgreSQL real: migraciones, catálogo, participación privada y publicac
           campaignId: c.id,
           credential: input.credential,
           expectedRevision: 1,
-          municipalityCode: "27027",
+          provinceCode: "27",
           optionId: c.b,
         };
         const results = await Promise.allSettled([
@@ -242,8 +266,9 @@ test("PostgreSQL real: migraciones, catálogo, participación privada y publicac
         for (const update of [
           { explicitConsent: false },
           { consentVersion: "old" },
-          { municipalityCode: "28079" },
-          { municipalityCode: "99999" },
+          { provinceCode: "28" },
+          { provinceCode: "99" },
+          { provinceCode: "27027" },
           { optionId: randomUUID() },
         ])
           await assert.rejects(service.submit({ ...input, ...update }));
@@ -285,7 +310,7 @@ test("PostgreSQL real: migraciones, catálogo, participación privada y publicac
           service.replace({
             campaignId: q.id,
             credential: input.credential,
-            municipalityCode: "27027",
+            provinceCode: "27",
             optionId: q.a,
             expectedRevision: 1,
           }),

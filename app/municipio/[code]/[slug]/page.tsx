@@ -32,6 +32,7 @@ export default async function Page({ params }: Props) {
   const c = communityByCode.get(m.communityCode)!;
   return (
     <TerritoryPage
+      candidacyProvinceCode={m.provinceCode}
       name={m.name}
       kind="MUNICIPIO"
       code={m.code}

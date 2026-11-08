@@ -33,6 +33,7 @@ export default async function Page({ params }: Props) {
     );
   return (
     <TerritoryPage
+      candidacyProvinceCode={p.code}
       name={p.name}
       kind={["51", "52"].includes(p.code) ? "CIUDAD AUTÓNOMA" : "PROVINCIA"}
       code={p.code}

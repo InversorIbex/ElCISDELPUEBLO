@@ -121,7 +121,8 @@ export default function Page() {
             Real Decreto 806/2026, anexo
           </a>
           . Se han validado las 52 circunscripciones y el total de 350 escaños.
-          Las candidaturas todavía no se han importado ni validado.
+          Las 534 candidaturas proclamadas están importadas desde el BOE del 3
+          de noviembre, con su corrección del 7 de noviembre.
         </p>
         <p>
           Reglas del simulador:{" "}
@@ -130,6 +131,33 @@ export default function Page() {
           </a>
           . El simulador utiliza alternativas hipotéticas introducidas
           manualmente, no partidos proclamados ni opiniones recogidas.
+        </p>
+        <h2>Candidaturas, logos y comparación histórica</h2>
+        <p>
+          <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-23103">
+            Proclamación del Congreso y Senado
+          </a>{" "}
+          y{" "}
+          <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-23383">
+            corrección posterior
+          </a>
+          . Solo se importan opciones del Congreso; 21 no proclamadas quedan
+          excluidas.{" "}
+          <a href="/candidaturas">
+            Consultar catálogo provincial y cobertura de logos
+          </a>
+          . Los logos proceden de webs oficiales de las formaciones, con enlaces
+          y huellas; no se asegura su equivalencia al símbolo registrado en cada
+          papeleta.
+        </p>
+        <p>
+          La comparación del hemiciclo utiliza{" "}
+          <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907">
+            los resultados oficiales de 2023 publicados por la JEC
+          </a>
+          , por candidaturas y circunscripciones. No representa la composición
+          de grupos al final de la legislatura. Las hipótesis manuales se
+          identifican por separado.
         </p>
         <h2>Alias para encontrar un lugar</h2>
         <p>

@@ -1,3 +1,4 @@
+import { candidaciesForProvince } from "@/lib/candidacies/registry";
 import Link from "next/link";
 import { EmptyState } from "./EmptyState";
 import { displayName } from "@/lib/territory-format";
@@ -8,6 +9,7 @@ export function TerritoryPage({
   breadcrumbs,
   children,
   municipalityCount,
+  candidacyProvinceCode,
 }: {
   name: string;
   kind: string;
@@ -15,6 +17,7 @@ export function TerritoryPage({
   breadcrumbs: { name: string; href: string }[];
   children?: React.ReactNode;
   municipalityCount?: number;
+  candidacyProvinceCode?: string;
 }) {
   return (
     <section className="page-section territory-page">
@@ -71,6 +74,27 @@ export function TerritoryPage({
         title="Todavía no hay respuestas publicadas"
         text="El catálogo identifica el territorio; no contiene opiniones políticas. La recogida permanece cerrada. Los futuros resultados respetarán el umbral de privacidad y las reglas contra reconstrucción por diferencias."
       />
+      {candidacyProvinceCode && (
+        <div className="territory-candidacies">
+          <div>
+            <div className="eyebrow">TU CIRCUNSCRIPCIÓN DEL CONGRESO</div>
+            <h2>
+              {candidaciesForProvince(candidacyProvinceCode).length}{" "}
+              candidaturas proclamadas
+            </h2>
+            <p>
+              Consulta las listas de tu provincia, con sus denominaciones
+              oficiales y fuentes.
+            </p>
+          </div>
+          <Link
+            className="button"
+            href={`/candidaturas?provincia=${candidacyProvinceCode}`}
+          >
+            Ver candidaturas ↗
+          </Link>
+        </div>
+      )}
       {children}
       <div className="territory-explainer">
         <div>
