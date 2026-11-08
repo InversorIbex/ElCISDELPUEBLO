@@ -3,6 +3,7 @@ import Link from "next/link";
 import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://elcisdelpueblo.vercel.app"),
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "es_ES",
