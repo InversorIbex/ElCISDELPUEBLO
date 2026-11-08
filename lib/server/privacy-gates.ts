@@ -1,7 +1,8 @@
 export const launchRequirements = [
   {
     id: "controller",
-    label: "Responsable y canal para ejercer derechos",
+    label:
+      "Revisión de la identificación del responsable y del canal de derechos",
     state: "pending",
   },
   {

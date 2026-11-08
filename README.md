@@ -1,6 +1,6 @@
 # El CIS del Pueblo
 
-Aplicación Next.js con catálogo INE 2026, mapa autonómico IGN, simulador manual y motor PostgreSQL aislado de pruebas, sin recogida de opiniones ni resultados ficticios. No está lista para producción. No se ha publicado.
+Aplicación Next.js con catálogo INE 2026, mapa autonómico IGN, simulador manual y motor PostgreSQL aislado de pruebas, sin recogida de opiniones ni resultados ficticios. Interfaz informativa publicada en https://elcisdelpueblo.vercel.app/. La recogida de opiniones sigue cerrada; no es una versión de producción del motor de votos.
 
 Requisitos: Node >=20.9 (validado con 24.22.1), npm 11.
 
@@ -18,7 +18,7 @@ Abrir http://localhost:3000. Comprobaciones: `npm test`, `npm run build`, `npm r
 - `docs/VALIDACION.md`: comprobaciones y límites de esta entrega.
 - `db/migrations/0001_foundation.sql`: cimientos PostgreSQL no aplicados, sin tablas sensibles.
 
-La convocatoria del 29/11/2026 y los 350 escaños en 52 circunscripciones están verificados en el RD 806/2026 del BOE; las candidaturas siguen pendientes. El catálogo INE está validado y su importación PostgreSQL está probada. La web pública no se conecta al motor de prueba ni necesita credenciales para ejecutar las pantallas. No habilitar recogida añadiendo un simple interruptor: completar antes las puertas documentadas de privacidad, seguridad y datos oficiales.
+La convocatoria del 29/11/2026 y los 350 escaños en 52 circunscripciones están verificados en el RD 806/2026 del BOE; la instantánea de 534 candidaturas está importada con las correcciones revisadas a 8/11/2026. El catálogo INE está validado y su importación PostgreSQL está probada. La web pública no se conecta al motor de prueba ni necesita credenciales para ejecutar las pantallas. No habilitar recogida añadiendo un simple interruptor: completar antes las puertas documentadas de privacidad, seguridad y datos oficiales.
 
 ## Catálogo territorial
 

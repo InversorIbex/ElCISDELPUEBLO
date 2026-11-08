@@ -115,10 +115,11 @@ export default function Page() {
         </p>
         <h2>Contacto y responsable</h2>
         <p>
-          Contacto público previsto:{" "}
+          Responsable indicado por el promotor: {legalContact.controllerName}.
+          Contacto público:{" "}
           <a href={`mailto:${legalContact.email}`}>{legalContact.email}</a>. La
-          identidad formal del responsable está pendiente de completar. El
-          contacto facilitado no acredita una revisión jurídica del proyecto.
+          información de identificación y este documento siguen pendientes de
+          revisión jurídica. El contacto facilitado no acredita dicha revisión.
         </p>
         <p>
           Mientras no se abra la recogida no debes enviar opiniones,

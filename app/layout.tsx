@@ -2,12 +2,22 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
 export const metadata: Metadata = {
+  metadataBase: new URL("https://elcisdelpueblo.vercel.app"),
+  openGraph: {
+    type: "website",
+    locale: "es_ES",
+    siteName: "El CIS del Pueblo",
+    title: "El CIS del Pueblo · La política, con contexto",
+    description:
+      "Candidaturas por circunscripción, simulador de escaños y comparación con 2023. Observatorio independiente; participación todavía no abierta.",
+  },
+  twitter: { card: "summary_large_image" },
   title: {
     default: "El CIS del Pueblo · Observatorio ciudadano",
     template: "%s · El CIS del Pueblo",
   },
   description:
-    "Proyecto independiente de sondeos abiertos. Muestra no representativa. Versión de desarrollo sin recogida de respuestas.",
+    "Candidaturas por circunscripción, simulador de escaños y fuentes oficiales. Observatorio independiente. Participación todavía no abierta.",
   robots: { index: false, follow: false },
 };
 export default function Layout({
@@ -20,7 +30,7 @@ export default function Layout({
           Saltar al contenido
         </a>
         <div className="devbar">
-          VERSIÓN DE DESARROLLO{" "}
+          EDICIÓN PÚBLICA INFORMATIVA{" "}
           <span>· Sin recogida de respuestas políticas</span>
         </div>
         <header>
@@ -46,7 +56,7 @@ export default function Layout({
             <Link href="/metodologia">Metodología</Link>
           </nav>
           <Link className="button small" href="/participar">
-            Participa ahora <span>↗</span>
+            Estado del sondeo <span>↗</span>
           </Link>
         </header>
         <main id="contenido">{children}</main>
@@ -67,7 +77,15 @@ export default function Layout({
                   Privacidad y control de tu respuesta ↗
                 </Link>
               </p>
-              <p>Independiente. Abierto. Con límites claros.</p>
+              <p>
+                <Link href="/ayuda">Preguntas frecuentes ↗</Link>
+              </p>
+              <p>
+                <Link href="/contacto">Contacto y correcciones ↗</Link>
+              </p>
+              <p>
+                <Link href="/aviso-legal">Aviso legal ↗</Link>
+              </p>
             </div>
           </div>
           <p>
@@ -78,7 +96,7 @@ export default function Layout({
             estadísticamente representativa.
           </p>
           <div className="footer-bottom">
-            <span>Proyecto en desarrollo · Catálogo INE 2026</span>
+            <span>Edición informativa · Catálogo INE 2026</span>
             <span>Sin geolocalización · Sin analítica de terceros</span>
           </div>
         </footer>
