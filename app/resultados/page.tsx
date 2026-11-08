@@ -1,3 +1,4 @@
+import { ParticipationAnalysis } from "@/components/ParticipationAnalysis";
 import { CandidacyResults } from "@/components/CandidacyResults";
 import { candidaciesForProvince } from "@/lib/candidacies/registry";
 import { approvedProvinceResult } from "@/lib/published-provincial";
@@ -67,6 +68,7 @@ export default async function Results({
         </p>
       )}
       {province && <CandidacyResults list={candidaciesForProvince(province.code)} provinceName={displayName(province.name)} release={approvedProvinceResult(province.code)} />}
+      {province && <ParticipationAnalysis list={candidaciesForProvince(province.code)} provinceName={displayName(province.name)} release={approvedProvinceResult(province.code)} />}
       <section className="public-results-empty">
         <span className="pill">SONDEO CIUDADANO · SIN PUBLICACIÓN</span>
         <h2>{province && approvedProvinceResult(province.code) ? "Los resultados provinciales publicados figuran arriba." : "Todavía no hay resultados del sondeo."}</h2>
