@@ -1,0 +1,22 @@
+-- Review-only migration. DO NOT run against production without approval.
+-- The cleanup account is deliberately separate from the vote writer.
+-- Provision a login role using Neon role management, then apply:
+-- GRANT USAGE ON SCHEMA poll_private TO epov_retention_cleaner;
+-- GRANT DELETE ON TABLE poll_private.ip_daily TO epov_retention_cleaner;
+-- GRANT DELETE ON TABLE poll_private.browser_daily TO epov_retention_cleaner;
+-- GRANT DELETE ON TABLE poll_private.idempotency TO epov_retention_cleaner;
+--
+-- RLS: enable narrowly scoped DELETE policies; do not relax ballot policies.
+-- CREATE POLICY retention_delete_ip ON poll_private.ip_daily
+--   FOR DELETE TO epov_retention_cleaner USING (date_madrid < (now() AT TIME ZONE 'Europe/Madrid')::date);
+-- CREATE POLICY retention_delete_browser ON poll_private.browser_daily
+--   FOR DELETE TO epov_retention_cleaner USING (date_madrid < (now() AT TIME ZONE 'Europe/Madrid')::date);
+-- CREATE POLICY retention_delete_retry ON poll_private.idempotency
+--   FOR DELETE TO epov_retention_cleaner USING (accepted_at < now() - interval '48 hours');
+--
+-- PostgreSQL DELETE with RLS also requires a SELECT policy in many cases.
+-- Test on isolated staging and limit SELECT to eligibility predicates only,
+-- without granting read access to sensitive ballot rows.
+--
+-- A future, separately audited retirement job must delete mobile_lifetime
+-- after campaign closure. Never silently remove the mobile marker mid-campaign.
