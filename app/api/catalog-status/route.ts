@@ -5,7 +5,9 @@ export const dynamic = "force-dynamic";
 
 let pool: Pool | null = null;
 function getPool() {
-  const connectionString = process.env.DATABASE_URL;
+  // A dedicated SELECT-only role is required before this route is merged.
+  // Never use the database owner credential for public production traffic.
+  const connectionString = process.env.CATALOG_READONLY_DATABASE_URL;
   if (!connectionString) throw new Error("DATABASE_NOT_CONFIGURED");
   pool ??= new Pool({
     connectionString,
