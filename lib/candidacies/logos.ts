@@ -34,6 +34,8 @@ const additional: Readonly<Record<string,string>> = {
   "CONVERGENTS (CNV)": "convergents",
   "COMPROMÍS: FRONT VALENCIÀ (COMPROMIS-EUPV-PODEM-ERPV)": "compromis-front",
   "PARTIDO REGIONALISTA DEL PAIS LEONES (PREPAL)": "prepal",
+  "PARTIDO UNIONISTA ESTADO DE ESPAÑA (PUEDE)": "puede",
+  "FRENTE AMPLIU POR ASTURIES (FA)": "frenteamplio",
 };
 export const logoInfo = {
   asOf: external.reviewedAt,
