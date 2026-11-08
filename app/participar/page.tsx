@@ -133,15 +133,13 @@ export default async function Participate({
               Ver resultados de esta zona ↗
             </Link>
           </div>
-          <BallotPreview candidacies={candidaciesForProvince(province.code)} provinceName={displayName(province.name)} />
+          <BallotPreview candidacies={candidaciesForProvince(province.code)} provinceName={displayName(province.name)} provinceCode={province.code} />
           <CandidacyResults list={candidaciesForProvince(province.code)} provinceName={displayName(province.name)} release={approvedProvinceResult(province.code)} />
           <details className="logo-transparency"><summary>Consultar fuentes oficiales y fichas completas de candidaturas</summary><CandidacyList list={candidaciesForProvince(province.code)} /></details>
           <div className="notice">
             <p>
               Faltan logos verificados para algunas candidaturas; todas aparecen
-              igualmente. La selección de una formación y el envío de votos se
-              habilitarán cuando funcione el servicio real. No se registra una
-              respuesta al abrir estas tarjetas.
+              igualmente. El servidor indicará cuándo se abra la participación. Abrir estas tarjetas no registra una respuesta; solo una confirmación explícita del servidor acredita el registro.
             </p>
           </div>
         </section>

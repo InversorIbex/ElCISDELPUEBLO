@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS poll_private.ballots (
  campaign_id text NOT NULL CHECK (campaign_id = 'congress-2026'),
  province_code char(2) NOT NULL REFERENCES reference.provinces(code),
  candidacy_id uuid NOT NULL,
+ consent_version text NOT NULL DEFAULT 'epov-2026-v1' CHECK (consent_version = 'epov-2026-v1'),
  edition_id text NOT NULL DEFAULT 'congress-2026' CHECK (edition_id = 'congress-2026'),
  FOREIGN KEY (edition_id,candidacy_id,province_code)
   REFERENCES catalog.registered_congress_candidacies(edition_id,id,province_code),
