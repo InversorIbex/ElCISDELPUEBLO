@@ -89,7 +89,7 @@ export function BallotPreview({candidacies,provinceName,provinceCode}:{
       <div>
         <span className={styles.kicker}>EL PUEBLO OPINA · SONDEO VOLUNTARIO</span>
         <h2 id="ballot-preview-title">¿Qué opción elegirías en {provinceName}?</h2>
-        <p>{enabled?"Elige una candidatura y confirma tu participación.": "Consulta las candidaturas proclamadas. La votación todavía no está abierta y aquí no se guardan respuestas."}</p>
+        <p>{enabled?"Elige una candidatura. Una vez registrada tu respuesta no podrás cambiar tu selección desde esta web.": "Consulta las candidaturas proclamadas. La votación todavía no está abierta y aquí no se guardan respuestas."}</p>
       </div>
       <span className={styles.closed}>{enabled?"Participación abierta":"Sondeo todavía cerrado"}</span>
     </div>
@@ -116,7 +116,7 @@ export function BallotPreview({candidacies,provinceName,provinceCode}:{
       {enabled&&!saved ? <>
         <label className={styles.checkbox}><input type="checkbox" checked={consent}
           onChange={e=>setConsent(e.target.checked)}/>
-          <span>He leído la <a href="/privacidad" target="_blank" rel="noreferrer">información de privacidad</a> y consiento expresamente el tratamiento de mi respuesta política para este sondeo voluntario.</span>
+          <span>He leído la <a href="/privacidad" target="_blank" rel="noreferrer">información de privacidad</a> y consiento expresamente el tratamiento de mi respuesta política para este sondeo voluntario. Mi selección no se puede editar después de registrarse.</span>
         </label>
         <div ref={widgetRef} className={styles.captcha} aria-label="Verificación antirobots"/>
         <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
@@ -125,7 +125,7 @@ export function BallotPreview({candidacies,provinceName,provinceCode}:{
           onClick={submit}>{busy?"Verificando y registrando…":"Registrar mi respuesta"}</button>
       </> : !saved && <p role="status" className={styles.legal}><strong>Votación aún no abierta:</strong> puedes seleccionar una candidatura, pero el botón para registrar una respuesta aparecerá únicamente cuando el servidor esté habilitado. Esta selección no se guarda.</p>}
       {error&&<p role="alert" className={styles.error}>{error}</p>}
-      {saved&&<p role="status" className={styles.ack}>Respuesta registrada y confirmada por el servidor. Gracias por participar.</p>}
+      {saved&&<p role="status" className={styles.ack}>Respuesta registrada y confirmada por el servidor. Tu selección es definitiva en la web; los derechos de protección de datos se explican en la política de privacidad.</p>}
     </div>
     <p className={styles.legal}><strong>No es una elección oficial.</strong> Sondeo voluntario no representativo, sin inferencias sobre el electorado. La provincia se selecciona manualmente.</p>
   </section>;
