@@ -13,8 +13,8 @@ export default function Legal() {
         <h2>Identificación y contacto</h2>
         <p>
           {legalContact.controllerName
-            ? `Nombre público indicado por el promotor: ${legalContact.controllerName}. La identificación legal completa del responsable sigue pendiente.`
-            : "La identidad formal de la persona o entidad responsable está pendiente de completar. Este documento no se presenta como un aviso legal definitivo aprobado."}{" "}
+            ? `Proyecto presentado bajo la marca comercial ${legalContact.tradeName}. Responsable legal: ${legalContact.controllerName}. La identificación y el aviso legal siguen pendientes de revisión.`
+            : `Proyecto presentado bajo la marca comercial ${legalContact.tradeName}. La marca no es una sociedad constituida; la persona física titular y responsable legal todavía debe identificarse. Este aviso legal es provisional.`}{" "}
           Contacto:{" "}
           <a href={`mailto:${legalContact.email}`}>{legalContact.email}</a>.
         </p>

@@ -115,11 +115,9 @@ export default function Page() {
         </p>
         <h2>Contacto y responsable</h2>
         <p>
-          Responsable indicado por el promotor: {legalContact.controllerName}.
+          Proyecto presentado bajo la marca comercial {legalContact.tradeName}. Responsable del tratamiento:{" "}{legalContact.controllerName ?? "persona física titular pendiente de identificación formal"}.
           Contacto público:{" "}
-          <a href={`mailto:${legalContact.email}`}>{legalContact.email}</a>. La
-          información de identificación y este documento siguen pendientes de
-          revisión jurídica. El contacto facilitado no acredita dicha revisión.
+          <a href={`mailto:${legalContact.email}`}>{legalContact.email}</a>. La marca comercial no sustituye al nombre legal de la persona responsable. La identificación completa y este documento siguen pendientes de revisión jurídica. El contacto facilitado no acredita dicha revisión.
         </p>
         <p>
           Mientras no se abra la recogida no debes enviar opiniones,
