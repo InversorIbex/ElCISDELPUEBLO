@@ -3,23 +3,14 @@ import { Pool } from "pg";
 import { cookies } from "next/headers";
 import { saveApprovedVote } from "@/lib/server/public-vote";
 import { closedParticipationResponse, launchStatus } from "@/lib/server/privacy-gates";
+import { isLiveVoteConfigured, voteConsentVersion } from "@/lib/server/live-vote-configuration";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-const CONSENT_VERSION = "epov-2026-v1";
+const CONSENT_VERSION = voteConsentVersion;
 let pool: Pool | undefined;
 const json=(body:unknown,status=200)=>Response.json(body,{status,headers:{"Cache-Control":"no-store"}});
-function configured() {
-  return process.env.VERCEL_ENV==="production"
-    && process.env.VOTE_PUBLIC_ENABLED==="true"
-    && process.env.VOTE_PRIVACY_APPROVED==="true"
-    && process.env.VOTE_SECURITY_APPROVED==="true"
-    && (process.env.VOTE_DATABASE_URL?.startsWith("postgres")??false)
-    && (process.env.VOTE_HMAC_SECRET?.length??0)>=32
-    && Boolean(process.env.TURNSTILE_SECRET_KEY)
-    && Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY)
-    && Boolean(process.env.VOTE_ALLOWED_HOSTNAME);
-}
+
 function getPool() {
   const url=process.env.VOTE_DATABASE_URL;
   if(!url) throw new Error("NO_VOTE_DATABASE");
@@ -54,12 +45,12 @@ async function verifyChallenge(token:string,ip:string,requestId:string):Promise<
 }
 export function GET() {
   const status=launchStatus();
-  return json({...status,enabled:configured(),mode:configured()?"open":"closed",
+  return json({...status,enabled:isLiveVoteConfigured(),mode:isLiveVoteConfigured()?"open":"closed",
     consentVersion:CONSENT_VERSION,
-    siteKey:configured()?process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY:undefined});
+    siteKey:isLiveVoteConfigured()?process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY:undefined});
 }
 export async function POST(req:Request) {
-  if(!configured())return closedParticipationResponse();
+  if(!isLiveVoteConfigured())return closedParticipationResponse();
   if(!validOrigin(req) || req.headers.get("x-vote-request")!=="1")return json({error:"INVALID_ORIGIN"},403);
   if(!(req.headers.get("content-type")??"").startsWith("application/json"))return json({error:"INVALID_CONTENT_TYPE"},415);
   const ip=trustedIp(req);
