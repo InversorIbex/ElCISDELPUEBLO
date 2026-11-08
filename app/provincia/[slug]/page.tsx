@@ -15,10 +15,11 @@ type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const p = provinces.find((p) => slugify(p.name) === slug);
+  if (!p) return { title: "Provincia no encontrada", robots: { index: false, follow: false } };
   return {
-    title: p
-      ? `Provincia de ${displayName(p.name)}`
-      : "Provincia no encontrada",
+    title: `Candidaturas al Congreso en ${displayName(p.name)} · 2026`,
+    description: `Consulta candidaturas proclamadas en ${displayName(p.name)}, las fuentes oficiales y cómo se asignan sus escaños. Sondeo independiente todavía cerrado.`,
+    alternates: { canonical: provincePath(p) },
   };
 }
 export default async function Page({ params }: Props) {
