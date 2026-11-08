@@ -1,0 +1,18 @@
+.shell{margin:2rem auto;max-width:1200px;background:#fff;border:1px solid #e8e4ed;border-radius:24px;padding:clamp(1rem,3vw,2rem);color:#29343b}
+.heading{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.heading h2{margin:.5rem 0;font-size:clamp(1.6rem,3vw,2.5rem);letter-spacing:-.035em}
+.heading p{margin:0 0 1rem;color:#53616c}
+.eyebrow{font-size:.75rem;font-weight:700;letter-spacing:.07em;color:#74668d}
+.status{font-size:.8rem;background:#dcece6;padding:.5rem .8rem;border-radius:50px}
+.canvas{width:100%;overflow:auto}
+.canvas svg{width:100%;min-width:360px;height:auto;display:block}
+.shape{cursor:pointer;transition:fill .14s ease;stroke-linejoin:round}
+.canvas a:focus-visible path,.canvas a:hover path{stroke:#594981;stroke-width:2;outline:none;fill:#c1b1e2}
+.canvas a:focus-visible rect,.canvas a:hover rect{stroke:#594981;stroke-width:3;fill:#c1b1e2}
+.label{font-size:11px;fill:#626c76}
+.city{font-size:17px;font-weight:700;fill:#29343b}
+.selection{min-height:26px;color:#514770;font-weight:600;font-size:.9rem}
+.fallback{background:#f8f7f4;border-radius:12px;padding:2rem;color:#53616c}
+.credit{margin:1rem 0 0;font-size:.75rem;color:#62707a}
+.credit a{color:inherit;text-decoration:underline}
+@media(max-width:600px){.shell{border-radius:16px}.canvas svg{min-width:500px}}
