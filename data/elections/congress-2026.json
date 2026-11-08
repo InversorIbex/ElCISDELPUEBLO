@@ -1,0 +1,325 @@
+{
+  "electionDate": "2026-11-29",
+  "title": "Elecciones al Congreso de los Diputados de 2026",
+  "source": {
+    "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742",
+    "sha256": "1bd94d7c7b0c265e12e655906e8b9ccff1ffa5b88a2bd13d55b8b28a6d9f5e27",
+    "retrievedAt": "2026-11-08T10:34:47.450197+00:00"
+  },
+  "legalRulesSource": "https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672#acientosesentaytres",
+  "candidaciesVerified": false,
+  "constituencies": [
+    {
+      "provinceCode": "01",
+      "name": "Araba/Álava",
+      "seats": 4,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "02",
+      "name": "Albacete",
+      "seats": 4,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "03",
+      "name": "Alicante/Alacant",
+      "seats": 12,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "04",
+      "name": "Almería",
+      "seats": 6,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "05",
+      "name": "Ávila",
+      "seats": 3,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "06",
+      "name": "Badajoz",
+      "seats": 5,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "07",
+      "name": "Balears, Illes",
+      "seats": 8,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "08",
+      "name": "Barcelona",
+      "seats": 32,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "09",
+      "name": "Burgos",
+      "seats": 4,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "10",
+      "name": "Cáceres",
+      "seats": 4,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "11",
+      "name": "Cádiz",
+      "seats": 8,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "12",
+      "name": "Castellón/Castelló",
+      "seats": 5,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "13",
+      "name": "Ciudad Real",
+      "seats": 5,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "14",
+      "name": "Córdoba",
+      "seats": 6,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "15",
+      "name": "Coruña, A",
+      "seats": 8,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "16",
+      "name": "Cuenca",
+      "seats": 3,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "17",
+      "name": "Girona",
+      "seats": 6,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "18",
+      "name": "Granada",
+      "seats": 7,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "19",
+      "name": "Guadalajara",
+      "seats": 3,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "20",
+      "name": "Gipuzkoa",
+      "seats": 6,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "21",
+      "name": "Huelva",
+      "seats": 5,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "22",
+      "name": "Huesca",
+      "seats": 3,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "23",
+      "name": "Jaén",
+      "seats": 5,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "24",
+      "name": "León",
+      "seats": 4,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "25",
+      "name": "Lleida",
+      "seats": 4,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "26",
+      "name": "Rioja, La",
+      "seats": 4,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "27",
+      "name": "Lugo",
+      "seats": 4,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "28",
+      "name": "Madrid",
+      "seats": 38,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "29",
+      "name": "Málaga",
+      "seats": 11,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "30",
+      "name": "Murcia",
+      "seats": 10,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "31",
+      "name": "Navarra",
+      "seats": 5,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "32",
+      "name": "Ourense",
+      "seats": 4,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "33",
+      "name": "Asturias",
+      "seats": 7,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "34",
+      "name": "Palencia",
+      "seats": 3,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "35",
+      "name": "Palmas, Las",
+      "seats": 8,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "36",
+      "name": "Pontevedra",
+      "seats": 7,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "37",
+      "name": "Salamanca",
+      "seats": 4,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "38",
+      "name": "Santa Cruz de Tenerife",
+      "seats": 7,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "39",
+      "name": "Cantabria",
+      "seats": 5,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "40",
+      "name": "Segovia",
+      "seats": 3,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "41",
+      "name": "Sevilla",
+      "seats": 12,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "42",
+      "name": "Soria",
+      "seats": 2,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "43",
+      "name": "Tarragona",
+      "seats": 6,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "44",
+      "name": "Teruel",
+      "seats": 3,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "45",
+      "name": "Toledo",
+      "seats": 6,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "46",
+      "name": "Valencia/València",
+      "seats": 16,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "47",
+      "name": "Valladolid",
+      "seats": 5,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "48",
+      "name": "Bizkaia",
+      "seats": 8,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "49",
+      "name": "Zamora",
+      "seats": 3,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "50",
+      "name": "Zaragoza",
+      "seats": 7,
+      "system": "dhondt"
+    },
+    {
+      "provinceCode": "51",
+      "name": "Ceuta",
+      "seats": 1,
+      "system": "plurality"
+    },
+    {
+      "provinceCode": "52",
+      "name": "Melilla",
+      "seats": 1,
+      "system": "plurality"
+    }
+  ]
+}

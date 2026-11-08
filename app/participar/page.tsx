@@ -1,0 +1,48 @@
+import { TerritorySelector } from "@/components/TerritorySelector";
+import { communities, provinces } from "@/lib/territories";
+import type { Metadata } from "next";
+import { EmptyState } from "@/components/EmptyState";
+export const metadata: Metadata = { title: "Participar" };
+export default function Participate() {
+  return (
+    <section className="page-section">
+      <div className="eyebrow">PARTICIPACIÓN PRIVADA</div>
+      <h1>Primero, las garantías.</h1>
+      <p className="lead">La recogida de respuestas aún no está abierta.</p>
+      <EmptyState
+        title="Estamos preparando una participación segura"
+        text="Antes de abrir necesitamos verificar las candidaturas oficiales, completar la evaluación de privacidad y someter el sistema a revisión jurídica y pruebas de seguridad."
+      />
+      <TerritorySelector communities={communities} provinces={provinces} />
+      <div className="prose">
+        <h2>Así será el proceso</h2>
+        <ol>
+          <li>
+            Elegirás manualmente tu municipio en el catálogo oficial del INE.
+          </li>
+          <li>
+            La selección territorial ya funciona para consultar fichas. Para
+            responder, leerás la información de privacidad y decidirás si
+            prestas consentimiento explícito.
+          </li>
+          <li>Seleccionarás una opción válida para tu circunscripción.</li>
+          <li>
+            Recibirás una credencial privada de ese sondeo para sustituir o
+            retirar tu respuesta.
+          </li>
+        </ol>
+        <p>
+          No solicitaremos nombre, DNI ni geolocalización. Sin identificación
+          fiable no podemos garantizar una respuesta por persona. Este diseño
+          todavía debe validarse antes de recoger datos reales.
+        </p>
+        <p>
+          La fecha de las elecciones y el reparto de escaños ya están
+          verificados en el BOE. Las candidaturas provinciales siguen pendientes
+          de comprobación. Consulta nuestra información de privacidad antes de
+          cualquier futura participación.
+        </p>
+      </div>
+    </section>
+  );
+}
