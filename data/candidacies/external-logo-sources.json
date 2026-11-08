@@ -171,6 +171,26 @@
       "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20convergents.svg",
       "background": "light",
       "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "compromis-front",
+      "file": "Logo coalición Compromís Front Valencià.svg",
+      "partyPage": "https://app.juntaelectoralcentral.es/svtjec/descargarFichero?tipo=tipoCoalicion&codigoCoalicion=76997",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logo_coalici%C3%B3n_Comprom%C3%ADs_Front_Valenci%C3%A0.svg",
+      "path": "/api/party-logo/compromis-front",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20coalici%C3%B3n%20Comprom%C3%ADs%20Front%20Valenci%C3%A0.svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "prepal",
+      "file": "Logo PREPAL.JPG",
+      "partyPage": "https://commons.wikimedia.org/wiki/Category:Partido_Regionalista_del_Pa%C3%ADs_Leon%C3%A9s",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logo_PREPAL.JPG",
+      "path": "/api/party-logo/prepal",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20PREPAL.JPG",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
     }
   ]
 }
