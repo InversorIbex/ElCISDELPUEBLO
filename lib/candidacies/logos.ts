@@ -16,6 +16,13 @@ const additional: Readonly<Record<string,string>> = {
   "PODEMOS (PODEMOS)": "podemos",
   "PODEMOS": "podemos",
   "PARTIDO COMUNISTA DE LOS TRABAJADORES DE ESPAÑA (PCTE)": "pcte",
+  "SE ACABÓ LA FIESTA (SALF)": "salf",
+  "SE ACABO LA FIESTA (SALF)": "salf",
+  "BLOQUE NACIONALISTA GALEGO (B.N.G.)": "bng",
+  "BLOQUE NACIONALISTA GALEGO (BNG)": "bng",
+  "JUNTS PER CATALUNYA (JxCat)": "junts",
+  "ESQUERRA REPUBLICANA DE CATALUNYA (ERC)": "erc",
+  "EUZKO ALDERDI JELTZALEA-PARTIDO NACIONALISTA VASCO (EAJ-PNV)": "pnv",
 };
 export const logoInfo = {
   asOf: external.reviewedAt,
