@@ -7,7 +7,13 @@ type Feature = {
   path: string;
   inset: boolean;
 };
-export function CommunityMap({ features }: { features: Feature[] }) {
+export function CommunityMap({
+  features,
+  selectionMode = false,
+}: {
+  features: Feature[];
+  selectionMode?: boolean;
+}) {
   const [zoom, setZoom] = useState(1),
     [active, setActive] = useState<string | null>(null);
   const scroll = useRef<HTMLDivElement>(null);
@@ -18,7 +24,11 @@ export function CommunityMap({ features }: { features: Feature[] }) {
           <span className="eyebrow">
             CARTOGRAFÍA OFICIAL / VISTA AUTONÓMICA
           </span>
-          <h2 id="community-map-title">Un país, muchos lugares.</h2>
+          <h2 id="community-map-title">
+            {selectionMode
+              ? "Elige tu comunidad en el mapa."
+              : "Un país, muchos lugares."}
+          </h2>
         </div>
         <div className="map-zoom" aria-label="Controles del mapa">
           <button
@@ -66,9 +76,9 @@ export function CommunityMap({ features }: { features: Feature[] }) {
             Comunidades y ciudades autónomas de España
           </title>
           <desc id="map-svg-desc">
-            Límites administrativos derivados del IGN. Cada territorio enlaza a
-            su ficha. Canarias, Ceuta y Melilla aparecen en recuadros con escala
-            propia. No se muestran resultados de opinión.
+            Límites administrativos derivados del IGN. Cada territorio es un
+            enlace de navegación. Canarias, Ceuta y Melilla aparecen en
+            recuadros con escala propia. No se muestran resultados de opinión.
           </desc>
           <defs>
             <pattern
@@ -137,7 +147,10 @@ export function CommunityMap({ features }: { features: Feature[] }) {
         <span className="map-key" aria-hidden="true" />
         <span>Límites territoriales · Sin resultados de sondeo</span>
         <strong aria-live="polite">
-          {active ?? "Selecciona un territorio para abrir su ficha ↗"}
+          {active ??
+            (selectionMode
+              ? "Selecciona tu comunidad y después tu circunscripción ↗"
+              : "Selecciona un territorio para abrir su ficha ↗")}
         </strong>
       </div>
       <div className="map-attribution">

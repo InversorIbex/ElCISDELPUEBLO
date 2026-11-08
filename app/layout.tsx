@@ -49,14 +49,14 @@ export default function Layout({
           <nav aria-label="Navegación principal">
             <Link href="/">Inicio</Link>
             <Link href="/mapa">Territorios</Link>
-            <Link href="/tendencias">Tendencias</Link>
+            <Link href="/resultados">Resultados</Link>
             <Link href="/simulador">Simulador</Link>
             <Link href="/candidaturas">Candidaturas</Link>
             <Link href="/preguntas">Preguntas del pueblo</Link>
             <Link href="/metodologia">Metodología</Link>
           </nav>
           <Link className="button small" href="/participar">
-            Estado del sondeo <span>↗</span>
+            Elegir mi zona <span>↗</span>
           </Link>
         </header>
         <main id="contenido">{children}</main>

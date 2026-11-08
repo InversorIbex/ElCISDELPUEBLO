@@ -32,9 +32,8 @@ export default function Contact() {
         <h2>Privacidad</h2>
         <p>
           Este es el contacto público del proyecto y para consultas sobre
-          privacidad. El responsable indicado por el promotor es Manuel Lopez
-          Sanchz. La información jurídica definitiva sigue pendiente de
-          revisión.{" "}
+          privacidad. El responsable indicado por el promotor es Inversor_Ibex.
+          La información jurídica definitiva sigue pendiente de revisión.{" "}
           <a href="/privacidad">Consulta el estado de privacidad y derechos</a>.
         </p>
       </div>

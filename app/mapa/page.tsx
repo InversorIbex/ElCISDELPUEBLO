@@ -42,6 +42,13 @@ export default function Page() {
         </span>
         <span>Fuente: INE · 1 de enero de 2026</span>
       </div>
+      <div className="notice">
+        <p>
+          Para consultar las candidaturas de tu circunscripción,{" "}
+          <Link href="/participar">elige tu zona en el mapa del sondeo →</Link>.
+          No hace falta indicar municipio.
+        </p>
+      </div>
       <CommunityMap features={mapData.features} />
       <TerritorySelector communities={communities} provinces={provinces} />
       <div className="directory-heading">

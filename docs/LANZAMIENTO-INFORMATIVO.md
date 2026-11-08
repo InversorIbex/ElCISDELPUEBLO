@@ -5,7 +5,7 @@ El sitio público es https://elcisdelpueblo.vercel.app/. Esta edición permite d
 ## Entrega
 
 - Portada con herramientas disponibles y estado real, sin llamadas a votar cuando está cerrado. El municipio queda separado del diseño de respuesta por circunscripción.
-- Preguntas frecuentes, contacto/correcciones, aviso legal de trabajo y nombre público facilitado por el promotor: Manuel Lopez Sanchz. Correo: letrixagame@gmail.com. Esta identificación no certifica revisión jurídica ni completa por sí sola todas las obligaciones de información.
+- Preguntas frecuentes, contacto/correcciones, aviso legal de trabajo y nombre público facilitado por el promotor: Inversor_Ibex. Correo: letrixagame@gmail.com. Esta identificación no certifica revisión jurídica ni completa por sí sola todas las obligaciones de información.
 - Imagen Open Graph PNG generada en servidor, metadatos sociales y base URL real. No se cargan fuentes o analítica de terceros.
 - Pantalla de error con reintento, foco en controles, respeto a movimiento reducido y tarjetas responsive.
 - Verificación HTTP reproducible con `node scripts/check-deployment.mjs` tras desplegar. Comprueba rutas, CSS, firma PNG, consulta provincial y cierre de POST sin cookies. No envía opiniones ni datos de prueba.

@@ -2568,3 +2568,57 @@ caption {
     font-size: 12px;
   }
 }
+.constituency-selection {
+  padding: 35px 0;
+  scroll-margin-top: 25px;
+}
+#papeleta {
+  scroll-margin-top: 25px;
+}
+.district-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 25px 0;
+}
+.district-shortcuts a {
+  border: 1px solid var(--line);
+  padding: 10px 16px;
+  font-size: 13px;
+  background: white;
+}
+.district-shortcuts a:hover {
+  border-color: var(--green);
+}
+.public-results-empty {
+  padding: 32px;
+  background: #eef1e8;
+  border: 1px solid var(--line);
+  margin: 30px 0;
+}
+.historical-district {
+  padding: 35px 0;
+}
+.historical-district h2,
+.public-results-empty h2 {
+  font-size: 32px;
+}
+.historical-district table {
+  width: 100%;
+}
+.historical-district th {
+  text-align: left;
+}
+.historical-district td {
+  min-width: 130px;
+}
+.historical-seat-track {
+  height: 6px;
+  background: #dce0dc;
+  margin: 7px 0;
+}
+.historical-seat-track span {
+  display: block;
+  height: 6px;
+  background: var(--green);
+}

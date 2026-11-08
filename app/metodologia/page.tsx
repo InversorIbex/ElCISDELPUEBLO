@@ -11,7 +11,7 @@ export default function Page() {
         <h2>Qué es este proyecto</h2>
         <p>
           Un observatorio independiente en desarrollo. El responsable indicado
-          por el promotor es Manuel Lopez Sanchz. La revisión de los documentos
+          por el promotor es Inversor_Ibex. La revisión de los documentos
           jurídicos está pendiente. El contacto público previsto es
           letrixagame@gmail.com. Por este motivo y por los controles aún
           pendientes, no recogemos respuestas políticas.
