@@ -106,7 +106,7 @@ export default function Page() {
         </details>
         <h2>Conservación y retirada</h2>
         <p>
-          Los plazos definitivos deben aprobarse antes de abrir. La retirada
+          Para prevenir duplicados se prevé conservar por separado hashes de IP y navegador durante el día civil de Madrid, y los hashes de solicitudes hasta 48 horas, con un proceso de limpieza pendiente de activar y verificar. Los identificadores móviles antifraude y las respuestas requieren plazos de fin de campaña y retirada todavía pendientes. Los plazos definitivos deben aprobarse antes de abrir. La retirada
           mediante credencial está probada en el laboratorio y elimina la
           respuesta activa y su credencial. Aún deben validarse copias de
           seguridad, registros, publicaciones previas y los casos en los que se
