@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS poll_private.idempotency (
  accepted_at timestamptz NOT NULL DEFAULT now(),
  PRIMARY KEY(campaign_id,request_digest)
 );
--- Retention will be implemented after the approved privacy schedule.
+-- An authenticated and minimally privileged cleanup endpoint is implemented.\n-- Its production cron, credentials and E2E verification are still required before activation.\n-- Daily hashes: previous dates removed each successful run; request idempotency digests: 48h.\n-- Mobile lifetime marker and ballots require separate campaign-end/withdrawal policies.
 ALTER TABLE poll_private.ballots ENABLE ROW LEVEL SECURITY;
 ALTER TABLE poll_private.ip_daily ENABLE ROW LEVEL SECURITY;
 ALTER TABLE poll_private.browser_daily ENABLE ROW LEVEL SECURITY;
