@@ -14,8 +14,13 @@ type Constituency = {
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 export function SeatSimulator({
   constituencies,
+  onSaveScenario,
 }: {
   constituencies: Constituency[];
+  onSaveScenario?: (scenario: {
+    provinceCode: string;
+    allocation: Record<string, number>;
+  }) => void;
 }) {
   const [province, setProvince] = useState("27");
   const [mode, setMode] = useState<"votes" | "percent">("votes");
@@ -297,6 +302,20 @@ export function SeatSimulator({
                       </p>
                     )}
                   </div>
+                )}
+                {result.status === "complete" && onSaveScenario && (
+                  <button
+                    type="button"
+                    className="button save-district"
+                    onClick={() =>
+                      onSaveScenario({
+                        provinceCode: province,
+                        allocation: { ...result.allocation },
+                      })
+                    }
+                  >
+                    Añadir esta circunscripción al escenario nacional →
+                  </button>
                 )}
                 <div className="seat-bars">
                   {values.map((_, i) => {

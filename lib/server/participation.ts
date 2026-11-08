@@ -15,7 +15,7 @@ export class ParticipationError extends Error {
     this.code = code;
   }
 }
-type Choice = { municipalityCode: string; optionId: string };
+type Choice = { provinceCode: string; optionId: string };
 type Submission = Choice & {
   campaignId: string;
   token: string;
@@ -63,11 +63,11 @@ export class TestParticipationService {
     choice: Choice,
   ) {
     requireUuid(choice.optionId);
-    if (!/^\d{5}$/.test(choice.municipalityCode))
-      throw new ParticipationError("INVALID_MUNICIPALITY");
+    if (!/^\d{2}$/.test(choice.provinceCode))
+      throw new ParticipationError("INVALID_CONSTITUENCY");
     const result = await client.query(
-      `SELECT 1 FROM reference.municipalities m JOIN catalog.option_provinces o ON o.province_code=m.province_code WHERE m.ine_code=$1 AND o.campaign_id=$2 AND o.option_id=$3`,
-      [choice.municipalityCode, campaignId, choice.optionId],
+      `SELECT 1 FROM catalog.option_provinces WHERE province_code=$1 AND campaign_id=$2 AND option_id=$3`,
+      [choice.provinceCode, campaignId, choice.optionId],
     );
     if (!result.rowCount) throw new ParticipationError("OPTION_NOT_AVAILABLE");
   }
@@ -79,13 +79,13 @@ export class TestParticipationService {
   ) {
     if (amount === 1) {
       await client.query(
-        `INSERT INTO aggregation_private.counts(campaign_id,municipality_code,option_id,responses) VALUES($1,$2,$3,1) ON CONFLICT(campaign_id,municipality_code,option_id) DO UPDATE SET responses=aggregation_private.counts.responses+1`,
-        [campaignId, choice.municipalityCode, choice.optionId],
+        `INSERT INTO aggregation_private.counts(campaign_id,province_code,option_id,responses) VALUES($1,$2,$3,1) ON CONFLICT(campaign_id,province_code,option_id) DO UPDATE SET responses=aggregation_private.counts.responses+1`,
+        [campaignId, choice.provinceCode, choice.optionId],
       );
     } else {
       const result = await client.query(
-        `UPDATE aggregation_private.counts SET responses=responses-1 WHERE campaign_id=$1 AND municipality_code=$2 AND option_id=$3 AND responses>0`,
-        [campaignId, choice.municipalityCode, choice.optionId],
+        `UPDATE aggregation_private.counts SET responses=responses-1 WHERE campaign_id=$1 AND province_code=$2 AND option_id=$3 AND responses>0`,
+        [campaignId, choice.provinceCode, choice.optionId],
       );
       if (!result.rowCount) throw new ParticipationError("INTEGRITY_ERROR");
     }
@@ -135,7 +135,7 @@ export class TestParticipationService {
         throw new ParticipationError("CREDENTIAL_ALREADY_USED");
       const id = randomUUID();
       const choice = {
-        municipalityCode: input.municipalityCode,
+        provinceCode: input.provinceCode,
         optionId: input.optionId,
       };
       await client.query(
@@ -188,7 +188,7 @@ export class TestParticipationService {
         old.encrypted_payload,
       );
       const next = {
-        municipalityCode: input.municipalityCode,
+        provinceCode: input.provinceCode,
         optionId: input.optionId,
       };
       await this.delta(client, input.campaignId, previous, -1);

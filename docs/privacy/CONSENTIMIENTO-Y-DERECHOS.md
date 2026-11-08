@@ -10,7 +10,7 @@ Consultar datos agregados no exigirá consentimiento de opinión. No preseleccio
 
 ## Redacción de trabajo
 
-Texto orientativo mostrado en `/privacidad`: decisión explícita para campaña concreta y municipio declarado, con finalidad estadística agregada y mecanismo de retirada. Debe completarse y aprobarse. No se puede prometer anonimato absoluto, eliminación instantánea de todas las copias ni reconocimiento sin credencial.
+Texto orientativo mostrado en `/privacidad`: decisión explícita para campaña concreta y circunscripción declarada, con finalidad estadística agregada y mecanismo de retirada. Debe completarse y aprobarse. No se puede prometer anonimato absoluto, eliminación instantánea de todas las copias ni reconocimiento sin credencial.
 
 El motor de laboratorio comprueba `explicitConsent === true` y la versión exacta dentro de la transacción. Una versión obsoleta impide la inserción y conserva el token sin consumir. El registro de consentimiento guarda versión y día, no la opinión. El esquema actual borra ese registro enlazado al retirar; evaluar si es necesario conservar una evidencia separada y cómo hacerlo sin reconstruir perfiles.
 

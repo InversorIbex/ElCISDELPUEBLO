@@ -9,6 +9,11 @@ export default function Page() {
         Las series históricas estarán disponibles cuando existan publicaciones
         seguras y comparables.
       </p>
+      <p>
+        <a href="/simulador">
+          Explorar hemiciclos y evolución de escenarios manuales →
+        </a>
+      </p>
       <EmptyState
         title="Todavía no hay una serie temporal"
         text="No se dibujan curvas ni variaciones ficticias. El Hito 7 distinguirá respuestas activas acumuladas de respuestas recibidas en un intervalo, con periodos y denominadores explícitos."

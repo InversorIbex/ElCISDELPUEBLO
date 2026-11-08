@@ -7,7 +7,7 @@ import { participationStatus, project } from "../lib/project.ts";
 test("el Hito 1 permanece cerrado para recogida sensible", () => {
   assert.equal(participationStatus().enabled, false);
   assert.equal(project.officialElectionVerified, true);
-  assert.equal(project.officialCandidaciesVerified, false);
+  assert.equal(project.officialCandidaciesVerified, true);
 });
 test("la API informa cierre y rechaza envíos reales", async () => {
   assert.equal(POST().status, 403);

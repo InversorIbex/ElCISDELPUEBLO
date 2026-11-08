@@ -321,6 +321,12 @@ export function TerritorySelector({
             <Link className="button" href={municipalityPath(selected)}>
               Ver territorio ↗
             </Link>
+            <Link
+              className="text-link"
+              href={`/candidaturas?provincia=${selected.provinceCode}`}
+            >
+              Candidaturas del Congreso ↗
+            </Link>
           </>
         ) : (
           <p>Selecciona un municipio para abrir su ficha territorial.</p>

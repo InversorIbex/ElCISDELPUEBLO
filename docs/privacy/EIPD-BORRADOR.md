@@ -6,7 +6,7 @@ Estado: BORRADOR TÉCNICO. No es EIPD aprobada, dictamen jurídico ni autorizaci
 
 Identidad jurídica del responsable: pendiente. Contacto público facilitado: letrixagame@gmail.com. Encargados, región de tratamiento, contratos, DPD si procede y asesor revisor: pendientes. Un correo no identifica por sí solo al responsable ni satisface la información exigible.
 
-Finalidad: sondeos voluntarios por campaña y estadísticas públicas agregadas. No publicidad, venta, afiliación, clasificación individual ni historial de afinidad. No comentarios ni texto libre sensible. Se prevén municipio declarado y respuesta de la campaña; información de consentimiento y credenciales necesarias para ejercer control. No nombre, DNI, dirección, GPS, geolocalización IP o datos electorales censales.
+Finalidad: sondeos voluntarios por campaña y estadísticas públicas agregadas. No publicidad, venta, afiliación, clasificación individual ni historial de afinidad. No comentarios ni texto libre sensible. Para el Congreso se prevén solo circunscripción declarada y respuesta de la campaña; información de consentimiento y credenciales necesarias para ejercer control. No nombre, DNI, dirección, GPS, geolocalización IP o datos electorales censales.
 
 La versión ejecutada es un laboratorio con datos sintéticos. `catalog.campaigns` impide `is_test=false`; el servicio no se conecta desde la web y los endpoints públicos devuelven 423 antes de leer cuerpos.
 
@@ -22,7 +22,7 @@ Referencias oficiales consultadas:
 
 ## Proporcionalidad y alternativa
 
-La consulta de resultados no requiere opinión. El municipio se elige expresamente. Un mínimo territorial obligatorio puede aumentar el riesgo en localidades pequeñas; evaluar permitir participación solo provincial o suprimir la recogida municipal en unidades de riesgo. Identificación documental daría otra garantía de duplicidad, pero añade datos y riesgos desproporcionados al objetivo; no se implementa. La plataforma renuncia a afirmar unicidad de personas.
+La consulta de resultados no requiere opinión. La circunscripción se elige expresamente. Para el Congreso no se exige ni almacena municipio; el directorio municipal queda separado del motor de respuestas. Identificación documental daría otra garantía de duplicidad, pero añade datos y riesgos desproporcionados al objetivo; no se implementa. La plataforma renuncia a afirmar unicidad de personas.
 
 Base jurídica candidata: consentimiento para la finalidad concreta y consentimiento explícito para categoría especial (arts. 6.1.a/9.2.a), pendiente de validación. No presumir que el interés estadístico o la excepción de datos manifiestamente públicos justifican automáticamente el tratamiento. Revisar legislación española aplicable, menores y finalidades políticas. La entidad responsable debe decidir y documentar la base antes de recoger.
 

@@ -24,3 +24,13 @@ Convocatoria y anexo del RD 806/2026 verificados en BOE: 52 circunscripciones y 
 Siguen pendientes navegador/E2E, a11y completa, carga, pentest y recuperación de backups, KMS/roles de producción, revisión jurídica y despliegue. Las rutas de recogida siguen cerradas.
 
 Pasada final de la continuación: `npm test` 38/38; integración PostgreSQL 13/13 subcasos (14/14 nodos TAP con contenedor); `npm run build`, `npm run typecheck` y `npm run check:build` correctos. La integración se ha repetido también sobre una base vacía distinta (`cis_pueblo_clean_test`), aplicando las dos migraciones desde cero. La CI remota de este commit se comprobará después de sincronizar el código; no se equipara a pruebas en navegador.
+
+## Continuación — candidaturas, circunscripciones y gráficos
+
+51 pruebas de aplicación correctas y 14 subcasos PostgreSQL (15 nodos TAP con la prueba contenedora). Migraciones 0001–0004 aplicadas y repetidas. La importación de 534 candidaturas se repite sin duplicar. Se comprueba el contenido descifrado mínimo (circunscripción/opción), la ausencia de columna municipal en contadores y el rechazo de códigos municipales en el motor. Sustitución concurrente, retirada, límites y publicación sintética mantienen sus comprobaciones.
+
+Logos: huellas de los 17 archivos locales verificadas, asociaciones y cobertura 161/534 comprobadas, SVG sin elementos activos ni referencias externas. Inspección estática de las imágenes originales realizada en hoja de contacto; no equivale a revisión jurídica de marcas ni del símbolo exacto de cada papeleta.
+
+Resultados oficiales de 2023: 350 diputados en 52 circunscripciones, totales provinciales comprobados. Hemiciclo: 350 puntos únicos en el marco; escenarios parciales no extrapolan y duplicados se rechazan. Cookie futura probada para secreto aleatorio, ruta específica y atributos; endpoints públicos no activados.
+
+Build de producción, TypeScript y comprobaciones de HTML/JS correctos. No se han realizado E2E, revisión móvil real ni auditoría WCAG completa: no hay herramienta de navegador compatible disponible en este entorno Sites. No hay despliegue ni recogida política real. La CI de GitHub se verificará antes de integrar esta continuación.

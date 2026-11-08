@@ -37,7 +37,7 @@ test("convocatoria 2026 verificada: 52 circunscripciones, 350 escaños y Ceuta/M
       election.constituencies.find((c) => c.provinceCode === code)?.system,
       "plurality",
     );
-  assert.equal(election.candidaciesVerified, false);
+  assert.equal(election.candidaciesVerified, true);
 });
 test("el blanco sí altera el umbral, el nulo no", () => {
   const base = {

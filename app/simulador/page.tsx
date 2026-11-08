@@ -1,4 +1,5 @@
-import { SeatSimulator } from "@/components/SeatSimulator";
+import { ParliamentLab } from "@/components/ParliamentLab";
+import previous from "@/data/elections/congress-2023-results.json";
 import election from "@/data/elections/congress-2026.json";
 export const metadata = {
   title: "Simulación experimental de escaños · Escenario manual",
@@ -25,8 +26,37 @@ export default function Page() {
           ni representan a la población.
         </p>
       </div>
-      <SeatSimulator constituencies={election.constituencies} />
+      <ParliamentLab
+        constituencies={election.constituencies}
+        previousGroups={previous.parties.map((p, i) => ({
+          ...p,
+          color: [
+            "#1673b7",
+            "#bc3b3b",
+            "#6a993f",
+            "#ba729e",
+            "#e86464",
+            "#c0a337",
+            "#598b9d",
+            "#498b6b",
+            "#618a5b",
+            "#66a5b2",
+            "#78839a",
+            "#9d7d4c",
+          ][i],
+        }))}
+      />
       <div className="prose">
+        <h2>Fuentes de la comparación</h2>
+        <p>
+          Resultados oficiales de 2023:{" "}
+          <a href={previous.source.url}>
+            Resolución de la Junta Electoral Central publicada en el BOE
+          </a>
+          . PSOE y PSC se conservan separados como en sus tablas. Es la
+          composición derivada de esas elecciones, no los grupos parlamentarios
+          al final de la legislatura.
+        </p>
         <h2>52 circunscripciones, no un reparto nacional único</h2>
         <p>
           El anexo de la convocatoria fija 350 diputados distribuidos entre las

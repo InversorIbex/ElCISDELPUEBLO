@@ -41,6 +41,7 @@ export default function Layout({
             <Link href="/mapa">Territorios</Link>
             <Link href="/tendencias">Tendencias</Link>
             <Link href="/simulador">Simulador</Link>
+            <Link href="/candidaturas">Candidaturas</Link>
             <Link href="/preguntas">Preguntas del pueblo</Link>
             <Link href="/metodologia">Metodología</Link>
           </nav>

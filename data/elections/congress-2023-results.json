@@ -1,0 +1,1010 @@
+{
+  "electionDate": "2023-07-23",
+  "kind": "official_election_result",
+  "source": {
+    "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2023-18907",
+    "sha256": "ee46741c741a71dc0f5aedcf129d058e777de09b607e98c7116a5669cfaa695a",
+    "retrievedAt": "2026-11-08T11:23:34.227991+00:00"
+  },
+  "parties": [
+    {
+      "id": "result-2023-1",
+      "name": "Partido Popular (PP)",
+      "seats": 137
+    },
+    {
+      "id": "result-2023-2",
+      "name": "Partido Socialista Obrero Español (PSOE)",
+      "seats": 102
+    },
+    {
+      "id": "result-2023-3",
+      "name": "VOX (VOX)",
+      "seats": 33
+    },
+    {
+      "id": "result-2023-4",
+      "name": "Sumar (SUMAR)",
+      "seats": 31
+    },
+    {
+      "id": "result-2023-5",
+      "name": "Partit dels Socialistes de Catalunya (PSC-PSOE) (PSC)",
+      "seats": 19
+    },
+    {
+      "id": "result-2023-6",
+      "name": "Esquerra Republicana de Catalunya (ERC)",
+      "seats": 7
+    },
+    {
+      "id": "result-2023-7",
+      "name": "Junts (JUNTS)",
+      "seats": 7
+    },
+    {
+      "id": "result-2023-8",
+      "name": "Euskal Herria Bildu (EH Bildu)",
+      "seats": 6
+    },
+    {
+      "id": "result-2023-9",
+      "name": "Euzko Alderdi Jeltzalea-Partido Nacionalista Vasco (EAJ-PNV)",
+      "seats": 5
+    },
+    {
+      "id": "result-2023-10",
+      "name": "Bloque Nacionalista Galego (BNG)",
+      "seats": 1
+    },
+    {
+      "id": "result-2023-11",
+      "name": "Coalición Canaria (CCa)",
+      "seats": 1
+    },
+    {
+      "id": "result-2023-12",
+      "name": "Unión del Pueblo Navarro (UPN)",
+      "seats": 1
+    }
+  ],
+  "constituencies": [
+    {
+      "provinceCode": "01",
+      "totalSeats": 4,
+      "seats": {
+        "result-2023-1": 1,
+        "result-2023-2": 1,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 1,
+        "result-2023-9": 1,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "02",
+      "totalSeats": 4,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 2,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "03",
+      "totalSeats": 12,
+      "seats": {
+        "result-2023-1": 5,
+        "result-2023-2": 4,
+        "result-2023-3": 2,
+        "result-2023-4": 1,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "04",
+      "totalSeats": 6,
+      "seats": {
+        "result-2023-1": 3,
+        "result-2023-2": 2,
+        "result-2023-3": 1,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "05",
+      "totalSeats": 3,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 1,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "06",
+      "totalSeats": 5,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 2,
+        "result-2023-3": 1,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "07",
+      "totalSeats": 8,
+      "seats": {
+        "result-2023-1": 3,
+        "result-2023-2": 3,
+        "result-2023-3": 1,
+        "result-2023-4": 1,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "08",
+      "totalSeats": 32,
+      "seats": {
+        "result-2023-1": 5,
+        "result-2023-2": 0,
+        "result-2023-3": 2,
+        "result-2023-4": 5,
+        "result-2023-5": 13,
+        "result-2023-6": 4,
+        "result-2023-7": 3,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "09",
+      "totalSeats": 4,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 2,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "10",
+      "totalSeats": 4,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 2,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "11",
+      "totalSeats": 9,
+      "seats": {
+        "result-2023-1": 4,
+        "result-2023-2": 3,
+        "result-2023-3": 1,
+        "result-2023-4": 1,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "12",
+      "totalSeats": 5,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 2,
+        "result-2023-3": 1,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "13",
+      "totalSeats": 5,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 2,
+        "result-2023-3": 1,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "14",
+      "totalSeats": 6,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 2,
+        "result-2023-3": 1,
+        "result-2023-4": 1,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "15",
+      "totalSeats": 8,
+      "seats": {
+        "result-2023-1": 4,
+        "result-2023-2": 2,
+        "result-2023-3": 0,
+        "result-2023-4": 1,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 1,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "16",
+      "totalSeats": 3,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 1,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "17",
+      "totalSeats": 6,
+      "seats": {
+        "result-2023-1": 0,
+        "result-2023-2": 0,
+        "result-2023-3": 0,
+        "result-2023-4": 1,
+        "result-2023-5": 2,
+        "result-2023-6": 1,
+        "result-2023-7": 2,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "18",
+      "totalSeats": 7,
+      "seats": {
+        "result-2023-1": 3,
+        "result-2023-2": 2,
+        "result-2023-3": 1,
+        "result-2023-4": 1,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "19",
+      "totalSeats": 3,
+      "seats": {
+        "result-2023-1": 1,
+        "result-2023-2": 1,
+        "result-2023-3": 1,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "20",
+      "totalSeats": 6,
+      "seats": {
+        "result-2023-1": 0,
+        "result-2023-2": 2,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 2,
+        "result-2023-9": 2,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "21",
+      "totalSeats": 5,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 2,
+        "result-2023-3": 1,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "22",
+      "totalSeats": 3,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 1,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "23",
+      "totalSeats": 5,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 2,
+        "result-2023-3": 1,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "24",
+      "totalSeats": 4,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 2,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "25",
+      "totalSeats": 4,
+      "seats": {
+        "result-2023-1": 0,
+        "result-2023-2": 0,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 2,
+        "result-2023-6": 1,
+        "result-2023-7": 1,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "26",
+      "totalSeats": 4,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 2,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "27",
+      "totalSeats": 4,
+      "seats": {
+        "result-2023-1": 3,
+        "result-2023-2": 1,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "28",
+      "totalSeats": 37,
+      "seats": {
+        "result-2023-1": 16,
+        "result-2023-2": 10,
+        "result-2023-3": 5,
+        "result-2023-4": 6,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "29",
+      "totalSeats": 11,
+      "seats": {
+        "result-2023-1": 5,
+        "result-2023-2": 3,
+        "result-2023-3": 2,
+        "result-2023-4": 1,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "30",
+      "totalSeats": 10,
+      "seats": {
+        "result-2023-1": 4,
+        "result-2023-2": 3,
+        "result-2023-3": 2,
+        "result-2023-4": 1,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "31",
+      "totalSeats": 5,
+      "seats": {
+        "result-2023-1": 1,
+        "result-2023-2": 2,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 1,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 1
+      }
+    },
+    {
+      "provinceCode": "32",
+      "totalSeats": 4,
+      "seats": {
+        "result-2023-1": 3,
+        "result-2023-2": 1,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "33",
+      "totalSeats": 7,
+      "seats": {
+        "result-2023-1": 3,
+        "result-2023-2": 2,
+        "result-2023-3": 1,
+        "result-2023-4": 1,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "34",
+      "totalSeats": 3,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 1,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "35",
+      "totalSeats": 8,
+      "seats": {
+        "result-2023-1": 3,
+        "result-2023-2": 3,
+        "result-2023-3": 1,
+        "result-2023-4": 1,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "36",
+      "totalSeats": 7,
+      "seats": {
+        "result-2023-1": 3,
+        "result-2023-2": 3,
+        "result-2023-3": 0,
+        "result-2023-4": 1,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "37",
+      "totalSeats": 4,
+      "seats": {
+        "result-2023-1": 3,
+        "result-2023-2": 1,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "38",
+      "totalSeats": 7,
+      "seats": {
+        "result-2023-1": 3,
+        "result-2023-2": 3,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 1,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "39",
+      "totalSeats": 5,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 2,
+        "result-2023-3": 1,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "40",
+      "totalSeats": 3,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 1,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "41",
+      "totalSeats": 12,
+      "seats": {
+        "result-2023-1": 4,
+        "result-2023-2": 5,
+        "result-2023-3": 1,
+        "result-2023-4": 2,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "42",
+      "totalSeats": 2,
+      "seats": {
+        "result-2023-1": 1,
+        "result-2023-2": 1,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "43",
+      "totalSeats": 6,
+      "seats": {
+        "result-2023-1": 1,
+        "result-2023-2": 0,
+        "result-2023-3": 0,
+        "result-2023-4": 1,
+        "result-2023-5": 2,
+        "result-2023-6": 1,
+        "result-2023-7": 1,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "44",
+      "totalSeats": 3,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 1,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "45",
+      "totalSeats": 6,
+      "seats": {
+        "result-2023-1": 3,
+        "result-2023-2": 2,
+        "result-2023-3": 1,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "46",
+      "totalSeats": 16,
+      "seats": {
+        "result-2023-1": 6,
+        "result-2023-2": 5,
+        "result-2023-3": 2,
+        "result-2023-4": 3,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "47",
+      "totalSeats": 5,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 2,
+        "result-2023-3": 1,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "48",
+      "totalSeats": 8,
+      "seats": {
+        "result-2023-1": 1,
+        "result-2023-2": 2,
+        "result-2023-3": 0,
+        "result-2023-4": 1,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 2,
+        "result-2023-9": 2,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "49",
+      "totalSeats": 3,
+      "seats": {
+        "result-2023-1": 2,
+        "result-2023-2": 1,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "50",
+      "totalSeats": 7,
+      "seats": {
+        "result-2023-1": 3,
+        "result-2023-2": 2,
+        "result-2023-3": 1,
+        "result-2023-4": 1,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "51",
+      "totalSeats": 1,
+      "seats": {
+        "result-2023-1": 1,
+        "result-2023-2": 0,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    },
+    {
+      "provinceCode": "52",
+      "totalSeats": 1,
+      "seats": {
+        "result-2023-1": 1,
+        "result-2023-2": 0,
+        "result-2023-3": 0,
+        "result-2023-4": 0,
+        "result-2023-5": 0,
+        "result-2023-6": 0,
+        "result-2023-7": 0,
+        "result-2023-8": 0,
+        "result-2023-9": 0,
+        "result-2023-10": 0,
+        "result-2023-11": 0,
+        "result-2023-12": 0
+      }
+    }
+  ],
+  "notice": "Resultados electorales de 2023 por candidaturas. PSOE y PSC se conservan separados como en el BOE. No representa los grupos parlamentarios al final de la legislatura."
+}

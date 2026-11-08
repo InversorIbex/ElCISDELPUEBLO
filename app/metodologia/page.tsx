@@ -24,20 +24,22 @@ export default function Page() {
           encuestas científicas. No se calcularán intervalos de confianza
           propios de muestras aleatorias.
         </p>
-        <h2>Municipio declarado, nunca inferido</h2>
+        <h2>Circunscripción declarada, nunca inferida</h2>
         <p>
-          El municipio se elegirá manualmente a partir del catálogo oficial del
-          INE. Será una declaración del participante, no una residencia
-          verificada. No se usa GPS, geolocalización por IP ni ubicación
-          inferida.
+          En el sondeo del Congreso se elegirá manualmente una de las 52
+          circunscripciones. No se necesita guardar el municipio. Será una
+          declaración del participante, no una residencia verificada. No se usa
+          GPS, geolocalización por IP ni ubicación inferida.
         </p>
         <h2>Privacidad y control de tu respuesta</h2>
         <p>
           El diseño prevé credenciales privadas específicas por sondeo para
           sustituir o retirar una respuesta. No habrá una cuenta global que
           conecte opiniones entre preguntas. Es un sistema seudónimo y no se
-          promete anonimato absoluto. Perder la credencial puede impedir
-          localizar la respuesta.
+          promete anonimato absoluto. Una credencial aleatoria en el navegador
+          permitirá recuperar el control de esa respuesta; no es un
+          identificador físico del dispositivo. Borrar sus datos o cambiar de
+          navegador puede impedir reconocerla.
         </p>
         <p>
           Antes de abrir se requiere revisión jurídica especializada de los
@@ -78,8 +80,11 @@ export default function Page() {
           intervalos de recepción. No existe un panel verificable. Una
           corrección no contará como nueva persona. La simulación manual ya
           permite explorar cifras hipotéticas por circunscripción con el reparto
-          del RD 806/2026 y las reglas del artículo 163 LOREG. No hay datos
-          suficientes para realizar una simulación territorial responsable.
+          del RD 806/2026 y las reglas del artículo 163 LOREG. Se pueden sumar
+          escenarios provinciales manuales, ver un hemiciclo y guardar puntos de
+          escenarios en memoria. La referencia histórica muestra los resultados
+          oficiales de 2023. No existe todavía una estimación basada en
+          respuestas reales ni una serie temporal publicada.
         </p>
         <h2>Fuentes y estado de verificación</h2>
         <p>
@@ -88,13 +93,14 @@ export default function Page() {
           <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-20742">
             Real Decreto 806/2026
           </a>
-          . Las candidaturas provinciales y las licencias cartográficas siguen
-          pendientes de verificación. Verificar una convocatoria no abre un
-          sondeo ni valida sus papeletas. El catálogo municipal del INE a 1 de
-          enero de 2026 ya está importado: 8.132 municipios, con contraste de
-          recuentos provinciales y huellas SHA-256 de los archivos fuente. No se
-          presenta como actualización en tiempo real del Registro de Entidades
-          Locales.
+          . Las 534 candidaturas proclamadas del Congreso y la corrección del 7
+          de noviembre están importadas por circunscripción; los logos tienen
+          cobertura parcial. La cartografía autonómica procede del IGN con
+          atribución CC BY 4.0. Verificar una convocatoria no abre un sondeo ni
+          valida sus papeletas. El catálogo municipal del INE a 1 de enero de
+          2026 ya está importado: 8.132 municipios, con contraste de recuentos
+          provinciales y huellas SHA-256 de los archivos fuente. No se presenta
+          como actualización en tiempo real del Registro de Entidades Locales.
         </p>
         <p>
           Fuentes previstas: <a href="https://www.ine.es/">INE</a>,{" "}
