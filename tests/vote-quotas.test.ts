@@ -1,0 +1,13 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { madridCalendarDate, voteLimits } from "../lib/server/public-vote.ts";
+test("daily quota is two for desktop IP, mobile browser is one per campaign",() => {
+  assert.equal(voteLimits.desktopPerIpPerDay,2);
+  assert.equal(voteLimits.desktopPerBrowserPerDay,2);
+  assert.equal(voteLimits.mobilePerBrowserCampaign,1);
+});
+test("Madrid's calendar date handles DST independently of server locale",() => {
+  assert.equal(madridCalendarDate(new Date("2026-11-08T23:30:00Z")),"2026-11-09");
+  assert.equal(madridCalendarDate(new Date("2026-07-08T22:30:00Z")),"2026-07-09");
+  assert.equal(madridCalendarDate(new Date("2026-11-08T21:30:00Z")),"2026-11-08");
+});

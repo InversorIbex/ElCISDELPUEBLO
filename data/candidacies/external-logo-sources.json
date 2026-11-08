@@ -1,0 +1,196 @@
+{
+  "reviewedAt": "2026-11-08",
+  "notice": "Logotipos de las formaciones identificados por fuentes en Wikimedia Commons. La marca de partido no acredita el símbolo de papeleta 2026. No hay logo inventado.",
+  "logos": [
+    {
+      "id": "pp",
+      "file": "Logo del PP (2022).svg",
+      "partyPage": "https://www.pp.es/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logo_del_PP_(2022).svg",
+      "path": "/api/party-logo/pp",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20del%20PP%20(2022).svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "psoe",
+      "file": "Logo PSOE 2023.svg",
+      "partyPage": "https://www.psoe.es/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logo_PSOE_2023.svg",
+      "path": "/api/party-logo/psoe",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20PSOE%202023.svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "vox",
+      "file": "VOX logo.svg",
+      "partyPage": "https://www.voxespana.es/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:VOX_logo.svg",
+      "path": "/api/party-logo/vox",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/VOX%20logo.svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "podemos",
+      "file": "Podemos logo completo (2022).svg",
+      "partyPage": "https://podemos.info/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Podemos_logo_completo_(2022).svg",
+      "path": "/api/party-logo/podemos",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Podemos%20logo%20completo%20(2022).svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "pcte",
+      "file": "PCTE LOGO.svg",
+      "partyPage": "https://www.pcte.es/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:PCTE_LOGO.svg",
+      "path": "/api/party-logo/pcte",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/PCTE%20LOGO.svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "salf",
+      "file": "Se acabo la fiesta wordmark.png",
+      "partyPage": "https://www.seacabolafiesta.com/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Se_acabo_la_fiesta_wordmark.png",
+      "path": "/api/party-logo/salf",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Se%20acabo%20la%20fiesta%20wordmark.png",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "bng",
+      "file": "BNG logo.svg",
+      "partyPage": "https://www.bng.gal/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:BNG_logo.svg",
+      "path": "/api/party-logo/bng",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/BNG%20logo.svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "junts",
+      "file": "Junts per Catalunya (2020).svg",
+      "partyPage": "https://www.junts.cat/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Junts_per_Catalunya_(2020).svg",
+      "path": "/api/party-logo/junts",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Junts%20per%20Catalunya%20(2020).svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "erc",
+      "file": "ERC logo 2025.svg",
+      "partyPage": "https://www.esquerra.cat/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:ERC_logo_2025.svg",
+      "path": "/api/party-logo/erc",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/ERC%20logo%202025.svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "pnv",
+      "file": "Logo PNV 2025.svg",
+      "partyPage": "https://www.eaj-pnv.eus/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logo_PNV_2025.svg",
+      "path": "/api/party-logo/pnv",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20PNV%202025.svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "mundojusto",
+      "file": "Por Un Mundo Mas Justo.png",
+      "partyPage": "https://www.porunmundomasjusto.es/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Por_Un_Mundo_Mas_Justo.png",
+      "path": "/api/party-logo/mundojusto",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Por%20Un%20Mundo%20Mas%20Justo.png",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "psc",
+      "file": "Logo PSC oficial 2021.svg",
+      "partyPage": "https://www.socialistes.cat/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logo_PSC_oficial_2021.svg",
+      "path": "/api/party-logo/psc",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20PSC%20oficial%202021.svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "pctc",
+      "file": "Logotip del Partit Comunista dels Treballadors de Catalunya.png",
+      "partyPage": "https://commons.wikimedia.org/wiki/Category:Communist_Party_of_the_Workers_of_Catalonia",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logotip_del_Partit_Comunista_dels_Treballadors_de_Catalunya.png",
+      "path": "/api/party-logo/pctc",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logotip%20del%20Partit%20Comunista%20dels%20Treballadors%20de%20Catalunya.png",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "teruelexiste",
+      "file": "Logotipo de Teruel Existe (2022).svg",
+      "partyPage": "https://teruelexiste.info/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logotipo_de_Teruel_Existe_(2022).svg",
+      "path": "/api/party-logo/teruelexiste",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logotipo%20de%20Teruel%20Existe%20(2022).svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "drago",
+      "file": "Logo Drago Canarias 2025.svg",
+      "partyPage": "https://www.dragocanarias.com/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logo_Drago_Canarias_2025.svg",
+      "path": "/api/party-logo/drago",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20Drago%20Canarias%202025.svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "soriaya",
+      "file": "Logo Soria Ya 2022.svg",
+      "partyPage": "https://soriaya.org/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logo_Soria_Ya_2022.svg",
+      "path": "/api/party-logo/soriaya",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20Soria%20Ya%202022.svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "convergents",
+      "file": "Logo convergents.svg",
+      "partyPage": "https://www.convergents.org/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logo_convergents.svg",
+      "path": "/api/party-logo/convergents",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20convergents.svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "compromis-front",
+      "file": "Compromís - Front Valencià.svg",
+      "partyPage": "https://app.juntaelectoralcentral.es/svtjec/descargarFichero?tipo=tipoCoalicion&codigoCoalicion=76997",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Comprom%C3%ADs_-_Front_Valenci%C3%A0.svg",
+      "path": "/api/party-logo/compromis-front",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Comprom%C3%ADs%20-%20Front%20Valenci%C3%A0.svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "prepal",
+      "file": "PREPAL (sigloide).svg",
+      "partyPage": "https://commons.wikimedia.org/wiki/Category:Partido_Regionalista_del_Pa%C3%ADs_Leon%C3%A9s",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:PREPAL_(sigloide).svg",
+      "path": "/api/party-logo/prepal",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/PREPAL%20(sigloide).svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    }
+  ]
+}

@@ -1,3 +1,6 @@
+import { BallotPreview } from "@/components/BallotPreview";
+import { CandidacyResults } from "@/components/CandidacyResults";
+import { approvedProvinceResult } from "@/lib/published-provincial";
 import Link from "next/link";
 import { CommunityMap } from "@/components/CommunityMap";
 import { CandidacyList } from "@/components/CandidacyList";
@@ -130,7 +133,9 @@ export default async function Participate({
               Ver resultados de esta zona ↗
             </Link>
           </div>
-          <CandidacyList list={candidaciesForProvince(province.code)} />
+          <BallotPreview candidacies={candidaciesForProvince(province.code)} provinceName={displayName(province.name)} />
+          <CandidacyResults list={candidaciesForProvince(province.code)} provinceName={displayName(province.name)} release={approvedProvinceResult(province.code)} />
+          <details className="logo-transparency"><summary>Consultar fuentes oficiales y fichas completas de candidaturas</summary><CandidacyList list={candidaciesForProvince(province.code)} /></details>
           <div className="notice">
             <p>
               Faltan logos verificados para algunas candidaturas; todas aparecen
