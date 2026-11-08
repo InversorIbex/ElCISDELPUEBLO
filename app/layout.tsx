@@ -3,6 +3,7 @@ import Link from "next/link";
 import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://elcisdelpueblo.vercel.app"),
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "es_ES",
@@ -11,14 +12,14 @@ export const metadata: Metadata = {
     description:
       "Candidaturas por circunscripción, simulador de escaños y comparación con 2023. Observatorio independiente; participación todavía no abierta.",
   },
-  twitter: { card: "summary_large_image" },
+  twitter: { card: "summary_large_image", title: "El Pueblo Opina · Candidaturas al Congreso", description: "Consulta candidaturas al Congreso por provincia, compara escaños y conoce las reglas electorales. Sondeo voluntario todavía cerrado." },
   title: {
     default: "El Pueblo Opina · Observatorio ciudadano",
     template: "%s · El Pueblo Opina",
   },
   description:
     "Candidaturas por circunscripción, simulador de escaños y fuentes oficiales. Observatorio independiente. Participación todavía no abierta.",
-  robots: { index: false, follow: false },
+  robots: { index: true, follow: true },
 };
 export default function Layout({
   children,

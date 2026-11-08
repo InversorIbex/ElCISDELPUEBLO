@@ -12,7 +12,7 @@ import {
   displayName,
 } from "@/lib/territories";
 import { candidaciesForProvince } from "@/lib/candidacies/registry";
-export const metadata = { title: "Elige tu zona · Mapa del sondeo" };
+export const metadata = { title: "Consultar papeleta por provincia · Sondeo todavía cerrado", robots: { index: false, follow: true } };
 export default async function Participate({
   searchParams,
 }: {
