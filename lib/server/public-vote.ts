@@ -1,10 +1,11 @@
 import { createHmac, randomUUID } from "node:crypto";
+import { isIP } from "node:net";
 import type { Pool, PoolClient } from "pg";
 import { candidaciesForProvince } from "../candidacies/registry.ts";
 const CAMPAIGN = "congress-2026";
 export const voteLimits = Object.freeze({desktopPerIpPerDay:2, desktopPerBrowserPerDay:2, mobilePerBrowserCampaign:1});
-type Mode = "mobile" | "desktop";
-type Vote = { provinceCode:string; candidacyId:string; browserToken:string; ip:string; mode:Mode; requestToken:string };
+export type Mode = "mobile" | "desktop";
+export type Vote = { provinceCode:string; candidacyId:string; browserToken:string; ip:string; mode:Mode; requestToken:string };
 export function madridCalendarDate(now:Date) {
   const parts=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/Madrid",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(now);
   const read=(type:string)=>parts.find(p=>p.type===type)?.value;
@@ -32,9 +33,9 @@ export async function saveApprovedVote(pool:Pool, secret:string, vote:Vote, now=
   if(secret.length<32)throw new Error("HMAC_SECRET_REQUIRED");
   if(!/^[0-9]{2}$/.test(vote.provinceCode)||!allowedChoice(vote.provinceCode,vote.candidacyId))
     return {accepted:false,code:"INVALID_CANDIDACY"} as const;
-  if(!/^[a-f0-9]{64}$/.test(vote.browserToken)||!/^[a-f0-9-]{36}$/.test(vote.requestToken))
+  if(!/^[a-f0-9]{64}$/.test(vote.browserToken)||!/^[a-f0-9]{8}-[a-f0-9]{4}-[1-8][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(vote.requestToken))
     return {accepted:false,code:"INVALID_TOKEN"} as const;
-  if(!vote.ip || vote.ip.length>120 || !["desktop","mobile"].includes(vote.mode))
+  if(isIP(vote.ip) === 0 || !["desktop","mobile"].includes(vote.mode))
     return {accepted:false,code:"INVALID_CLIENT"} as const;
   const date=madridCalendarDate(now);
   const ipHash=hmac(secret,`${CAMPAIGN}:ip:${date}`,vote.ip);
