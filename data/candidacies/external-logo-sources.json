@@ -101,6 +101,46 @@
       "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20PNV%202025.svg",
       "background": "light",
       "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "mundojusto",
+      "file": "Por Un Mundo Mas Justo.png",
+      "partyPage": "https://www.porunmundomasjusto.es/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Por_Un_Mundo_Mas_Justo.png",
+      "path": "/api/party-logo/mundojusto",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Por%20Un%20Mundo%20Mas%20Justo.png",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "psc",
+      "file": "Logo PSC oficial 2021.svg",
+      "partyPage": "https://www.socialistes.cat/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logo_PSC_oficial_2021.svg",
+      "path": "/api/party-logo/psc",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20PSC%20oficial%202021.svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "pctc",
+      "file": "Logotip del Partit Comunista dels Treballadors de Catalunya.png",
+      "partyPage": "https://commons.wikimedia.org/wiki/Category:Communist_Party_of_the_Workers_of_Catalonia",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logotip_del_Partit_Comunista_dels_Treballadors_de_Catalunya.png",
+      "path": "/api/party-logo/pctc",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logotip%20del%20Partit%20Comunista%20dels%20Treballadors%20de%20Catalunya.png",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "teruelexiste",
+      "file": "Logotipo de Teruel Existe (2022).svg",
+      "partyPage": "https://teruelexiste.info/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logotipo_de_Teruel_Existe_(2022).svg",
+      "path": "/api/party-logo/teruelexiste",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logotipo%20de%20Teruel%20Existe%20(2022).svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
     }
   ]
 }
