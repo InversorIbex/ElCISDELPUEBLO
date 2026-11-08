@@ -65,8 +65,8 @@ export async function saveApprovedVote(pool:Pool, secret:string, vote:Vote, now=
       if(!await upsertCounter(client,"browser_daily",CAMPAIGN,date,browserHash,2))throw new Error("BROWSER_LIMIT_RACE");
     }
     // Do not link stored ballot rows to browser or IP identifiers.
-    await client.query("INSERT INTO poll_private.ballots(id,campaign_id,province_code,candidacy_id) VALUES($1,$2,$3,$4)",
-      [randomUUID(),CAMPAIGN,vote.provinceCode,vote.candidacyId]);
+    await client.query("INSERT INTO poll_private.ballots(id,campaign_id,province_code,candidacy_id,consent_version) VALUES($1,$2,$3,$4,$5)",
+      [randomUUID(),CAMPAIGN,vote.provinceCode,vote.candidacyId,"epov-2026-v1"]);
     await client.query("INSERT INTO poll_private.idempotency(campaign_id,request_digest) VALUES($1,$2)",[CAMPAIGN,requestHash]);
     await client.query("COMMIT");
     return {accepted:true,code:"RECORDED"} as const;
