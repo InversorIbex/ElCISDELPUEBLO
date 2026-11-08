@@ -1,13 +1,19 @@
--- Draft for separately reviewed production participation. DO NOT APPLY to the disposable test DB.
+-- Draft for separately reviewed production participation. Apply ONLY on isolated test branch before approval.
 -- No public permissions; the server role must be granted minimum privileges only after launch approval.
 BEGIN;
 CREATE SCHEMA IF NOT EXISTS poll_private;
 REVOKE ALL ON SCHEMA poll_private FROM PUBLIC;
+-- Required for cross-constraint that the selected candidacy belongs to its province.
+CREATE UNIQUE INDEX IF NOT EXISTS registry_edition_id_province_unique
+ ON catalog.registered_congress_candidacies(edition_id,id,province_code);
 CREATE TABLE IF NOT EXISTS poll_private.ballots (
  id uuid PRIMARY KEY,
  campaign_id text NOT NULL CHECK (campaign_id = 'congress-2026'),
- province_code char(2) NOT NULL CHECK (province_code ~ '^[0-9]{2}$'),
- candidacy_id text NOT NULL,
+ province_code char(2) NOT NULL REFERENCES reference.provinces(code),
+ candidacy_id uuid NOT NULL,
+ edition_id text NOT NULL DEFAULT 'congress-2026' CHECK (edition_id = 'congress-2026'),
+ FOREIGN KEY (edition_id,candidacy_id,province_code)
+  REFERENCES catalog.registered_congress_candidacies(edition_id,id,province_code),
  created_at timestamptz NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS ballots_campaign_province_idx ON poll_private.ballots (campaign_id,province_code,candidacy_id);
@@ -38,6 +44,7 @@ CREATE TABLE IF NOT EXISTS poll_private.idempotency (
  accepted_at timestamptz NOT NULL DEFAULT now(),
  PRIMARY KEY(campaign_id,request_digest)
 );
+-- Retention will be implemented after the approved privacy schedule.
 ALTER TABLE poll_private.ballots ENABLE ROW LEVEL SECURITY;
 ALTER TABLE poll_private.ip_daily ENABLE ROW LEVEL SECURITY;
 ALTER TABLE poll_private.browser_daily ENABLE ROW LEVEL SECURITY;
