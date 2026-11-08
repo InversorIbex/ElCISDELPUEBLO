@@ -39,9 +39,7 @@ export default function Layout({
             href="/"
             aria-label="El Pueblo Opina, inicio"
           >
-            <span className="brand-icon">
-              p<span>·</span>
-            </span>
+            <span className="brand-icon" aria-hidden="true">◉</span>
             <span>
               EL PUEBLO <small>OPINA</small>
             </span>
