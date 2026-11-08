@@ -1,3 +1,5 @@
+import { CandidacyResults } from "@/components/CandidacyResults";
+import { approvedProvinceResult } from "@/lib/published-provincial";
 import Link from "next/link";
 import { CommunityMap } from "@/components/CommunityMap";
 import { CandidacyList } from "@/components/CandidacyList";
@@ -130,6 +132,7 @@ export default async function Participate({
               Ver resultados de esta zona ↗
             </Link>
           </div>
+          <CandidacyResults list={candidaciesForProvince(province.code)} provinceName={displayName(province.name)} release={approvedProvinceResult(province.code)} />
           <CandidacyList list={candidaciesForProvince(province.code)} />
           <div className="notice">
             <p>
