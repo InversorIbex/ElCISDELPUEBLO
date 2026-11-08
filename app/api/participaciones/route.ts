@@ -70,11 +70,9 @@ export async function POST(req:Request) {
   const cookie=(await cookies()).get("epov_anon_v1")?.value;
   if(!cookie||!/^[a-f0-9]{64}$/.test(cookie))return json({error:"SESSION_REQUIRED"},403);
   if(!await verifyChallenge(turnstileToken,ip,requestToken))return json({error:"CHALLENGE_INVALID"},403);
-  const userAgent=req.headers.get("user-agent")??"";
-  const mode=/(android|iphone|ipad|ipod|mobile)/i.test(userAgent)?"mobile":"desktop";
   try {
     const result=await saveApprovedVote(getPool(),process.env.VOTE_HMAC_SECRET!,{
-      provinceCode,candidacyId,browserToken:cookie,ip,mode,requestToken,
+      provinceCode,candidacyId,browserToken:cookie,ip,requestToken,
     });
     if(result.accepted) return json({recorded:true,code:"RECORDED"});
     const code=result.code;

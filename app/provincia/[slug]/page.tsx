@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props) {
   if (!p) return { title: "Provincia no encontrada", robots: { index: false, follow: false } };
   return {
     title: `Candidaturas al Congreso en ${displayName(p.name)} · 2026`,
-    description: `Consulta candidaturas proclamadas en ${displayName(p.name)}, las fuentes oficiales y cómo se asignan sus escaños. Sondeo independiente todavía cerrado.`,
+    description: `Consulta candidaturas proclamadas en ${displayName(p.name)}, las fuentes oficiales y cómo se asignan sus escaños. Sondeo ciudadano voluntario e independiente.`,
     alternates: { canonical: provincePath(p) },
   };
 }

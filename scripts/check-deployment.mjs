@@ -44,12 +44,13 @@ assert.match(image.headers.get("content-type"), /image\/png/);
 const bytes = new Uint8Array(await image.arrayBuffer());
 assert.deepEqual([...bytes.slice(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
 const status = await (await get("/api/participaciones")).json();
-assert.equal(status.enabled, false);
-const closed = await (await get("/api/participaciones", 423, "POST")).json();
-assert.equal(closed.enabled, false);
+if (!status.enabled) {
+  const closed = await (await get("/api/participaciones", 423, "POST")).json();
+  assert.equal(closed.enabled, false);
+}
 const candidates = await (await get("/api/candidaturas?provincia=27")).json();
 assert.equal(candidates.candidacies.length, 8);
-assert.equal(candidates.participationEnabled, false);
+assert.equal(candidates.participationEnabled, status.enabled);
 assert.ok(candidates.candidacies.every((c) => c.provinceCode === "27"));
 console.log(
   "Portada, rutas, CSS, imagen social PNG y cierre de participación verificados por HTTP. No sustituye pruebas de navegador.",
@@ -57,7 +58,7 @@ console.log(
 
 const ballot = await (await get("/participar?provincia=27")).text();
 assert.ok(ballot.includes("Lugo"));
-assert.ok(ballot.includes("VOTACIÓN TODAVÍA NO ABIERTA"));
+assert.ok(ballot.includes(status.enabled ? "VOTACIÓN ABIERTA" : "VOTACIÓN TODAVÍA NO ABIERTA"));
 assert.ok(ballot.includes("/logos/"));
 assert.ok(ballot.includes("/resultados?provincia=27"));
 const resultPage = await (await get("/resultados?provincia=27")).text();

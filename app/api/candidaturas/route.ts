@@ -1,3 +1,4 @@
+import { isLiveVoteConfigured } from "../../../lib/server/live-vote-configuration.ts";
 import {
   candidaciesForProvince,
   candidacyInfo,
@@ -18,7 +19,7 @@ export function GET(request: Request) {
       provinceCode: province,
       candidacies: candidaciesForProvince(province),
       asOf: candidacyInfo.asOf,
-      participationEnabled: false,
+      participationEnabled: isLiveVoteConfigured(),
     },
     { headers: { "Cache-Control": "public, max-age=3600" } },
   );

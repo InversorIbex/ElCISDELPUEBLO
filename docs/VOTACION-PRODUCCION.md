@@ -3,8 +3,8 @@
 La página pública sigue rechazando POST en `/api/participaciones` con 423; los cambios de esta rama no han activado el servicio. `lib/server/public-vote.ts` es la capa transaccional preparada para una futura integración, con SQL de revisión en `db/drafts/public_vote.sql`. **Ese SQL no pertenece al flujo automático de migraciones y no se ha aplicado a producción.**
 
 ## Política solicitada por el promotor
-- Ordenador: máximo **2 votos aceptados por IP y día de calendario de Madrid** y máximo 2 por credencial de navegador y día.
-- Navegador móvil: **1 voto por credencial anónima persistente y campaña**, además de máximo 2 por IP y día.
+- **Regla vigente (2026-11-08):** máximo **2 votos aceptados por IP y día de calendario de Madrid** y **1 voto por credencial anónima de navegador ("ID de dispositivo") en toda la campaña**, sea ordenador o móvil. Ya no se distingue el tipo de dispositivo por User-Agent. La marca de "ya votó" se guarda (como HMAC) en `poll_private.mobile_lifetime`, nombre conservado por compatibilidad con el esquema ya creado en Neon.
+- **Veda electoral (LOREG art. 69.7):** `lib/electoral-blackout.ts` impide en servidor devolver resultados del sondeo del 24-N 00:00 al 29-N 21:00 (hora peninsular). La votación sigue abierta.
 - La web **no obtiene un ID permanente real de un teléfono**. El navegador puede borrar cookies; el User-Agent se puede falsificar; una IP puede pertenecer a varias personas. Por tanto, estos límites son *mitigaciones*, no garantías de identidad individual. No implementar fingerprinting invasivo como sustituto.
 - Los contadores de IP y navegador se almacenarán como HMAC con clave privada; nunca la IP literal. El voto se guarda separado de dichos contadores.
 - Detección de IP únicamente desde proveedor de proxy confiable y configuración verificada; no aceptar arbitrariamente `X-Forwarded-For` del cliente.

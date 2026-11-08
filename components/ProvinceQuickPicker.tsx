@@ -4,7 +4,7 @@ import Link from "next/link";
 import styles from "./ProvinceQuickPicker.module.css";
 
 type ProvinceOption = { code: string; name: string };
-export function ProvinceQuickPicker({ provinces }: { provinces: ProvinceOption[] }) {
+export function ProvinceQuickPicker({ provinces, voteOpen = false }: { provinces: ProvinceOption[]; voteOpen?: boolean }) {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<string>("");
   const options = useMemo(() => provinces
@@ -35,10 +35,10 @@ export function ProvinceQuickPicker({ provinces }: { provinces: ProvinceOption[]
       {options.length === 0 && <p role="status">No hay circunscripciones que coincidan con la búsqueda.</p>}
       {province ? (
         <Link className={styles.cta} href={`/participar?provincia=${encodeURIComponent(province.code)}#papeleta`}>
-          Ver candidaturas de {province.name} →
+          {voteOpen ? `Votar en ${province.name}` : `Ver candidaturas de ${province.name}`} →
         </Link>
       ) : (
-        <p className={styles.hint}>Puedes consultar todas las candidaturas. La recogida de votos todavía no está abierta.</p>
+        <p className={styles.hint}>{voteOpen ? "Elige tu circunscripción para ver la papeleta y dar tu opinión." : "Puedes consultar todas las candidaturas. La recogida de votos todavía no está abierta."}</p>
       )}
       <p className={styles.disclaimer}>Sondeo abierto voluntario, no científico ni representativo. No es una consulta electoral oficial.</p>
     </section>

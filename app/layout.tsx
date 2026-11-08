@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import { isLiveVoteConfigured } from "@/lib/server/live-vote-configuration";
 export const metadata: Metadata = {
   metadataBase: new URL("https://elcisdelpueblo.vercel.app"),
   alternates: { canonical: "/" },
@@ -10,15 +11,15 @@ export const metadata: Metadata = {
     siteName: "El Pueblo Opina",
     title: "El Pueblo Opina · La política, con contexto",
     description:
-      "Candidaturas por circunscripción, simulador de escaños y comparación con 2023. Observatorio independiente; participación todavía no abierta.",
+      "Candidaturas por circunscripción, simulador de escaños y comparación con 2023. Observatorio independiente y sondeo ciudadano voluntario.",
   },
-  twitter: { card: "summary_large_image", title: "El Pueblo Opina · Candidaturas al Congreso", description: "Consulta candidaturas al Congreso por provincia, compara escaños y conoce las reglas electorales. Sondeo voluntario todavía cerrado." },
+  twitter: { card: "summary_large_image", title: "El Pueblo Opina · Candidaturas al Congreso", description: "Consulta candidaturas al Congreso por provincia, compara escaños y da tu opinión en un sondeo voluntario." },
   title: {
     default: "El Pueblo Opina · Observatorio ciudadano",
     template: "%s · El Pueblo Opina",
   },
   description:
-    "Candidaturas por circunscripción, simulador de escaños y fuentes oficiales. Observatorio independiente. Participación todavía no abierta.",
+    "Candidaturas por circunscripción, simulador de escaños y fuentes oficiales. Observatorio independiente. Sondeo voluntario no representativo.",
   robots: { index: true, follow: true },
 };
 export default function Layout({
@@ -31,8 +32,11 @@ export default function Layout({
           Saltar al contenido
         </a>
         <div className="devbar">
-          EDICIÓN PÚBLICA INFORMATIVA{" "}
-          <span>· Sin recogida de respuestas políticas</span>
+          {isLiveVoteConfigured() ? (
+            <>SONDEO CIUDADANO ABIERTO{" "}<span>· Voluntario, no oficial ni representativo</span></>
+          ) : (
+            <>EDICIÓN PÚBLICA INFORMATIVA{" "}<span>· Sin recogida de respuestas políticas</span></>
+          )}
         </div>
         <header>
           <Link

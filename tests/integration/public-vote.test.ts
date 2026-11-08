@@ -17,8 +17,8 @@ if(!secret || secret.length<32) throw new Error("TEST_VOTE_HMAC_SECRET_REQUIRED"
 const candidacyId="c52d79f1-37b1-509c-b597-303b410d427d";
 const browser=()=>randomBytes(32).toString("hex");
 const nextIP=()=>{const b=randomBytes(4);return `fd42:${b.subarray(0,2).toString("hex")}:${b.subarray(2,4).toString("hex")}::1`;};
-const input=(ip:string,mode:"mobile"|"desktop",browserToken=browser()):Vote=>({
-  ip,mode,browserToken,provinceCode:"27",candidacyId,requestToken:randomUUID(),
+const input=(ip:string,browserToken=browser()):Vote=>({
+  ip,browserToken,provinceCode:"27",candidacyId,requestToken:randomUUID(),
 });
 async function existingVotes(ip:string, date:string) {
   // For tests prefer assertions about accepted count + commit, never query by a raw client IP in application code.
@@ -27,29 +27,29 @@ async function existingVotes(ip:string, date:string) {
 }
 test("transactional quota and idempotency against isolated Neon branch",async(t)=>{
   try {
-    await t.test("desktop: 2 per IP/day, third rejected", async()=>{
+    await t.test("2 per IP/day, third rejected", async()=>{
       const ip=nextIP();
-      assert.equal((await saveApprovedVote(pool,secret,input(ip,"desktop"))).accepted,true);
-      assert.equal((await saveApprovedVote(pool,secret,input(ip,"desktop"))).accepted,true);
-      assert.deepEqual(await saveApprovedVote(pool,secret,input(ip,"desktop")),{accepted:false,code:"IP_DAILY_LIMIT"});
+      assert.equal((await saveApprovedVote(pool,secret,input(ip))).accepted,true);
+      assert.equal((await saveApprovedVote(pool,secret,input(ip))).accepted,true);
+      assert.deepEqual(await saveApprovedVote(pool,secret,input(ip)),{accepted:false,code:"IP_DAILY_LIMIT"});
     });
-    await t.test("mobile: one per persistent browser token",async()=>{
+    await t.test("one vote per persistent browser token for the whole campaign",async()=>{
       const id=browser();
-      assert.equal((await saveApprovedVote(pool,secret,input(nextIP(),"mobile",id))).accepted,true);
-      assert.deepEqual(await saveApprovedVote(pool,secret,input(nextIP(),"mobile",id)),{accepted:false,code:"MOBILE_BROWSER_LIMIT"});
+      assert.equal((await saveApprovedVote(pool,secret,input(nextIP(),id))).accepted,true);
+      assert.deepEqual(await saveApprovedVote(pool,secret,input(nextIP(),id)),{accepted:false,code:"BROWSER_LIMIT"});
     });
     await t.test("idempotent request never inserts twice",async()=>{
-      const v=input(nextIP(),"desktop");
+      const v=input(nextIP());
       assert.equal((await saveApprovedVote(pool,secret,v)).accepted,true);
       assert.deepEqual(await saveApprovedVote(pool,secret,v),{accepted:false,code:"ALREADY_SUBMITTED"});
     });
     await t.test("3 concurrent requests allow at most 2 from one IP",async()=>{
       const ip=nextIP();
-      const results=await Promise.all([1,2,3].map(()=>saveApprovedVote(pool,secret,input(ip,"desktop"))));
+      const results=await Promise.all([1,2,3].map(()=>saveApprovedVote(pool,secret,input(ip))));
       assert.equal(results.filter(r=>r.accepted).length,2);
     });
     await t.test("different province rejected before touching DB",async()=>{
-      const v={...input(nextIP(),"desktop"),provinceCode:"28"};
+      const v={...input(nextIP()),provinceCode:"28"};
       assert.deepEqual(await saveApprovedVote(pool,secret,v),{accepted:false,code:"INVALID_CANDIDACY"});
     });
   }finally{await pool.end();}

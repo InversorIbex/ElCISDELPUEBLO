@@ -1,5 +1,6 @@
 import data from "../data/results/approved-provincial.json" with { type: "json" };
 import { candidaciesForProvince } from "./candidacies/registry.ts";
+import { inPollBlackout } from "./electoral-blackout.ts";
 
 export type ProvincialRelease = {
   provinceCode: string;
@@ -26,7 +27,9 @@ function valid(release: ProvincialRelease): boolean {
   if (release.totalResponses < 50 || counts.some(([,v]) => v > 0 && v < 50)) return false;
   return true;
 }
-export function approvedProvinceResult(provinceCode: string): ProvincialRelease | null {
+export function approvedProvinceResult(provinceCode: string, now = new Date()): ProvincialRelease | null {
+  // Server-side legal blackout: nothing from the citizen poll is returned.
+  if (inPollBlackout(now)) return null;
   const found = releases.filter(r => r.provinceCode === provinceCode);
   if (found.length !== 1) return null;
   return valid(found[0]) ? found[0] : null;

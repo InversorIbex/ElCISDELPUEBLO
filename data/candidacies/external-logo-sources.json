@@ -191,6 +191,16 @@
       "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/PREPAL%20(sigloide).svg",
       "background": "light",
       "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "puede",
+      "file": "PUEDE logo.png",
+      "partyPage": "https://commons.wikimedia.org/wiki/Category:Partido_Unionista_Estado_de_Espa%C3%B1a",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:PUEDE_logo.png",
+      "path": "/api/party-logo/puede",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/PUEDE%20logo.png",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
     }
   ]
 }

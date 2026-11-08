@@ -3,9 +3,14 @@ import { isIP } from "node:net";
 import type { Pool, PoolClient } from "pg";
 import { candidaciesForProvince } from "../candidacies/registry.ts";
 const CAMPAIGN = "congress-2026";
-export const voteLimits = Object.freeze({desktopPerIpPerDay:2, desktopPerBrowserPerDay:2, mobilePerBrowserCampaign:1});
-export type Mode = "mobile" | "desktop";
-export type Vote = { provinceCode:string; candidacyId:string; browserToken:string; ip:string; mode:Mode; requestToken:string };
+/**
+ * Promoter policy (2026-11-08): max 2 accepted votes per IP and Madrid calendar day,
+ * and 1 vote per anonymous browser credential ("device ID") for the whole campaign,
+ * on any device. The credential is an HttpOnly cookie: it is NOT a hardware ID and
+ * can be reset by clearing cookies; these are mitigations, not identity guarantees.
+ */
+export const voteLimits = Object.freeze({perIpPerDay:2, perBrowserCampaign:1});
+export type Vote = { provinceCode:string; candidacyId:string; browserToken:string; ip:string; requestToken:string };
 export function madridCalendarDate(now:Date) {
   const parts=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/Madrid",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(now);
   const read=(type:string)=>parts.find(p=>p.type===type)?.value;
@@ -19,8 +24,8 @@ function hmac(secret:string, scope:string,value:string) {
 function allowedChoice(provinceCode:string,candidacyId:string) {
   return candidaciesForProvince(provinceCode).some(c => c.id===candidacyId);
 }
-async function upsertCounter(client:PoolClient,table:"ip_daily"|"browser_daily",campaignId:string,date:string,digest:string,max:number) {
-  const column=table==="ip_daily"?"ip_digest":"browser_digest";
+async function upsertCounter(client:PoolClient,table:"ip_daily",campaignId:string,date:string,digest:string,max:number) {
+  const column="ip_digest";
   const rows=await client.query(`
     INSERT INTO poll_private.${table}(campaign_id,date_madrid,${column},accepted) VALUES($1,$2,$3,1)
     ON CONFLICT(campaign_id,date_madrid,${column})
@@ -35,7 +40,7 @@ export async function saveApprovedVote(pool:Pool, secret:string, vote:Vote, now=
     return {accepted:false,code:"INVALID_CANDIDACY"} as const;
   if(!/^[a-f0-9]{64}$/.test(vote.browserToken)||!/^[a-f0-9]{8}-[a-f0-9]{4}-[1-8][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(vote.requestToken))
     return {accepted:false,code:"INVALID_TOKEN"} as const;
-  if(isIP(vote.ip) === 0 || !["desktop","mobile"].includes(vote.mode))
+  if(isIP(vote.ip) === 0)
     return {accepted:false,code:"INVALID_CLIENT"} as const;
   const date=madridCalendarDate(now);
   const ipHash=hmac(secret,`${CAMPAIGN}:ip:${date}`,vote.ip);
@@ -50,20 +55,12 @@ export async function saveApprovedVote(pool:Pool, secret:string, vote:Vote, now=
     const seen=await client.query("SELECT 1 FROM poll_private.idempotency WHERE campaign_id=$1 AND request_digest=$2",[CAMPAIGN,requestHash]);
     if(seen.rowCount){await client.query("ROLLBACK");return {accepted:false,code:"ALREADY_SUBMITTED"} as const;}
     const prior=await client.query("SELECT accepted FROM poll_private.ip_daily WHERE campaign_id=$1 AND date_madrid=$2 AND ip_digest=$3",[CAMPAIGN,date,ipHash]);
-    if(prior.rows[0]?.accepted>=voteLimits.desktopPerIpPerDay){await client.query("ROLLBACK");return {accepted:false,code:"IP_DAILY_LIMIT"} as const;}
-    if(vote.mode==="mobile"){
-      const already=await client.query("SELECT 1 FROM poll_private.mobile_lifetime WHERE campaign_id=$1 AND browser_digest=$2",[CAMPAIGN,browserHash]);
-      if(already.rowCount){await client.query("ROLLBACK");return {accepted:false,code:"MOBILE_BROWSER_LIMIT"} as const;}
-    } else {
-      const previous=await client.query("SELECT accepted FROM poll_private.browser_daily WHERE campaign_id=$1 AND date_madrid=$2 AND browser_digest=$3",[CAMPAIGN,date,browserHash]);
-      if(previous.rows[0]?.accepted>=voteLimits.desktopPerBrowserPerDay){await client.query("ROLLBACK");return {accepted:false,code:"DESKTOP_BROWSER_LIMIT"} as const;}
-    }
-    if(!await upsertCounter(client,"ip_daily",CAMPAIGN,date,ipHash,2))throw new Error("IP_LIMIT_RACE");
-    if(vote.mode==="mobile"){
-      await client.query("INSERT INTO poll_private.mobile_lifetime(campaign_id,browser_digest) VALUES($1,$2)",[CAMPAIGN,browserHash]);
-    }else{
-      if(!await upsertCounter(client,"browser_daily",CAMPAIGN,date,browserHash,2))throw new Error("BROWSER_LIMIT_RACE");
-    }
+    if(prior.rows[0]?.accepted>=voteLimits.perIpPerDay){await client.query("ROLLBACK");return {accepted:false,code:"IP_DAILY_LIMIT"} as const;}
+    // One vote per browser credential for the whole campaign (table name kept for schema compatibility).
+    const already=await client.query("SELECT 1 FROM poll_private.mobile_lifetime WHERE campaign_id=$1 AND browser_digest=$2",[CAMPAIGN,browserHash]);
+    if(already.rowCount){await client.query("ROLLBACK");return {accepted:false,code:"BROWSER_LIMIT"} as const;}
+    if(!await upsertCounter(client,"ip_daily",CAMPAIGN,date,ipHash,voteLimits.perIpPerDay))throw new Error("IP_LIMIT_RACE");
+    await client.query("INSERT INTO poll_private.mobile_lifetime(campaign_id,browser_digest) VALUES($1,$2)",[CAMPAIGN,browserHash]);
     // Do not link stored ballot rows to browser or IP identifiers.
     await client.query("INSERT INTO poll_private.ballots(id,campaign_id,province_code,candidacy_id,consent_version) VALUES($1,$2,$3,$4,$5)",
       [randomUUID(),CAMPAIGN,vote.provinceCode,vote.candidacyId,"epov-2026-v1"]);

@@ -5,6 +5,7 @@ import { CandidacyResults } from "@/components/CandidacyResults";
 import { candidaciesForProvince } from "@/lib/candidacies/registry";
 import { approvedProvinceResult } from "@/lib/published-provincial";
 import Link from "next/link";
+import { BLACKOUT_NOTICE, inPollBlackout } from "@/lib/electoral-blackout";
 import previous from "@/data/elections/congress-2023-results.json";
 import { provinces, provinceByCode, displayName } from "@/lib/territories";
 export const metadata = { title: "Resultados por circunscripción · Sin publicación del sondeo", robots: { index: false, follow: true } };
@@ -73,7 +74,8 @@ export default async function Results({
       {province && <CandidacyResults list={candidaciesForProvince(province.code)} provinceName={displayName(province.name)} release={approvedProvinceResult(province.code)} />}
       {province && <ParticipationAnalysis list={candidaciesForProvince(province.code)} provinceName={displayName(province.name)} release={approvedProvinceResult(province.code)} />}
       <section className="public-results-empty">
-        <span className="pill">SONDEO CIUDADANO · SIN PUBLICACIÓN</span>
+        <span className="pill">{inPollBlackout() ? "SONDEO CIUDADANO · VEDA ELECTORAL" : "SONDEO CIUDADANO · SIN PUBLICACIÓN"}</span>
+        {inPollBlackout() && <p role="status"><strong>{BLACKOUT_NOTICE}</strong></p>}
         <h2>{province && approvedProvinceResult(province.code) ? "Los resultados provinciales publicados figuran arriba." : "Todavía no hay resultados del sondeo."}</h2>
         <p>
           Cuando exista una publicación provincial aprobada, aparecerá arriba y su candidatura con más respuestas se reflejará en el mapa. Las provincias sin resultados publicables permanecerán grises. No se muestran porcentajes inventados ni se presenta la falta de datos como cero votos.

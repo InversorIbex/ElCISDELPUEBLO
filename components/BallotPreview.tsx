@@ -14,9 +14,8 @@ type TurnstileApi={
 declare global { interface Window { turnstile?:TurnstileApi } }
 
 const userErrors:Record<string,string>={
-  IP_DAILY_LIMIT:"Este acceso a Internet ha alcanzado el límite de dos participaciones de hoy.",
-  DESKTOP_BROWSER_LIMIT:"Este navegador ha alcanzado el límite de dos participaciones de hoy.",
-  MOBILE_BROWSER_LIMIT:"Ya se ha registrado una participación con este navegador móvil para el sondeo.",
+  IP_DAILY_LIMIT:"Esta conexión a Internet ya ha alcanzado el límite de dos participaciones de hoy.",
+  BROWSER_LIMIT:"Ya se ha registrado una participación desde este navegador. Solo se admite un voto por dispositivo.",
   INVALID_CANDIDACY:"La candidatura no corresponde a la provincia seleccionada.",
   ALREADY_SUBMITTED:"Esta solicitud ya se procesó. Consulta el estado antes de volver a enviarla.",
   CHALLENGE_INVALID:"No se ha superado la comprobación antirobots. Inténtalo de nuevo.",

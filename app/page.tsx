@@ -4,7 +4,9 @@ import { TerritorySelector } from "@/components/TerritorySelector";
 import { communities, provinces, municipalities, displayName } from "@/lib/territories";
 import Link from "next/link";
 import { EmptyState } from "@/components/EmptyState";
+import { isLiveVoteConfigured } from "@/lib/server/live-vote-configuration";
 export default function Home() {
+  const voteOpen = isLiveVoteConfigured();
   return (
     <>
       <section className="hero">
@@ -25,12 +27,14 @@ export default function Home() {
             </p>
             <p className="hero-copy">
               Explora las candidaturas de tu circunscripción y descubre cómo se
-              convierten los votos en escaños. Estamos preparando el sondeo
-              ciudadano; la participación todavía no está abierta.
+              convierten los votos en escaños.{" "}
+              {voteOpen
+                ? "El sondeo ciudadano está abierto: elige tu circunscripción y da tu opinión."
+                : "Estamos preparando el sondeo ciudadano; la participación todavía no está abierta."}
             </p>
             <div className="actions">
               <Link className="button" href="/participar">
-                Ver mi circunscripción <span>↗</span>
+                {voteOpen ? "Votar ahora" : "Ver mi circunscripción"} <span>↗</span>
               </Link>
               <Link className="secondary" href="/simulador">
                 Explorar el hemiciclo ↗
@@ -108,7 +112,7 @@ export default function Home() {
           <small>Preparando una participación segura</small>
         </div>
       </section>
-      <ProvinceQuickPicker provinces={provinces.map((p) => ({ code: p.code, name: displayName(p.name) }))} />
+      <ProvinceQuickPicker voteOpen={voteOpen} provinces={provinces.map((p) => ({ code: p.code, name: displayName(p.name) }))} />
       <ProvinceMap provinces={provinces.map((p) => ({ code: p.code, name: displayName(p.name) }))} />
       <section
         className="section launch-tools"

@@ -2,6 +2,7 @@ import { BallotPreview } from "@/components/BallotPreview";
 import { CandidacyResults } from "@/components/CandidacyResults";
 import { approvedProvinceResult } from "@/lib/published-provincial";
 import Link from "next/link";
+import { isLiveVoteConfigured } from "@/lib/server/live-vote-configuration";
 import { CommunityMap } from "@/components/CommunityMap";
 import { CandidacyList } from "@/components/CandidacyList";
 import mapData from "@/data/cartography/communities-svg.json";
@@ -12,13 +13,14 @@ import {
   displayName,
 } from "@/lib/territories";
 import { candidaciesForProvince } from "@/lib/candidacies/registry";
-export const metadata = { title: "Consultar papeleta por provincia · Sondeo todavía cerrado", robots: { index: false, follow: true } };
+export const metadata = { title: "Participar · Papeleta por circunscripción", robots: { index: false, follow: true } };
 export default async function Participate({
   searchParams,
 }: {
   searchParams: Promise<{ comunidad?: string; provincia?: string }>;
 }) {
   const query = await searchParams;
+  const voteOpen = isLiveVoteConfigured();
   const province =
     typeof query.provincia === "string"
       ? provinceByCode.get(query.provincia)
@@ -46,10 +48,12 @@ export default async function Participate({
         No usamos geolocalización ni necesitas indicar municipio.
       </p>
       <div className="ballot-consultation-note">
-        <span className="pill">VOTACIÓN TODAVÍA NO ABIERTA</span>
+        <span className="pill">{voteOpen ? "VOTACIÓN ABIERTA" : "VOTACIÓN TODAVÍA NO ABIERTA"}</span>
         <p>
-          Puedes explorar las candidaturas y sus logos disponibles. El registro real está conectado a un servicio de producción, pero la recogida sigue bloqueada hasta completar y verificar las garantías necesarias.{" "}
-          <Link href="/privacidad">Estado de las garantías →</Link>
+          {voteOpen
+            ? "Elige tu circunscripción, selecciona una candidatura y confirma. Máximo un voto por navegador y dos por conexión a Internet al día. Sondeo voluntario, no oficial ni representativo."
+            : "Puedes explorar las candidaturas y sus logos disponibles. El registro real está conectado a un servicio de producción, pero la recogida sigue bloqueada hasta completar y verificar las garantías necesarias."}{" "}
+          <Link href="/privacidad">Privacidad y garantías →</Link>
         </p>
       </div>
       <CommunityMap features={features} selectionMode />
@@ -121,7 +125,7 @@ export default async function Participate({
               <h2>{displayName(province.name)}</h2>
               <p>
                 {candidaciesForProvince(province.code).length} candidaturas
-                proclamadas · selección disponible; registro solo cuando se abra la votación
+                proclamadas · {voteOpen ? "elige una y confirma tu voto" : "selección disponible; registro solo cuando se abra la votación"}
               </p>
             </div>
             <Link
@@ -137,7 +141,7 @@ export default async function Participate({
           <div className="notice">
             <p>
               Faltan logos verificados para algunas candidaturas; todas aparecen
-              igualmente. El servidor indicará cuándo se abra la participación. Abrir estas tarjetas no registra una respuesta; solo una confirmación explícita del servidor acredita el registro.
+              igualmente. Abrir estas tarjetas no registra una respuesta; solo una confirmación explícita del servidor acredita el registro.
             </p>
           </div>
         </section>
