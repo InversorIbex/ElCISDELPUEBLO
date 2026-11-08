@@ -48,9 +48,7 @@ export default async function Participate({
       <div className="ballot-consultation-note">
         <span className="pill">VOTACIÓN TODAVÍA NO ABIERTA</span>
         <p>
-          Puedes explorar las candidaturas y sus logos disponibles. Los votos
-          reales y sus resultados necesitan un servicio de participación de
-          producción aún no conectado.{" "}
+          Puedes explorar las candidaturas y sus logos disponibles. El registro real está conectado a un servicio de producción, pero la recogida sigue bloqueada hasta completar y verificar las garantías necesarias.{" "}
           <Link href="/privacidad">Estado de las garantías →</Link>
         </p>
       </div>
@@ -123,7 +121,7 @@ export default async function Participate({
               <h2>{displayName(province.name)}</h2>
               <p>
                 {candidaciesForProvince(province.code).length} candidaturas
-                proclamadas · consulta sin registrar preferencias
+                proclamadas · selección disponible; registro solo cuando se abra la votación
               </p>
             </div>
             <Link
