@@ -44,20 +44,17 @@ export default function Page() {
         </div>
         <div>
           <span>03 / PUEDES CAMBIAR</span>
-          <h3>Corrección y retirada</h3>
+          <h3>Voto definitivo y derechos</h3>
           <p>
-            La credencial privada permitirá sustituir o retirar una respuesta.
-            No se publicará tu respuesta individual.
+            El voto confirmado no podrá modificarse ni sustituirse desde la papeleta.
+            Los derechos de protección de datos se gestionarán mediante el canal de privacidad y requieren un procedimiento verificable antes de abrir.
           </p>
         </div>
       </div>
       <div className="prose">
         <h2>Una credencial, no una promesa de anonimato absoluto</h2>
         <p>
-          El motor de prueba separa los hashes de las credenciales de las
-          respuestas cifradas. Existe un enlace técnico necesario para corregir
-          o retirar; por eso hablamos de seudonimización. La separación y el
-          cifrado reducen riesgos, pero no eliminan todos los posibles enlaces.
+          El servicio web de votación guarda la papeleta separada de los hashes de IP y navegador usados para limitar participaciones. Al no disponer de un vínculo directo con una identidad, no podemos localizar automáticamente una papeleta individual a partir de un nombre o correo. Estos mecanismos reducen riesgos, pero los datos antifraude siguen siendo seudonimizados.
         </p>
         <p>
           Sin identificación fiable tampoco podemos garantizar una respuesta por
@@ -94,8 +91,9 @@ export default function Page() {
             tratamiento de la respuesta de esta campaña y de la circunscripción
             que declaro, con el fin de producir estadísticas agregadas del
             sondeo. Entiendo que mi respuesta puede revelar opiniones políticas,
-            que participar es voluntario y que puedo retirarla usando mi
-            credencial.
+            que participar es voluntario y que mi voto no se podrá editar desde la web.
+            Entiendo que la retirada del consentimiento y los derechos del RGPD
+            deben poder ejercerse por un procedimiento efectivo comunicado antes de participar.
           </p>
           <p>
             Este texto todavía debe completarse con responsable, bases
@@ -106,12 +104,7 @@ export default function Page() {
         </details>
         <h2>Conservación y retirada</h2>
         <p>
-          Para prevenir duplicados se prevé conservar por separado hashes de IP y navegador durante el día civil de Madrid, y los hashes de solicitudes hasta 48 horas, con un proceso de limpieza pendiente de activar y verificar. Los identificadores móviles antifraude y las respuestas requieren plazos de fin de campaña y retirada todavía pendientes. Los plazos definitivos deben aprobarse antes de abrir. La retirada
-          mediante credencial está probada en el laboratorio y elimina la
-          respuesta activa y su credencial. Aún deben validarse copias de
-          seguridad, registros, publicaciones previas y los casos en los que se
-          pierde la credencial. No prometemos localizar una respuesta sin un
-          mecanismo que permita hacerlo de forma segura.
+          Para prevenir duplicados se prevé conservar por separado hashes de IP y navegador durante el día civil de Madrid, y los hashes de solicitudes hasta 48 horas, con un proceso de limpieza pendiente de activar y verificar. Los identificadores móviles antifraude y las respuestas requieren plazos de fin de campaña y retirada todavía pendientes. Los plazos definitivos deben aprobarse antes de abrir. La versión pública aún no dispone de un procedimiento comprobado para localizar y suprimir una papeleta individual tras retirar el consentimiento. Antes de recoger opiniones políticas deben definirse la retirada del consentimiento, la gestión de derechos, las copias de seguridad y las publicaciones agregadas. No prometemos identificar una papeleta si técnicamente no es posible.
         </p>
         <h2>Contacto y responsable</h2>
         <p>
