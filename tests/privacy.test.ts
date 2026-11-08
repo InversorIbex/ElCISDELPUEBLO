@@ -105,8 +105,13 @@ test("el umbral no puede rebajarse por llamada", () => {
 test("ningún endpoint de participación está abierto ni necesita leer cuerpos", async () => {
   assert.equal(launchStatus().enabled, false);
   assert.ok(launchStatus().requirements.every((r) => r.state === "pending"));
-  for (const handler of [submit, replace, revoke]) {
-    const response = handler();
+  const handlers = [
+    () => submit(new Request("https://example.test/api/participaciones", {method:"POST"})),
+    () => replace(),
+    () => revoke(),
+  ];
+  for (const handler of handlers) {
+    const response = await handler();
     assert.equal(response.status, 423);
     assert.equal(response.headers.get("Cache-Control"), "no-store");
     assert.equal((await response.json()).enabled, false);
