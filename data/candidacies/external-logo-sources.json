@@ -1,0 +1,127 @@
+{
+  "reviewedAt": "2026-11-08",
+  "notice": "Referencias identificativas de marcas de formación o agrupación. No certifican el diseño del símbolo de la papeleta del 29N. Servidas mediante proxy sin geolocalización del visitante.",
+  "logos": [
+    {
+      "id": "pp",
+      "path": "/api/party-logo/pp",
+      "file": "Logo del PP (2022).svg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logo_del_PP_(2022).svg",
+      "partyPage": "https://www.pp.es/",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20del%20PP%20(2022).svg?width=320",
+      "background": "light",
+      "sourceType": "Wikimedia Commons, original atribuido a la formación o su marca",
+      "rights": "Marca de su titular; revisar términos en página de origen y símbolo electoral de 2026."
+    },
+    {
+      "id": "psoe",
+      "path": "/api/party-logo/psoe",
+      "file": "Logo PSOE 2023.svg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logo_PSOE_2023.svg",
+      "partyPage": "https://www.psoe.es/",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20PSOE%202023.svg?width=320",
+      "background": "light",
+      "sourceType": "Wikimedia Commons, original atribuido a la formación o su marca",
+      "rights": "Marca de su titular; revisar términos en página de origen y símbolo electoral de 2026."
+    },
+    {
+      "id": "vox",
+      "path": "/api/party-logo/vox",
+      "file": "VOX logo.svg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:VOX_logo.svg",
+      "partyPage": "https://www.voxespana.es/",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/VOX%20logo.svg?width=320",
+      "background": "light",
+      "sourceType": "Wikimedia Commons, original atribuido a la formación o su marca",
+      "rights": "Marca de su titular; revisar términos en página de origen y símbolo electoral de 2026."
+    },
+    {
+      "id": "podemos",
+      "path": "/api/party-logo/podemos",
+      "file": "Podemos logo completo (2022).svg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Podemos_logo_completo_(2022).svg",
+      "partyPage": "https://podemos.info/",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Podemos%20logo%20completo%20(2022).svg?width=320",
+      "background": "light",
+      "sourceType": "Wikimedia Commons, original atribuido a la formación o su marca",
+      "rights": "Marca de su titular; revisar términos en página de origen y símbolo electoral de 2026."
+    },
+    {
+      "id": "pcte",
+      "path": "/api/party-logo/pcte",
+      "file": "PCTE LOGO.svg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:PCTE_LOGO.svg",
+      "partyPage": "https://www.pcte.es/",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/PCTE%20LOGO.svg?width=320",
+      "background": "light",
+      "sourceType": "Wikimedia Commons, original atribuido a la formación o su marca",
+      "rights": "Marca de su titular; revisar términos en página de origen y símbolo electoral de 2026."
+    },
+    {
+      "id": "salf",
+      "path": "/api/party-logo/salf",
+      "file": "Se acabo la fiesta wordmark.png",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Se_acabo_la_fiesta_wordmark.png",
+      "partyPage": "https://commons.wikimedia.org/wiki/Category:Se_Acab%C3%B3_la_Fiesta",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Se%20acabo%20la%20fiesta%20wordmark.png?width=320",
+      "background": "light",
+      "sourceType": "Wikimedia Commons, original atribuido a la formación o su marca",
+      "rights": "Marca de su titular; revisar términos en página de origen y símbolo electoral de 2026."
+    },
+    {
+      "id": "bng",
+      "path": "/api/party-logo/bng",
+      "file": "BNG logo.svg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:BNG_logo.svg",
+      "partyPage": "https://www.bng.gal/",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/BNG%20logo.svg?width=320",
+      "background": "light",
+      "sourceType": "Wikimedia Commons, original atribuido a la formación o su marca",
+      "rights": "Marca de su titular; revisar términos en página de origen y símbolo electoral de 2026."
+    },
+    {
+      "id": "junts",
+      "path": "/api/party-logo/junts",
+      "file": "Junts per Catalunya (2020).svg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Junts_per_Catalunya_(2020).svg",
+      "partyPage": "https://junts.cat/",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Junts%20per%20Catalunya%20(2020).svg?width=320",
+      "background": "light",
+      "sourceType": "Wikimedia Commons, original atribuido a la formación o su marca",
+      "rights": "Marca de su titular; revisar términos en página de origen y símbolo electoral de 2026."
+    },
+    {
+      "id": "erc",
+      "path": "/api/party-logo/erc",
+      "file": "ERC logo 2025.svg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:ERC_logo_2025.svg",
+      "partyPage": "https://www.esquerra.cat/",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/ERC%20logo%202025.svg?width=320",
+      "background": "light",
+      "sourceType": "Wikimedia Commons, original atribuido a la formación o su marca",
+      "rights": "Marca de su titular; revisar términos en página de origen y símbolo electoral de 2026."
+    },
+    {
+      "id": "pnv",
+      "path": "/api/party-logo/pnv",
+      "file": "Logo PNV 2025.svg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logo_PNV_2025.svg",
+      "partyPage": "https://www.eaj-pnv.eus/",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20PNV%202025.svg?width=320",
+      "background": "light",
+      "sourceType": "Wikimedia Commons, original atribuido a la formación o su marca",
+      "rights": "Marca de su titular; revisar términos en página de origen y símbolo electoral de 2026."
+    },
+    {
+      "id": "teruelexiste",
+      "path": "/api/party-logo/teruelexiste",
+      "file": "Logotipo de Teruel Existe (2022).svg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logotipo_de_Teruel_Existe_(2022).svg",
+      "partyPage": "https://teruelexiste.info/",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logotipo%20de%20Teruel%20Existe%20(2022).svg?width=320",
+      "background": "light",
+      "sourceType": "Wikimedia Commons, original atribuido a la formación o su marca",
+      "rights": "Marca de su titular; revisar términos en página de origen y símbolo electoral de 2026."
+    }
+  ]
+}
