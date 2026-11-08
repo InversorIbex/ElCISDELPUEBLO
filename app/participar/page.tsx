@@ -1,65 +1,151 @@
-import { TerritorySelector } from "@/components/TerritorySelector";
-import { communities, provinces } from "@/lib/territories";
-import type { Metadata } from "next";
-import { EmptyState } from "@/components/EmptyState";
-export const metadata: Metadata = { title: "Participar" };
-export default function Participate() {
+import Link from "next/link";
+import { CommunityMap } from "@/components/CommunityMap";
+import { CandidacyList } from "@/components/CandidacyList";
+import mapData from "@/data/cartography/communities-svg.json";
+import {
+  communityByCode,
+  provinces,
+  provinceByCode,
+  displayName,
+} from "@/lib/territories";
+import { candidaciesForProvince } from "@/lib/candidacies/registry";
+export const metadata = { title: "Elige tu zona · Mapa del sondeo" };
+export default async function Participate({
+  searchParams,
+}: {
+  searchParams: Promise<{ comunidad?: string; provincia?: string }>;
+}) {
+  const query = await searchParams;
+  const province =
+    typeof query.provincia === "string"
+      ? provinceByCode.get(query.provincia)
+      : undefined;
+  const community = province
+    ? communityByCode.get(province.communityCode)
+    : typeof query.comunidad === "string"
+      ? communityByCode.get(query.comunidad)
+      : undefined;
+  const available = provinces
+    .filter((p) => !community || p.communityCode === community.code)
+    .sort((a, b) =>
+      displayName(a.name).localeCompare(displayName(b.name), "es"),
+    );
+  const features = mapData.features.map((f) => ({
+    ...f,
+    href: `/participar?comunidad=${f.code}#circunscripcion`,
+  }));
   return (
     <section className="page-section">
-      <div className="eyebrow">PARTICIPACIÓN PRIVADA</div>
-      <h1>Primero, las garantías.</h1>
-      <p className="lead">La recogida de respuestas aún no está abierta.</p>
-      <EmptyState
-        title="Estamos preparando una participación segura"
-        text="Antes de abrir necesitamos revisar las actualizaciones de las candidaturas, completar la evaluación de privacidad y someter el sistema a revisión jurídica y pruebas de seguridad."
-      />
+      <div className="eyebrow">TU CIRCUNSCRIPCIÓN, TUS OPCIONES</div>
+      <h1>Empieza por tu zona.</h1>
       <p className="lead">
-        <a href="/candidaturas">
-          Elegir circunscripción y consultar candidaturas →
-        </a>
+        Elige la comunidad en el mapa y después tu provincia o ciudad autónoma.
+        No usamos geolocalización ni necesitas indicar municipio.
       </p>
-      <TerritorySelector communities={communities} provinces={provinces} />
-      <div className="prose">
-        <h2>Una respuesta por credencial, dentro de tu circunscripción</h2>
+      <div className="ballot-consultation-note">
+        <span className="pill">VOTACIÓN TODAVÍA NO ABIERTA</span>
         <p>
-          Elegirás tu circunscripción directamente. El sondeo del Congreso no
-          necesitará tu municipio, tu dispositivo ni tu IP para situar la
-          respuesta. La credencial del sondeo permitirá cambiar la respuesta y
-          reemplazar su cómputo. El navegador no expone un identificador físico
-          fiable: borrar sus datos o usar otro navegador impide reconocer esa
-          credencial. No garantizamos una respuesta por persona o dispositivo.
-        </p>
-        <h2>Así será el proceso</h2>
-        <ol>
-          <li>
-            Elegirás manualmente tu circunscripción entre las 52 opciones. El
-            catálogo municipal es una ayuda de consulta, no un requisito para
-            responder.
-          </li>
-          <li>
-            La selección territorial ya funciona para consultar fichas. Para
-            responder, leerás la información de privacidad y decidirás si
-            prestas consentimiento explícito.
-          </li>
-          <li>Seleccionarás una opción válida para tu circunscripción.</li>
-          <li>
-            Recibirás una credencial privada de ese sondeo para sustituir o
-            retirar tu respuesta.
-          </li>
-        </ol>
-        <p>
-          No solicitaremos nombre, DNI ni geolocalización. Sin identificación
-          fiable no podemos garantizar una respuesta por persona. Este diseño
-          todavía debe validarse antes de recoger datos reales.
-        </p>
-        <p>
-          La fecha de las elecciones y el reparto de escaños ya están
-          verificados en el BOE. Ya puedes consultar 534 candidaturas
-          proclamadas en las 52 circunscripciones, según el BOE y su corrección
-          del 7 de noviembre. Consulta nuestra información de privacidad antes
-          de cualquier futura participación.
+          Puedes explorar las candidaturas y sus logos disponibles. Los votos
+          reales y sus resultados necesitan un servicio de participación de
+          producción aún no conectado.{" "}
+          <Link href="/privacidad">Estado de las garantías →</Link>
         </p>
       </div>
+      <CommunityMap features={features} selectionMode />
+      <section id="circunscripcion" className="constituency-selection">
+        <div className="eyebrow">PASO 2 / CIRCUNSCRIPCIÓN</div>
+        <h2>
+          {community
+            ? displayName(community.name)
+            : "Elige directamente tu circunscripción."}
+        </h2>
+        <p>También puedes usar esta lista sin interactuar con el mapa.</p>
+        {community && (
+          <Link className="text-link" href="/participar#circunscripcion">
+            Ver todas las circunscripciones →
+          </Link>
+        )}
+        <form
+          className="constituency-form"
+          action="/participar#papeleta"
+          method="get"
+        >
+          <div>
+            <label htmlFor="participation-province">
+              Provincia o ciudad autónoma
+            </label>
+            <select
+              id="participation-province"
+              name="provincia"
+              defaultValue={province?.code ?? ""}
+              required
+            >
+              <option value="" disabled>
+                Selecciona tu circunscripción
+              </option>
+              {available.map((p) => (
+                <option key={p.code} value={p.code}>
+                  {displayName(p.name)}
+                </option>
+              ))}
+            </select>
+          </div>
+          <button type="submit" className="button">
+            Ver candidaturas y logos →
+          </button>
+        </form>
+        <div className="district-shortcuts">
+          {available.map((p) => (
+            <Link
+              key={p.code}
+              href={`/participar?provincia=${p.code}#papeleta`}
+            >
+              {displayName(p.name)} ↗
+            </Link>
+          ))}
+        </div>
+        {((query.provincia && !province) ||
+          (query.comunidad && !community)) && (
+          <p className="form-error" role="alert">
+            El territorio solicitado no es válido. Selecciona una opción de la
+            lista.
+          </p>
+        )}
+      </section>
+      {province && (
+        <section id="papeleta">
+          <div className="directory-heading">
+            <div>
+              <div className="eyebrow">PASO 3 / CANDIDATURAS DEL CONGRESO</div>
+              <h2>{displayName(province.name)}</h2>
+              <p>
+                {candidaciesForProvince(province.code).length} candidaturas
+                proclamadas · consulta sin registrar preferencias
+              </p>
+            </div>
+            <Link
+              className="button"
+              href={`/resultados?provincia=${province.code}`}
+            >
+              Ver resultados de esta zona ↗
+            </Link>
+          </div>
+          <CandidacyList list={candidaciesForProvince(province.code)} />
+          <div className="notice">
+            <p>
+              Faltan logos verificados para algunas candidaturas; todas aparecen
+              igualmente. La selección de una formación y el envío de votos se
+              habilitarán cuando funcione el servicio real. No se registra una
+              respuesta al abrir estas tarjetas.
+            </p>
+          </div>
+        </section>
+      )}
+      <p className="denominator-note">
+        El mapa representa comunidades, no límites provinciales. La lista
+        posterior identifica las 52 circunscripciones del Congreso, incluidas
+        Ceuta y Melilla.
+      </p>
     </section>
   );
 }

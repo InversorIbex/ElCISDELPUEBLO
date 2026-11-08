@@ -1,3 +1,5 @@
+import { CommunityMap } from "@/components/CommunityMap";
+import mapData from "@/data/cartography/communities-svg.json";
 import { TerritorySelector } from "@/components/TerritorySelector";
 import { communities, provinces, municipalities } from "@/lib/territories";
 import Link from "next/link";
@@ -27,7 +29,7 @@ export default function Home() {
               ciudadano; la participación todavía no está abierta.
             </p>
             <div className="actions">
-              <Link className="button" href="/candidaturas">
+              <Link className="button" href="/participar">
                 Ver mi circunscripción <span>↗</span>
               </Link>
               <Link className="secondary" href="/simulador">
@@ -105,6 +107,15 @@ export default function Home() {
           <strong>0</strong>
           <small>Preparando una participación segura</small>
         </div>
+      </section>
+      <section className="section">
+        <CommunityMap
+          features={mapData.features.map((f) => ({
+            ...f,
+            href: `/participar?comunidad=${f.code}#circunscripcion`,
+          }))}
+          selectionMode
+        />
       </section>
       <section
         className="section launch-tools"

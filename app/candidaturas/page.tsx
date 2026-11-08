@@ -110,6 +110,20 @@ export default async function Page({
               Ficha territorial ↗
             </Link>
           </div>
+          <div className="actions">
+            <Link
+              className="secondary"
+              href={`/participar?provincia=${province.code}#papeleta`}
+            >
+              Abrir mi circunscripción →
+            </Link>
+            <Link
+              className="secondary"
+              href={`/resultados?provincia=${province.code}`}
+            >
+              Ver resultados y referencia histórica →
+            </Link>
+          </div>
           <CandidacyList list={list} />
         </>
       ) : (
@@ -120,8 +134,8 @@ export default async function Page({
             La provincia determina qué candidaturas podrán formar parte de tu
             sondeo. El catálogo incluye Ceuta y Melilla.
           </p>
-          <Link className="text-link" href="/mapa">
-            Buscar primero tu municipio →
+          <Link className="text-link" href="/participar">
+            Elegir mi zona en el mapa →
           </Link>
         </div>
       )}
