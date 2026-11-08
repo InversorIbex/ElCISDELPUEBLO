@@ -16,7 +16,7 @@ export default function Page() {
       </p>
       <EmptyState
         title="Todavía no hay una serie temporal"
-        text="No se dibujan curvas ni variaciones ficticias. El Hito 7 distinguirá respuestas activas acumuladas de respuestas recibidas en un intervalo, con periodos y denominadores explícitos."
+        text="No se dibujan curvas ni variaciones ficticias. Las futuras publicaciones distinguirán respuestas activas acumuladas de respuestas recibidas en un intervalo, con periodos y denominadores explícitos."
       />
     </section>
   );

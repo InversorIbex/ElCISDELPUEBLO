@@ -11,7 +11,7 @@ export default function Page() {
       </p>
       <EmptyState
         title="No hay preguntas abiertas"
-        text="El módulo se implementará en el Hito 8. Cada pregunta tendrá calendario, opciones revisadas y resultados agregados. Sus credenciales serán independientes del sondeo electoral."
+        text="Estamos preparando las primeras consultas. Cada pregunta tendrá calendario, opciones revisadas y resultados agregados. Sus credenciales serán independientes del sondeo electoral."
       />
       <div className="prose">
         <h2>Sin construir perfiles de opinión</h2>

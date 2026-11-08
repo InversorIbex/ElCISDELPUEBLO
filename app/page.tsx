@@ -22,19 +22,20 @@ export default function Home() {
               las elecciones generales?
             </p>
             <p className="hero-copy">
-              Un espacio abierto para expresar tu opinión y explorar las
-              respuestas de otros participantes, municipio a municipio.
+              Explora las candidaturas de tu circunscripción y descubre cómo se
+              convierten los votos en escaños. Estamos preparando el sondeo
+              ciudadano; la participación todavía no está abierta.
             </p>
             <div className="actions">
-              <Link className="button" href="/participar">
-                Participar en el sondeo <span>↗</span>
+              <Link className="button" href="/candidaturas">
+                Ver mi circunscripción <span>↗</span>
               </Link>
-              <Link className="secondary" href="#resultados">
-                Explorar los resultados ↓
+              <Link className="secondary" href="/simulador">
+                Explorar el hemiciclo ↗
               </Link>
             </div>
             <p className="privacy-note">
-              ◈ Tu municipio lo eliges tú. Nunca usamos geolocalización.
+              ◈ Tú eliges la circunscripción. Sin geolocalización.
             </p>
           </div>
           <aside className="hero-card">
@@ -85,24 +86,60 @@ export default function Home() {
       </div>
       <section className="stats" aria-label="Estado de los datos">
         <div>
-          <span>Participaciones válidas</span>
-          <strong>—</strong>
-          <small>Recogida todavía no abierta</small>
+          <span>Circunscripciones</span>
+          <strong>52</strong>
+          <small>Elección manual, sin ubicación inferida</small>
         </div>
         <div>
-          <span>Municipios con participantes</span>
-          <strong>—</strong>
-          <small>Catálogo INE disponible</small>
+          <span>Candidaturas proclamadas</span>
+          <strong>534</strong>
+          <small>BOE · Revisión a 08/11/2026</small>
         </div>
         <div>
-          <span>Última actualización</span>
-          <strong className="text-stat">Sin publicación</strong>
-          <small>No hay agregados disponibles</small>
+          <span>Congreso de los Diputados</span>
+          <strong>350</strong>
+          <small>Simulación manual por circunscripción</small>
         </div>
         <div>
           <span>Sondeos abiertos</span>
           <strong>0</strong>
           <small>Preparando una participación segura</small>
+        </div>
+      </section>
+      <section
+        className="section launch-tools"
+        aria-labelledby="herramientas-title"
+      >
+        <div className="eyebrow">DISPONIBLE HOY</div>
+        <h2 id="herramientas-title">Explora. Comprueba. Entiende.</h2>
+        <div className="launch-grid">
+          <Link href="/candidaturas" className="launch-card">
+            <span>01 / CANDIDATURAS</span>
+            <h3>Tu circunscripción, sus opciones.</h3>
+            <p>
+              Nombres oficiales, orden de proclamación y fuentes. Todas las
+              opciones aparecen, tengan o no logo verificado.
+            </p>
+            <strong>Consultar candidaturas ↗</strong>
+          </Link>
+          <Link href="/simulador" className="launch-card">
+            <span>02 / HEMICICLO</span>
+            <h3>Construye un escenario.</h3>
+            <p>
+              Calcula cada provincia, reúne hasta 350 escaños y compara la
+              estructura con el resultado oficial de 2023.
+            </p>
+            <strong>Abrir simulador ↗</strong>
+          </Link>
+          <Link href="/ayuda" className="launch-card">
+            <span>03 / CÓMO FUNCIONA</span>
+            <h3>Las respuestas, claras.</h3>
+            <p>
+              Qué puedes consultar hoy, cómo se elegirá la circunscripción y qué
+              significará cambiar una respuesta.
+            </p>
+            <strong>Preguntas frecuentes ↗</strong>
+          </Link>
         </div>
       </section>
       <section className="section" id="resultados">
@@ -124,7 +161,7 @@ export default function Home() {
             </div>
             <EmptyState
               title="Los datos empiezan con la confianza."
-              text="Todavía no hay resultados publicados. Aquí aparecerán las candidaturas verificadas, sus respuestas y los denominadores de cada porcentaje."
+              text="Todavía no hay resultados publicados. El catálogo de candidaturas ya se puede consultar. Los porcentajes del sondeo aparecerán cuando exista una publicación segura."
             />
           </div>
           <aside className="ink-panel">
@@ -156,8 +193,8 @@ export default function Home() {
           </h2>
           <p>
             Explora 8.132 municipios del catálogo oficial INE, sus provincias y
-            comunidades. Los territorios sin muestra suficiente no mostrarán
-            resultados sensibles.
+            comunidades. Es un directorio de consulta: el sondeo del Congreso
+            solo necesitará elegir circunscripción, sin guardar tu municipio.
           </p>
           <Link className="secondary" href="/mapa">
             Explorar el territorio →

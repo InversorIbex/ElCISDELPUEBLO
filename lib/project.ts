@@ -3,7 +3,7 @@ export const project = {
   minimumReleaseSize: 50,
   officialElectionVerified: true,
   officialCandidaciesVerified: true,
-  stage: "Desarrollo — laboratorio, mapa y simulación manual",
+  stage: "Edición pública informativa — participación cerrada",
 } as const;
 export function participationStatus() {
   return {

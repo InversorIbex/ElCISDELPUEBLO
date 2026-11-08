@@ -10,11 +10,11 @@ export default function Page() {
       <div className="prose">
         <h2>Qué es este proyecto</h2>
         <p>
-          Un observatorio independiente en desarrollo. La identidad formal de la
-          entidad responsable y la revisión de los documentos jurídicos están
-          pendientes. El contacto público previsto es letrixagame@gmail.com. Por
-          este motivo y por los controles aún pendientes, no recogemos
-          respuestas políticas.
+          Un observatorio independiente en desarrollo. El responsable indicado
+          por el promotor es Manuel Lopez Sanchz. La revisión de los documentos
+          jurídicos está pendiente. El contacto público previsto es
+          letrixagame@gmail.com. Por este motivo y por los controles aún
+          pendientes, no recogemos respuestas políticas.
         </p>
         <h2>Qué significa un sondeo abierto</h2>
         <p>
