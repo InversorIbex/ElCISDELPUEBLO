@@ -21,3 +21,6 @@ Implementado: portada editorial responsive, páginas de estado de participación
 Pruebas/resultados: ver `VALIDACION.md`, generado al terminar comprobaciones.
 Riesgos: no hay verificación oficial de elección; no hay revisión jurídica; SQL no aplicado; no se ha certificado accesibilidad o escala. CSP admite inline y requiere revisión para producción. Las páginas territoriales con datos se crearán después del catálogo, evitando páginas vacías indexables.
 Siguiente paso: Hito 2 con importación INE trazable; en paralelo documental Hito 3 sin habilitar recogida.
+
+## Informe Hito 2
+Ver `HITO-2.md`: catálogo oficial de 8.132 municipios, importador con validación/reemplazo atómico, búsqueda y selección jerárquica, API territorial, directorios y fichas navegables, fuentes y trazabilidad. 14 pruebas Node y 4 pruebas de importación Python. PostgreSQL, navegador y cartografía siguen pendientes; no se declara este hito como validación de producción.

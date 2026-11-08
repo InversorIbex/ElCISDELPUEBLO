@@ -1,6 +1,6 @@
 # El CIS del Pueblo — Arquitectura v0.1
 
-Estado: Hito 1, 8 de noviembre de 2026. Entorno local de desarrollo; sin publicación, sin recogida sensible. No se declara preparado para producción.
+Estado: Hitos 1–2, 8 de noviembre de 2026. Entorno local de desarrollo; sin publicación, sin recogida sensible. No se declara preparado para producción.
 
 ## Inspección y alcance
 El workspace no contenía código de producto, package.json ni instrucciones AGENTS.md. Se ha creado `/workspace/el-cis-del-pueblo`. El encargo completo se divide en diez hitos; esta entrega implementa la estructura y las páginas iniciales. No hay usuarios, respuestas ni resultados reales. Los guiones en indicadores significan dato no disponible, no cero participantes.
@@ -47,7 +47,7 @@ Ver `db/migrations/0001_foundation.sql` para cimientos ejecutables con restricci
 Las tablas futuras NO están implementadas. Antes de crearlas: diseño de cifrado con KMS, análisis de acceso y borrado, pruebas de restauración/retención. No usar UUID como si fuera anonimización. RLS y permisos de base de datos cerrados por defecto; migraciones con rol propietario aislado.
 
 ## Cartografía y catálogo
-Hito 2: descargar catálogo oficial INE, registrar URL, versión, fecha, checksum, licencia y validaciones de totalidad y relaciones. No usar códigos de nombre. Normalizar búsqueda con Unicode, acentos y alias cooficiales revisados; códigos oficiales INE siguen siendo claves. Incluir Ceuta/Melilla correctamente. Importación staging → validación → publicación transaccional; no sobrescribir códigos históricos silenciosamente.
+Hito 2 implementado en catálogo versionado: importación oficial INE a 1/1/2026, URL, fecha de descarga, checksum y validaciones de totalidad/relaciones. Ver `HITO-2.md`. No está aplicado a PostgreSQL. No usar códigos de nombre. Normalizar búsqueda con Unicode, acentos y alias cooficiales revisados; códigos oficiales INE siguen siendo claves. Incluir Ceuta/Melilla correctamente. Actualmente: archivo temporal → validación completa → reemplazo atómico del JSON en servidor. Próxima integración PostgreSQL: staging → validación → publicación transaccional; no sobrescribir códigos históricos silenciosamente.
 
 Hito 6: límites administrativos IGN/CNIG con licencia verificada, normalizados a EPSG:4326, validados contra INE, simplificados por zoom preservando topología. Producir PMTiles con capas autonómica/provincial/municipal y propiedades mínimas; CDN/objeto con solicitudes Range. MapLibre con carga progresiva y caché. Canarias en recuadro explícito, Baleares, Ceuta y Melilla navegables. Atribución visible y alternativa de tabla. Diferenciar geometría sin dato de dato suprimido; leyendas y etiquetas accesibles. Sin GeoJSON municipal nacional masivo en navegador. Medir presupuesto de bytes y rendimiento en móvil antes de seleccionar niveles de simplificación.
 

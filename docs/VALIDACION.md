@@ -10,3 +10,6 @@
 - Navegador: no hay herramienta cua_repl.js disponible en el entorno gestionado. Conforme a la habilidad Sites, no se improvisó otro navegador ni se inició servidor de preview. Sin capturas, E2E, comprobación móvil real o auditoría WCAG. CSS responsive y semántica implementados, acabado visual aún pendiente de verificación.
 - No se ha medido carga ni concurrencia porque aún no existe motor de respuestas.
 - No hay despliegue web ni recogida sensible. Código preparado para ejecutarse localmente mediante README.
+
+## Continuación — Hito 2
+Ver `HITO-2.md` para archivos y evidencia. 14 pruebas Node y 4 de importador Python correctas; build/tipos correctos tras incorporar catálogo, selector, fichas y fuentes. Se añade comprobación de HTML prerenderizado y separación de catálogo del JS cliente. No hay pruebas E2E ni conexión PostgreSQL. La fecha y el RD electorales siguen sin verificar.
