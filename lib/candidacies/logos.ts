@@ -32,6 +32,8 @@ const additional: Readonly<Record<string,string>> = {
   "PARTIDO DRAGO CANARIAS (D.R.G)": "drago",
   "SORIA ¡YA! (SY)": "soriaya",
   "CONVERGENTS (CNV)": "convergents",
+  "COMPROMÍS: FRONT VALENCIÀ (COMPROMIS-EUPV-PODEM-ERPV)": "compromis-front",
+  "PARTIDO REGIONALISTA DEL PAIS LEONES (PREPAL)": "prepal",
 };
 export const logoInfo = {
   asOf: external.reviewedAt,
