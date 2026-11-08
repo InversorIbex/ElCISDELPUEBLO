@@ -1,7 +1,8 @@
+import { ProvinceQuickPicker } from "@/components/ProvinceQuickPicker";
 import { CommunityMap } from "@/components/CommunityMap";
 import mapData from "@/data/cartography/communities-svg.json";
 import { TerritorySelector } from "@/components/TerritorySelector";
-import { communities, provinces, municipalities } from "@/lib/territories";
+import { communities, provinces, municipalities, displayName } from "@/lib/territories";
 import Link from "next/link";
 import { EmptyState } from "@/components/EmptyState";
 export default function Home() {
@@ -9,14 +10,14 @@ export default function Home() {
     <>
       <section className="hero">
         <div className="eyebrow">
-          <span className="dot" /> OBSERVATORIO CIUDADANO INDEPENDIENTE
+          <span className="dot" /> EL PUEBLO OPINA · OBSERVATORIO INDEPENDIENTE
         </div>
         <div className="hero-grid">
           <div>
             <h1>
-              La opinión de quienes
+              EL PUEBLO
               <br />
-              deciden <em>participar.</em>
+              <em>OPINA.</em>
             </h1>
             <p className="hero-question">
               ¿A quién votarías si hoy fueran
@@ -108,6 +109,7 @@ export default function Home() {
           <small>Preparando una participación segura</small>
         </div>
       </section>
+      <ProvinceQuickPicker provinces={provinces.map((p) => ({ code: p.code, name: displayName(p.name) }))} />
       <section className="section">
         <CommunityMap
           features={mapData.features.map((f) => ({
