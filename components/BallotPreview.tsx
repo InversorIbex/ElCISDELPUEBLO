@@ -27,7 +27,6 @@ export function BallotPreview({candidacies,provinceName,provinceCode}:{
   candidacies:readonly Candidacy[];provinceName:string;provinceCode:string;
 }) {
   const [selected,setSelected]=useState("");
-  const [confirmed,setConfirmed]=useState(false);
   const [search,setSearch]=useState("");
   const [status,setStatus]=useState<VoteStatus|null>(null);
   const [consent,setConsent]=useState(false);
@@ -77,7 +76,7 @@ export function BallotPreview({candidacies,provinceName,provinceCode}:{
           turnstileToken:token,explicitConsent:true,consentVersion:status.consentVersion}),
       });
       const data=await response.json() as {recorded?:boolean;code?:string;error?:string};
-      if(response.ok&&data.recorded===true){setSaved(true);setConfirmed(true);return;}
+      if(response.ok&&data.recorded===true){setSaved(true);return;}
       setError(userErrors[data.code??data.error??""]??"No se pudo confirmar el registro. No se ha contado tu voto.");
     }catch{setError("No se pudo confirmar el registro. Comprueba la conexión antes de intentarlo de nuevo.");}
     finally {
@@ -103,7 +102,7 @@ export function BallotPreview({candidacies,provinceName,provinceCode}:{
         return <button className={`${styles.option} ${selected===c.id?styles.active:""}`}
           disabled={saved||busy} type="button" key={c.id}
           aria-pressed={selected===c.id}
-          onClick={()=>{setSelected(c.id);setConfirmed(false);setError("");setToken("");
+          onClick={()=>{setSelected(c.id);setError("");setToken("");
             if(widgetId.current&&window.turnstile)window.turnstile.reset(widgetId.current);}}>
           <span className={styles.logo}>{logo?<img width="56" height="42" src={logo.path} alt="" loading="lazy"/>:<span aria-hidden="true">—</span>}</span>
           <span className={styles.name}>{c.officialName}</span>
@@ -124,12 +123,9 @@ export function BallotPreview({candidacies,provinceName,provinceCode}:{
           strategy="afterInteractive" onReady={renderTurnstile}/>
         <button type="button" disabled={!chosen||!consent||!token||busy}
           onClick={submit}>{busy?"Verificando y registrando…":"Registrar mi respuesta"}</button>
-      </> : !saved && <button type="button" disabled={!chosen} onClick={()=>setConfirmed(true)}>
-        Revisar mi selección de demostración
-      </button>}
+      </> : !saved && <p role="status" className={styles.legal}><strong>Votación aún no abierta:</strong> puedes seleccionar una candidatura, pero el botón para registrar una respuesta aparecerá únicamente cuando el servidor esté habilitado. Esta selección no se guarda.</p>}
       {error&&<p role="alert" className={styles.error}>{error}</p>}
       {saved&&<p role="status" className={styles.ack}>Respuesta registrada y confirmada por el servidor. Gracias por participar.</p>}
-      {confirmed&&!saved&&chosen&&<p role="status" className={styles.ack}>Has seleccionado «{chosen.officialName}» en la demostración. No se ha registrado ningún voto.</p>}
     </div>
     <p className={styles.legal}><strong>No es una elección oficial.</strong> Sondeo voluntario no representativo, sin inferencias sobre el electorado. La provincia se selecciona manualmente.</p>
   </section>;
