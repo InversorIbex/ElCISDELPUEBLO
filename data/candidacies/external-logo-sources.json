@@ -51,6 +51,56 @@
       "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/PCTE%20LOGO.svg",
       "background": "light",
       "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "salf",
+      "file": "Se acabo la fiesta wordmark.png",
+      "partyPage": "https://www.seacabolafiesta.com/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Se_acabo_la_fiesta_wordmark.png",
+      "path": "/api/party-logo/salf",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Se%20acabo%20la%20fiesta%20wordmark.png",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "bng",
+      "file": "BNG logo.svg",
+      "partyPage": "https://www.bng.gal/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:BNG_logo.svg",
+      "path": "/api/party-logo/bng",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/BNG%20logo.svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "junts",
+      "file": "Junts per Catalunya (2020).svg",
+      "partyPage": "https://www.junts.cat/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Junts_per_Catalunya_(2020).svg",
+      "path": "/api/party-logo/junts",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Junts%20per%20Catalunya%20(2020).svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "erc",
+      "file": "ERC logo 2025.svg",
+      "partyPage": "https://www.esquerra.cat/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:ERC_logo_2025.svg",
+      "path": "/api/party-logo/erc",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/ERC%20logo%202025.svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
+    },
+    {
+      "id": "pnv",
+      "file": "Logo PNV 2025.svg",
+      "partyPage": "https://www.eaj-pnv.eus/",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Logo_PNV_2025.svg",
+      "path": "/api/party-logo/pnv",
+      "sourceAsset": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Logo%20PNV%202025.svg",
+      "background": "light",
+      "sourceType": "wikimedia-commons-sourced-from-party"
     }
   ]
 }
