@@ -1,6 +1,6 @@
 # El CIS del Pueblo
 
-Hitos 1–2: aplicación Next.js con catálogo oficial INE 2026 y explorador territorial, sin recogida de opiniones ni resultados ficticios. No está lista para producción. No se ha publicado.
+Aplicación Next.js con catálogo INE 2026, mapa autonómico IGN, simulador manual y motor PostgreSQL aislado de pruebas, sin recogida de opiniones ni resultados ficticios. No está lista para producción. No se ha publicado.
 
 Requisitos: Node >=20.9 (validado con 24.22.1), npm 11.
 
@@ -18,8 +18,7 @@ Abrir http://localhost:3000. Comprobaciones: `npm test`, `npm run build`, `npm r
 - `docs/VALIDACION.md`: comprobaciones y límites de esta entrega.
 - `db/migrations/0001_foundation.sql`: cimientos PostgreSQL no aplicados, sin tablas sensibles.
 
-La fecha y el real decreto electorales del encargo no están verificados. El catálogo territorial INE 2026 está importado y validado; no hay datos electorales importados. No hay base de datos conectada, credenciales ni variables necesarias para ejecutar la aplicación. No habilitar recogida añadiendo un simple interruptor: completar antes las puertas documentadas de privacidad, seguridad y datos oficiales.
-
+La convocatoria del 29/11/2026 y los 350 escaños en 52 circunscripciones están verificados en el RD 806/2026 del BOE; las candidaturas siguen pendientes. El catálogo INE está validado y su importación PostgreSQL está probada. La web pública no se conecta al motor de prueba ni necesita credenciales para ejecutar las pantallas. No habilitar recogida añadiendo un simple interruptor: completar antes las puertas documentadas de privacidad, seguridad y datos oficiales.
 
 ## Catálogo territorial
 
@@ -40,3 +39,36 @@ work/data-venv/bin/python scripts/test-import-ine.py --source-dir work/ine
 La descarga comprueba los SHA-256 de la versión incluida; si INE modifica un archivo, se detiene para revisión. No se regeneran datos silenciosamente. Los alias editoriales se mantienen en `data/territories/aliases.json`. Fuentes, licencia y límites: `docs/HITO-2.md` y `/fuentes`.
 
 `npm run check:build`, después del build, comprueba el HTML prerenderizado y que el catálogo no viaje en los bundles cliente. La configuración de CI ejecuta pruebas, build, tipos y esta comprobación. Su estado remoto debe confirmarse en GitHub; las comprobaciones documentadas se han ejecutado localmente.
+
+## Motor PostgreSQL de laboratorio
+
+Solo datos sintéticos. El esquema impide campañas reales (`is_test=false`), el factory exige base terminada en `_test` y el motor rechaza `NODE_ENV=production`. Las claves aleatorias de prueba se mantienen en memoria. No activar la recogida pública a partir de esta configuración.
+
+```sh
+docker compose -f compose.test.yml up -d
+TEST_DATABASE_URL=postgresql://postgres@127.0.0.1:55432/cis_pueblo_test npm run test:integration
+docker compose -f compose.test.yml down
+```
+
+La imagen PostgreSQL está fijada por digest. Puerto solo loopback, autenticación trust **exclusivamente para este laboratorio desechable** y sin volumen. El runner aplica migraciones con checksums, importa INE transaccionalmente y prueba inserción, corrección, retirada, concurrencia, aislamiento, permisos y publicaciones sintéticas. No usar la URL de una base real.
+
+`/api/participaciones`, `/corregir` y `/revocar` bajo esa ruta rechazan POST con 423 sin leer el cuerpo. No hay un formulario electoral real habilitado.
+
+## Simulador y mapa
+
+`/simulador`: cálculo local de escenarios hipotéticos por circunscripción; votos o porcentajes, blanco, nulo, umbral y cocientes exactos. En empates no resueltos se detiene. No se envían los parámetros al servidor. Reparto territorial del RD 806/2026 verificado, sin candidaturas de 2026 importadas.
+
+`/mapa`: SVG autonómico derivado del WFS INSPIRE del IGN, con atribución y recuadros de escala propia. No muestra opiniones. No es todavía el mapa multinivel MapLibre/PMTiles previsto. Pipeline offline:
+
+```sh
+python3 -m venv work/geo-venv
+work/geo-venv/bin/pip install -r scripts/requirements-geo.txt
+python3 scripts/fetch-community-geometries.py --destination work/ign
+work/geo-venv/bin/python scripts/build-community-map.py --source-dir work/ign
+```
+
+Datos fuente pesados solo offline; el mapa final está limitado a 400 KB sin comprimir. No es cartografía para medición o delimitación jurídica. Huellas, simplificación y condiciones incluidas en el artefacto.
+
+## Estado del plan
+
+Ver `docs/ESTADO-DEL-PLAN.md` y `docs/CONTINUACION-3-6-9.md`. Privacidad: expediente EIPD, consentimiento/derechos y operación en `docs/privacy/`. No están aprobados jurídicamente. Contacto público facilitado: letrixagame@gmail.com; identidad formal del responsable aún pendiente. No hay despliegue ni opiniones reales.

@@ -8,18 +8,22 @@
     "start": "next start --hostname 0.0.0.0",
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
-    "check:build": "node scripts/check-build.mjs"
+    "check:build": "node scripts/check-build.mjs",
+    "test:integration": "node scripts/test-db.mjs"
   },
   "dependencies": {
     "next": "16.4.5",
+    "pg": "8.23.1",
     "react": "19.3.1",
     "react-dom": "19.3.1"
   },
   "devDependencies": {
-    "typescript": "5.9.3",
     "@types/node": "24.10.0",
+    "@types/pg": "8.23.1",
     "@types/react": "19.2.2",
-    "@types/react-dom": "19.2.2"
+    "@types/react-dom": "19.2.2",
+    "prettier": "3.9.10",
+    "typescript": "5.9.3"
   },
   "type": "module"
 }

@@ -1,13 +1,335 @@
-'use client';
-import {useEffect,useRef,useState,useId} from 'react';
-import Link from 'next/link';
-import type {Community,Province,Municipality} from '@/lib/territories';
-import {displayName,municipalityPath} from '@/lib/territory-format';
-export function TerritorySelector({communities,provinces,compact=false}:{communities:Community[];provinces:Province[];compact?:boolean}) {
- const [query,setQuery]=useState('');const [community,setCommunity]=useState('');const [province,setProvince]=useState('');const [options,setOptions]=useState<Municipality[]>([]);const [municipalList,setMunicipalList]=useState<Municipality[]>([]);const [selected,setSelected]=useState<Municipality|null>(null);const [busy,setBusy]=useState(false);const [error,setError]=useState('');const [active,setActive]=useState(-1);const [open,setOpen]=useState(false);const [retry,setRetry]=useState(0);const inputRef=useRef<HTMLInputElement>(null);const id=useId();
- useEffect(()=>{const controller=new AbortController();if(query.trim().length<2){setOptions([]);setBusy(false);setError('');return()=>controller.abort()};setOptions([]);setBusy(true);setError('');const timer=setTimeout(async()=>{try{const params=new URLSearchParams({q:query,community,province});const response=await fetch(`/api/territorios?${params}`,{signal:controller.signal});if(!response.ok)throw Error();const data=await response.json();setOptions(data.municipalities);setActive(-1)}catch(e){if(!controller.signal.aborted){setError('No se ha podido cargar la búsqueda. Inténtalo de nuevo.');setOptions([])}}finally{if(!controller.signal.aborted)setBusy(false)}},200);return()=>{clearTimeout(timer);controller.abort()}},[query,community,province,retry]);
- useEffect(()=>{const controller=new AbortController();setMunicipalList([]);if(!province)return()=>controller.abort();setError('');(async()=>{try{const response=await fetch(`/api/territorios?province=${province}`,{signal:controller.signal});if(!response.ok)throw Error();const data=await response.json();setMunicipalList(data.municipalities)}catch{if(!controller.signal.aborted)setError('No se han podido cargar los municipios. Inténtalo de nuevo.')}})();return()=>controller.abort()},[province,retry]);
- function choose(m:Municipality){setSelected(m);setCommunity(m.communityCode);setProvince(m.provinceCode);setQuery(displayName(m.name));setOpen(false);setActive(-1);inputRef.current?.focus()}
- function reset(){setSelected(null);setQuery('');setCommunity('');setProvince('');setOptions([]);setOpen(false);inputRef.current?.focus()}
- return <div className={`territory-selector ${compact?'compact':''}`}><div className="selector-heading"><span className="eyebrow">TU PUNTO DE PARTIDA</span><span className="source-stamp">INE · 01 ENE 2026</span></div><h3>Encuentra tu municipio.</h3><p>Elige dónde mirar. Sin detectar tu ubicación.</p><div className="search-wrap" onBlur={e=>{if(!e.currentTarget.contains(e.relatedTarget as Node))setOpen(false)}}><label htmlFor={`${id}-search`}>Buscar por nombre o código INE</label><div className="search-field"><span aria-hidden="true">⌕</span><input ref={inputRef} id={`${id}-search`} role="combobox" aria-expanded={open&&query.trim().length>=2} aria-controls={`${id}-list`} aria-autocomplete="list" aria-activedescendant={open&&active>=0?`${id}-option-${active}`:undefined} autoComplete="off" maxLength={100} placeholder="Madrid, Lourenzá, Donostia…" value={query} onChange={e=>{setQuery(e.target.value);if(selected){setCommunity('');setProvince('')}setSelected(null);setOpen(true);setActive(-1)}} onFocus={()=>{if(!selected)setOpen(true)}} onKeyDown={e=>{if(e.key==='Escape'){setOpen(false);setActive(-1)}if(e.key==='ArrowDown'){e.preventDefault();setOpen(true);setActive(a=>Math.min(a+1,options.length-1))}if(e.key==='ArrowUp'){e.preventDefault();setActive(a=>options.length?Math.max(0,a-1):-1)}if(e.key==='Enter'&&open&&active>=0&&options[active]){e.preventDefault();choose(options[active])}}}/>{query&&<button type="button" className="clear-search" aria-label="Borrar selección y búsqueda" onClick={reset}>×</button>}</div>{open&&query.trim().length>=2&&<div className="search-popover"><ul id={`${id}-list`} role="listbox" aria-label="Municipios encontrados">{options.map((m,i)=><li id={`${id}-option-${i}`} key={m.code} role="option" aria-selected={active===i} onMouseDown={e=>e.preventDefault()}><button type="button" onClick={()=>choose(m)} onMouseEnter={()=>setActive(i)}><span>{displayName(m.name)}<small>{displayName(provinces.find(p=>p.code===m.provinceCode)?.name??'')} · {m.code}</small></span><span aria-hidden="true">↗</span></button></li>)}</ul><p className="search-status" role="status">{busy?'Buscando municipios…':error?error:options.length?`${options.length}${options.length===20?' primeros':''} resultados. Usa las flechas y Enter o selecciona una opción.`:'No hay coincidencias. Prueba otro nombre o cambia los filtros.'}</p></div>}</div><div className="selector-divider"><span>o elige paso a paso</span></div><div className="hierarchy"><div><label htmlFor={`${id}-community`}>Comunidad o ciudad autónoma</label><select id={`${id}-community`} value={community} onChange={e=>{setCommunity(e.target.value);setProvince('');setSelected(null);setQuery('');setOpen(false)}}><option value="">Todas las comunidades</option>{communities.map(c=><option key={c.code} value={c.code}>{displayName(c.name)}</option>)}</select></div><div><label htmlFor={`${id}-province`}>Provincia / ciudad autónoma</label><select id={`${id}-province`} value={province} disabled={!community} onChange={e=>{setProvince(e.target.value);setSelected(null);setQuery('');setOpen(false)}}><option value="">Selecciona provincia</option>{provinces.filter(p=>p.communityCode===community).map(p=><option key={p.code} value={p.code}>{displayName(p.name)}</option>)}</select></div><div><label htmlFor={`${id}-municipality`}>Municipio</label><select id={`${id}-municipality`} value={selected?.code??''} disabled={!province||!municipalList.length} onChange={e=>{const m=municipalList.find(m=>m.code===e.target.value);if(m)choose(m);else{setSelected(null);setQuery('')}}}><option value="">{province&&!municipalList.length?'Cargando municipios…':'Selecciona municipio'}</option>{municipalList.map(m=><option key={m.code} value={m.code}>{displayName(m.name)}</option>)}</select></div></div>{error&&<div className="selector-error" role="alert">{error} <button type="button" onClick={()=>setRetry(r=>r+1)}>Reintentar</button></div>}<div className="selection-result" aria-live="polite">{selected?<><div><span className="eyebrow">MUNICIPIO SELECCIONADO</span><strong>{displayName(selected.name)}</strong><small>Código INE {selected.code} · Municipio declarado, sin verificación de residencia</small></div><Link className="button" href={municipalityPath(selected)}>Ver territorio ↗</Link></>:<p>Selecciona un municipio para abrir su ficha territorial.</p>}</div><p className="selector-footnote">Esta selección solo se utiliza para navegar. No se guarda una preferencia política ni una ubicación persistente.</p></div>
+"use client";
+import { useEffect, useRef, useState, useId } from "react";
+import Link from "next/link";
+import type { Community, Province, Municipality } from "@/lib/territories";
+import { displayName, municipalityPath } from "@/lib/territory-format";
+export function TerritorySelector({
+  communities,
+  provinces,
+  compact = false,
+}: {
+  communities: Community[];
+  provinces: Province[];
+  compact?: boolean;
+}) {
+  const [query, setQuery] = useState("");
+  const [community, setCommunity] = useState("");
+  const [province, setProvince] = useState("");
+  const [options, setOptions] = useState<Municipality[]>([]);
+  const [municipalList, setMunicipalList] = useState<Municipality[]>([]);
+  const [selected, setSelected] = useState<Municipality | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const [active, setActive] = useState(-1);
+  const [open, setOpen] = useState(false);
+  const [retry, setRetry] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const id = useId();
+  useEffect(() => {
+    const controller = new AbortController();
+    if (query.trim().length < 2) {
+      setOptions([]);
+      setBusy(false);
+      setError("");
+      return () => controller.abort();
+    }
+    setOptions([]);
+    setBusy(true);
+    setError("");
+    const timer = setTimeout(async () => {
+      try {
+        const params = new URLSearchParams({ q: query, community, province });
+        const response = await fetch(`/api/territorios?${params}`, {
+          signal: controller.signal,
+        });
+        if (!response.ok) throw Error();
+        const data = await response.json();
+        setOptions(data.municipalities);
+        setActive(-1);
+      } catch (e) {
+        if (!controller.signal.aborted) {
+          setError("No se ha podido cargar la búsqueda. Inténtalo de nuevo.");
+          setOptions([]);
+        }
+      } finally {
+        if (!controller.signal.aborted) setBusy(false);
+      }
+    }, 200);
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [query, community, province, retry]);
+  useEffect(() => {
+    const controller = new AbortController();
+    setMunicipalList([]);
+    if (!province) return () => controller.abort();
+    setError("");
+    (async () => {
+      try {
+        const response = await fetch(`/api/territorios?province=${province}`, {
+          signal: controller.signal,
+        });
+        if (!response.ok) throw Error();
+        const data = await response.json();
+        setMunicipalList(data.municipalities);
+      } catch {
+        if (!controller.signal.aborted)
+          setError(
+            "No se han podido cargar los municipios. Inténtalo de nuevo.",
+          );
+      }
+    })();
+    return () => controller.abort();
+  }, [province, retry]);
+  function choose(m: Municipality) {
+    setSelected(m);
+    setCommunity(m.communityCode);
+    setProvince(m.provinceCode);
+    setQuery(displayName(m.name));
+    setOpen(false);
+    setActive(-1);
+    inputRef.current?.focus();
+  }
+  function reset() {
+    setSelected(null);
+    setQuery("");
+    setCommunity("");
+    setProvince("");
+    setOptions([]);
+    setOpen(false);
+    inputRef.current?.focus();
+  }
+  return (
+    <div className={`territory-selector ${compact ? "compact" : ""}`}>
+      <div className="selector-heading">
+        <span className="eyebrow">TU PUNTO DE PARTIDA</span>
+        <span className="source-stamp">INE · 01 ENE 2026</span>
+      </div>
+      <h3>Encuentra tu municipio.</h3>
+      <p>Elige dónde mirar. Sin detectar tu ubicación.</p>
+      <div
+        className="search-wrap"
+        onBlur={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget as Node))
+            setOpen(false);
+        }}
+      >
+        <label htmlFor={`${id}-search`}>Buscar por nombre o código INE</label>
+        <div className="search-field">
+          <span aria-hidden="true">⌕</span>
+          <input
+            ref={inputRef}
+            id={`${id}-search`}
+            role="combobox"
+            aria-expanded={open && query.trim().length >= 2}
+            aria-controls={`${id}-list`}
+            aria-autocomplete="list"
+            aria-activedescendant={
+              open && active >= 0 ? `${id}-option-${active}` : undefined
+            }
+            autoComplete="off"
+            maxLength={100}
+            placeholder="Madrid, Lourenzá, Donostia…"
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              if (selected) {
+                setCommunity("");
+                setProvince("");
+              }
+              setSelected(null);
+              setOpen(true);
+              setActive(-1);
+            }}
+            onFocus={() => {
+              if (!selected) setOpen(true);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") {
+                setOpen(false);
+                setActive(-1);
+              }
+              if (e.key === "ArrowDown") {
+                e.preventDefault();
+                setOpen(true);
+                setActive((a) => Math.min(a + 1, options.length - 1));
+              }
+              if (e.key === "ArrowUp") {
+                e.preventDefault();
+                setActive((a) => (options.length ? Math.max(0, a - 1) : -1));
+              }
+              if (e.key === "Enter" && open && active >= 0 && options[active]) {
+                e.preventDefault();
+                choose(options[active]);
+              }
+            }}
+          />
+          {query && (
+            <button
+              type="button"
+              className="clear-search"
+              aria-label="Borrar selección y búsqueda"
+              onClick={reset}
+            >
+              ×
+            </button>
+          )}
+        </div>
+        {open && query.trim().length >= 2 && (
+          <div className="search-popover">
+            <ul
+              id={`${id}-list`}
+              role="listbox"
+              aria-label="Municipios encontrados"
+            >
+              {options.map((m, i) => (
+                <li
+                  id={`${id}-option-${i}`}
+                  key={m.code}
+                  role="option"
+                  aria-selected={active === i}
+                  onMouseDown={(e) => e.preventDefault()}
+                >
+                  <button
+                    type="button"
+                    onClick={() => choose(m)}
+                    onMouseEnter={() => setActive(i)}
+                  >
+                    <span>
+                      {displayName(m.name)}
+                      <small>
+                        {displayName(
+                          provinces.find((p) => p.code === m.provinceCode)
+                            ?.name ?? "",
+                        )}{" "}
+                        · {m.code}
+                      </small>
+                    </span>
+                    <span aria-hidden="true">↗</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <p className="search-status" role="status">
+              {busy
+                ? "Buscando municipios…"
+                : error
+                  ? error
+                  : options.length
+                    ? `${options.length}${options.length === 20 ? " primeros" : ""} resultados. Usa las flechas y Enter o selecciona una opción.`
+                    : "No hay coincidencias. Prueba otro nombre o cambia los filtros."}
+            </p>
+          </div>
+        )}
+      </div>
+      <div className="selector-divider">
+        <span>o elige paso a paso</span>
+      </div>
+      <div className="hierarchy">
+        <div>
+          <label htmlFor={`${id}-community`}>Comunidad o ciudad autónoma</label>
+          <select
+            id={`${id}-community`}
+            value={community}
+            onChange={(e) => {
+              setCommunity(e.target.value);
+              setProvince("");
+              setSelected(null);
+              setQuery("");
+              setOpen(false);
+            }}
+          >
+            <option value="">Todas las comunidades</option>
+            {communities.map((c) => (
+              <option key={c.code} value={c.code}>
+                {displayName(c.name)}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor={`${id}-province`}>Provincia / ciudad autónoma</label>
+          <select
+            id={`${id}-province`}
+            value={province}
+            disabled={!community}
+            onChange={(e) => {
+              setProvince(e.target.value);
+              setSelected(null);
+              setQuery("");
+              setOpen(false);
+            }}
+          >
+            <option value="">Selecciona provincia</option>
+            {provinces
+              .filter((p) => p.communityCode === community)
+              .map((p) => (
+                <option key={p.code} value={p.code}>
+                  {displayName(p.name)}
+                </option>
+              ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor={`${id}-municipality`}>Municipio</label>
+          <select
+            id={`${id}-municipality`}
+            value={selected?.code ?? ""}
+            disabled={!province || !municipalList.length}
+            onChange={(e) => {
+              const m = municipalList.find((m) => m.code === e.target.value);
+              if (m) choose(m);
+              else {
+                setSelected(null);
+                setQuery("");
+              }
+            }}
+          >
+            <option value="">
+              {province && !municipalList.length
+                ? "Cargando municipios…"
+                : "Selecciona municipio"}
+            </option>
+            {municipalList.map((m) => (
+              <option key={m.code} value={m.code}>
+                {displayName(m.name)}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+      {error && (
+        <div className="selector-error" role="alert">
+          {error}{" "}
+          <button type="button" onClick={() => setRetry((r) => r + 1)}>
+            Reintentar
+          </button>
+        </div>
+      )}
+      <div className="selection-result" aria-live="polite">
+        {selected ? (
+          <>
+            <div>
+              <span className="eyebrow">MUNICIPIO SELECCIONADO</span>
+              <strong>{displayName(selected.name)}</strong>
+              <small>
+                Código INE {selected.code} · Municipio declarado, sin
+                verificación de residencia
+              </small>
+            </div>
+            <Link className="button" href={municipalityPath(selected)}>
+              Ver territorio ↗
+            </Link>
+          </>
+        ) : (
+          <p>Selecciona un municipio para abrir su ficha territorial.</p>
+        )}
+      </div>
+      <p className="selector-footnote">
+        Esta selección solo se utiliza para navegar. No se guarda una
+        preferencia política ni una ubicación persistente.
+      </p>
+    </div>
+  );
 }

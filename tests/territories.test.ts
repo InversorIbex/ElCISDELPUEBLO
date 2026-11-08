@@ -1,15 +1,129 @@
-import test from 'node:test';
-import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import {communities,provinces,municipalities,municipalityByCode,provinceByCode,communityByCode,searchMunicipalities,municipalityPath,provincePath,communityPath,displayName,catalogInfo} from '../lib/territories.ts';
-import {GET} from '../app/api/territorios/route.ts';
-test('catálogo completo: 8132 municipios, 52 provincias/códigos y 19 comunidades/ciudades',()=>{assert.equal(municipalities.length,8132);assert.equal(provinces.length,52);assert.equal(communities.length,19);assert.equal(municipalityByCode.size,8132)});
-test('todos los códigos conservan ceros y una jerarquía íntegra',()=>{for(const m of municipalities){assert.match(m.code,/^\d{5}$/);assert.equal(m.code.slice(0,2),m.provinceCode);assert.equal(provinceByCode.get(m.provinceCode)?.communityCode,m.communityCode);assert.ok(communityByCode.has(m.communityCode))}assert.equal(municipalityByCode.get('01001')?.name,'Alegría-Dulantzi')});
-test('Ceuta, Melilla, Baleares y ambas provincias canarias están incluidos',()=>{assert.equal(municipalityByCode.get('51001')?.communityCode,'18');assert.equal(municipalityByCode.get('52001')?.communityCode,'19');for(const p of ['07','35','38'])assert.ok(municipalities.some(m=>m.provinceCode===p))});
-test('búsqueda sin acentos, por código, denominaciones oficiales y alias comunes',()=>{for(const [q,code] of [['lourenza','27027'],['01059','01059'],['Bilbo','48020'],['San Sebastian','20069'],['Donostia','20069'],['La Coruña','15030'],['Orense','32054'],['Palma de Mallorca','07040'],['Tarrasa','08279']])assert.ok(searchMunicipalities(q).some(m=>m.code===code),`${q} debe encontrar ${code}`)});
-test('nombres ambiguos no se usan como clave y filtros limitan las coincidencias',()=>{assert.equal(searchMunicipalities('a').length,0);assert.equal(searchMunicipalities('Madrid',{province:'08'}).length,0);assert.ok(searchMunicipalities('Madrid',{community:'13'}).every(m=>m.communityCode==='13'));assert.ok(searchMunicipalities('san').length<=20)});
-test('alias de producto apuntan a municipios válidos',()=>{const aliases=JSON.parse(readFileSync('data/territories/aliases.json','utf8'));for(const code of Object.keys(aliases))assert.ok(municipalityByCode.has(code),code)});
-test('rutas territoriales son únicas y nombres con artículos se leen naturalmente',()=>{assert.equal(displayName('Coruña, A'),'A Coruña');assert.equal(new Set(provinces.map(provincePath)).size,52);assert.equal(new Set(communities.map(communityPath)).size,19);assert.equal(new Set(municipalities.map(municipalityPath)).size,8132);assert.match(municipalityPath(municipalityByCode.get('27027')!),/^\/municipio\/27027\/lourenza$/)});
-test('fuentes y versión están documentadas con SHA-256',()=>{assert.equal(catalogInfo.version,'2026-01-01');assert.equal(catalogInfo.sources.length,3);for(const source of catalogInfo.sources){assert.ok(source.url.startsWith('https://www.ine.es/'));assert.match(source.sha256,/^[a-f0-9]{64}$/)}});
-test('API búsqueda y jerarquía: resultados acotados y cero datos políticos',async()=>{const result=await GET(new Request('https://local/api/territorios?q=lourenza'));assert.equal(result.status,200);const data=await result.json();assert.equal(data.municipalities[0].code,'27027');assert.deepEqual(Object.keys(data.municipalities[0]).sort(),['code','communityCode','name','provinceCode']);const p=await GET(new Request('https://local/api/territorios?province=51'));assert.equal((await p.json()).municipalities[0].code,'51001');const c=await GET(new Request('https://local/api/territorios?community=05'));assert.deepEqual((await c.json()).provinces.map((p:{code:string})=>p.code),['35','38'])});
-test('API rechaza filtros inválidos, incompatibles y consulta excesiva',()=>{for(const query of ['province=99','community=20','province=28&community=12',`q=${'a'.repeat(101)}`])assert.equal(GET(new Request(`https://local/api/territorios?${query}`)).status,400)});
+import test from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import {
+  communities,
+  provinces,
+  municipalities,
+  municipalityByCode,
+  provinceByCode,
+  communityByCode,
+  searchMunicipalities,
+  municipalityPath,
+  provincePath,
+  communityPath,
+  displayName,
+  catalogInfo,
+} from "../lib/territories.ts";
+import { GET } from "../app/api/territorios/route.ts";
+test("catálogo completo: 8132 municipios, 52 provincias/códigos y 19 comunidades/ciudades", () => {
+  assert.equal(municipalities.length, 8132);
+  assert.equal(provinces.length, 52);
+  assert.equal(communities.length, 19);
+  assert.equal(municipalityByCode.size, 8132);
+});
+test("todos los códigos conservan ceros y una jerarquía íntegra", () => {
+  for (const m of municipalities) {
+    assert.match(m.code, /^\d{5}$/);
+    assert.equal(m.code.slice(0, 2), m.provinceCode);
+    assert.equal(
+      provinceByCode.get(m.provinceCode)?.communityCode,
+      m.communityCode,
+    );
+    assert.ok(communityByCode.has(m.communityCode));
+  }
+  assert.equal(municipalityByCode.get("01001")?.name, "Alegría-Dulantzi");
+});
+test("Ceuta, Melilla, Baleares y ambas provincias canarias están incluidos", () => {
+  assert.equal(municipalityByCode.get("51001")?.communityCode, "18");
+  assert.equal(municipalityByCode.get("52001")?.communityCode, "19");
+  for (const p of ["07", "35", "38"])
+    assert.ok(municipalities.some((m) => m.provinceCode === p));
+});
+test("búsqueda sin acentos, por código, denominaciones oficiales y alias comunes", () => {
+  for (const [q, code] of [
+    ["lourenza", "27027"],
+    ["01059", "01059"],
+    ["Bilbo", "48020"],
+    ["San Sebastian", "20069"],
+    ["Donostia", "20069"],
+    ["La Coruña", "15030"],
+    ["Orense", "32054"],
+    ["Palma de Mallorca", "07040"],
+    ["Tarrasa", "08279"],
+  ])
+    assert.ok(
+      searchMunicipalities(q).some((m) => m.code === code),
+      `${q} debe encontrar ${code}`,
+    );
+});
+test("nombres ambiguos no se usan como clave y filtros limitan las coincidencias", () => {
+  assert.equal(searchMunicipalities("a").length, 0);
+  assert.equal(searchMunicipalities("Madrid", { province: "08" }).length, 0);
+  assert.ok(
+    searchMunicipalities("Madrid", { community: "13" }).every(
+      (m) => m.communityCode === "13",
+    ),
+  );
+  assert.ok(searchMunicipalities("san").length <= 20);
+});
+test("alias de producto apuntan a municipios válidos", () => {
+  const aliases = JSON.parse(
+    readFileSync("data/territories/aliases.json", "utf8"),
+  );
+  for (const code of Object.keys(aliases))
+    assert.ok(municipalityByCode.has(code), code);
+});
+test("rutas territoriales son únicas y nombres con artículos se leen naturalmente", () => {
+  assert.equal(displayName("Coruña, A"), "A Coruña");
+  assert.equal(new Set(provinces.map(provincePath)).size, 52);
+  assert.equal(new Set(communities.map(communityPath)).size, 19);
+  assert.equal(new Set(municipalities.map(municipalityPath)).size, 8132);
+  assert.match(
+    municipalityPath(municipalityByCode.get("27027")!),
+    /^\/municipio\/27027\/lourenza$/,
+  );
+});
+test("fuentes y versión están documentadas con SHA-256", () => {
+  assert.equal(catalogInfo.version, "2026-01-01");
+  assert.equal(catalogInfo.sources.length, 3);
+  for (const source of catalogInfo.sources) {
+    assert.ok(source.url.startsWith("https://www.ine.es/"));
+    assert.match(source.sha256, /^[a-f0-9]{64}$/);
+  }
+});
+test("API búsqueda y jerarquía: resultados acotados y cero datos políticos", async () => {
+  const result = await GET(
+    new Request("https://local/api/territorios?q=lourenza"),
+  );
+  assert.equal(result.status, 200);
+  const data = await result.json();
+  assert.equal(data.municipalities[0].code, "27027");
+  assert.deepEqual(Object.keys(data.municipalities[0]).sort(), [
+    "code",
+    "communityCode",
+    "name",
+    "provinceCode",
+  ]);
+  const p = await GET(new Request("https://local/api/territorios?province=51"));
+  assert.equal((await p.json()).municipalities[0].code, "51001");
+  const c = await GET(
+    new Request("https://local/api/territorios?community=05"),
+  );
+  assert.deepEqual(
+    (await c.json()).provinces.map((p: { code: string }) => p.code),
+    ["35", "38"],
+  );
+});
+test("API rechaza filtros inválidos, incompatibles y consulta excesiva", () => {
+  for (const query of [
+    "province=99",
+    "community=20",
+    "province=28&community=12",
+    `q=${"a".repeat(101)}`,
+  ])
+    assert.equal(
+      GET(new Request(`https://local/api/territorios?${query}`)).status,
+      400,
+    );
+});
