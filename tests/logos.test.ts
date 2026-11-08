@@ -7,7 +7,7 @@ import { candidacies } from "../lib/candidacies/registry.ts";
 import associations from "../data/candidacies/logo-associations.json" with { type: "json" };
 
 test("logos locales: integridad, fuentes oficiales y SVG sin contenido activo", () => {
-  const local = logoAssets.filter((l) => l.path.startsWith("/logos/"));
+  const local = logoAssets.filter((l) => "assetSha256" in l && l.path.startsWith("/logos/"));
   assert.equal(local.length, 17);
   assert.ok(logoAssets.length >= 22);
   assert.equal(readdirSync("public/logos").length, 17);
