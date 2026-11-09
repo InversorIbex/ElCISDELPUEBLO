@@ -1,6 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TerritoryPage } from "@/components/TerritoryPage";
+import { JsonLd } from "@/components/JsonLd";
+import { breadcrumbLd } from "@/lib/seo";
+import { candidaciesForProvince } from "@/lib/candidacies/registry";
+import election from "@/data/elections/congress-2026.json";
+const SEATS = new Map(election.constituencies.map((c) => [c.provinceCode, c.seats]));
 import {
   provinces,
   municipalities,
@@ -16,10 +21,14 @@ export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const p = provinces.find((p) => slugify(p.name) === slug);
   if (!p) return { title: "Provincia no encontrada", robots: { index: false, follow: false } };
+  const n = displayName(p.name);
+  const seats = SEATS.get(p.code);
   return {
-    title: `Candidaturas al Congreso en ${displayName(p.name)} · 2026`,
-    description: `Consulta candidaturas proclamadas en ${displayName(p.name)}, las fuentes oficiales y cómo se asignan sus escaños. Sondeo ciudadano voluntario e independiente.`,
+    title: `Elecciones generales 2026 en ${n}: candidaturas, escaños y encuesta en vivo`,
+    description: `¿A quién votarías en ${n} el 29 de noviembre? ${candidaciesForProvince(p.code).length} candidaturas proclamadas al Congreso${seats ? `, ${seats} ${seats === 1 ? "escaño" : "escaños"} en juego` : ""}. Vota en el sondeo ciudadano y mira los resultados de ${n} en vivo.`,
+    keywords: [`elecciones ${n} 2026`, `encuesta ${n}`, `candidatos ${n} Congreso`, `sondeo elecciones ${n}`, `escaños ${n}`, `listas electorales ${n}`],
     alternates: { canonical: provincePath(p) },
+    openGraph: { url: provincePath(p), title: `Elecciones generales 2026 en ${n}` },
   };
 }
 export default async function Page({ params }: Props) {
@@ -32,7 +41,8 @@ export default async function Page({ params }: Props) {
     .sort((a, b) =>
       displayName(a.name).localeCompare(displayName(b.name), "es"),
     );
-  return (
+  return (<>
+    <JsonLd nodes={[breadcrumbLd([{ name: "Inicio", path: "/" }, { name: displayName(c.name), path: communityPath(c) }, { name: displayName(p.name), path: provincePath(p) }])]} />
     <TerritoryPage
       candidacyProvinceCode={p.code}
       name={p.name}
@@ -61,5 +71,6 @@ export default async function Page({ params }: Props) {
         ))}
       </div>
     </TerritoryPage>
+  </>
   );
 }

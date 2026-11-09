@@ -63,3 +63,15 @@ test("conexión a Supabase: TLS verificado y sin sslmode en la URL", () => {
   assert.equal((c.ssl as { rejectUnauthorized: boolean }).rejectUnauthorized, true);
   assert.ok(!String(c.connectionString).includes("sslmode"));
 });
+
+test("proyección: completa los 350 escaños con el reparto nacional y declara su base", () => {
+  const pp = byGroup("28", "PP"), psoe = byGroup("28", "PSOE");
+  const r = buildLiveResults([row("28", pp.id, 3), row("28", psoe.id, 1)], { now: before });
+  const pr = r.projection;
+  assert.equal(pr.basedOnVotes, 4);
+  assert.equal(pr.ownProvinces, 1);
+  assert.equal(pr.estimatedProvinces, 51);
+  assert.equal(pr.groups.reduce((s, g) => s + g.seats, 0) + pr.unassigned, 350);
+  assert.equal(pr.unassigned, 0);
+  assert.ok(pr.groups.find((g) => g.id === "PP")!.seats > pr.groups.find((g) => g.id === "PSOE")!.seats);
+});

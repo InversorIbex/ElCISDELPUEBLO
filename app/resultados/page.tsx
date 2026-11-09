@@ -2,7 +2,11 @@ import { LiveResultsSection } from "@/components/LiveResults";
 import Link from "next/link";
 import previous from "@/data/elections/congress-2023-results.json";
 import { provinces, provinceByCode, displayName } from "@/lib/territories";
-export const metadata = { title: "Resultados en vivo por circunscripción", robots: { index: false, follow: true } };
+export const metadata = {
+  title: "Resultados de la encuesta de las elecciones generales 2026 en vivo: mapa y escaños",
+  description: "Resultados en vivo del sondeo ciudadano de las elecciones generales del 29-N: partido más votado en cada provincia, porcentajes, votos y proyección de escaños en el hemiciclo. Siempre con el número de votos.",
+  alternates: { canonical: "/resultados" },
+};
 export default async function Results({
   searchParams,
 }: {

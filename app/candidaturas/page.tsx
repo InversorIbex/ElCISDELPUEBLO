@@ -13,7 +13,9 @@ import {
   provincePath,
 } from "@/lib/territories";
 export const metadata = {
-  title: "Candidaturas al Congreso por circunscripción · 29N 2026",
+  title: "Candidaturas y listas electorales al Congreso 2026 por provincia",
+  description: "Todas las candidaturas proclamadas en el BOE para las elecciones generales del 29 de noviembre de 2026, provincia a provincia, con su nombre exacto en la papeleta y logos verificados.",
+  alternates: { canonical: "/candidaturas" },
 };
 export default async function Page({
   searchParams,

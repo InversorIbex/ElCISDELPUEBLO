@@ -45,6 +45,31 @@ export function LiveVotersCount() {
   </span>;
 }
 
+/* ---------- Hemiciclo: proyección completa o solo provincias con votos ---------- */
+function LiveHemicycle({ data }: { data: Data }) {
+  const [mode, setMode] = useState<"projection" | "own">("projection");
+  const pr = data.projection;
+  const v = data.totals.votes;
+  const groups = mode === "projection" ? pr.groups : data.hemicycle.groups;
+  const unassigned = mode === "projection" ? pr.unassigned : data.hemicycle.unassigned;
+  return <div className={styles.hemi}>
+    <div className="eyebrow">CONGRESO · PROYECCIÓN CON LOS VOTOS DEL SONDEO</div>
+    <p className={styles.basis}>
+      Calculada con <strong>{fmt.format(v)} {v === 1 ? "voto" : "votos"}</strong> registrados hasta ahora ·{" "}
+      {pr.ownProvinces} {pr.ownProvinces === 1 ? "circunscripción" : "circunscripciones"} con votos propios
+      {mode === "projection" && pr.estimatedProvinces > 0 && <> · {pr.estimatedProvinces} estimadas con el reparto nacional</>}
+    </p>
+    <div className={styles.toggle} role="group" aria-label="Tipo de reparto">
+      <button type="button" aria-pressed={mode === "projection"} onClick={() => setMode("projection")}>Proyección de los 350 escaños</button>
+      <button type="button" aria-pressed={mode === "own"} onClick={() => setMode("own")}>Solo provincias con votos</button>
+    </div>
+    <Hemicycle groups={groups} unassigned={unassigned}
+      label={mode === "projection"
+        ? "Método: en cada circunscripción con votos se aplica D'Hondt con barrera del 3 % a sus votos; en las que aún no tienen votos se aplica el reparto nacional del sondeo a las candidaturas que se presentan allí. Sondeo voluntario no representativo: no es una predicción."
+        : "Reparto D'Hondt con barrera del 3 % solo en las circunscripciones que ya tienen votos; el resto queda sin asignar."} />
+  </div>;
+}
+
 /* ---------- Mapa + panel de circunscripción + hemiciclo ---------- */
 export function LiveResultsSection({ provinces, initialProvince = "28" }: { provinces: { code: string; name: string }[]; initialProvince?: string }) {
   const { data, error } = useLiveResults();
@@ -71,11 +96,7 @@ export function LiveResultsSection({ provinces, initialProvince = "28" }: { prov
       <ProvinceMap provinces={provinces} winners={winners} selected={selected} onSelect={setSelected} live />
       <LiveProvincePanel code={selected} name={names.get(selected) ?? selected} />
     </div>
-    {data && <div className={styles.hemi}>
-      <div className="eyebrow">CONGRESO · SIMULACIÓN CON LOS VOTOS DE ESTA WEB</div>
-      <Hemicycle groups={data.hemicycle.groups} unassigned={data.hemicycle.unassigned}
-        label={`Reparto D'Hondt por circunscripción con barrera del 3 % según los votos de esta web. Las circunscripciones sin votos quedan sin asignar. No es una predicción.`} />
-    </div>}
+    {data && <LiveHemicycle data={data} />}
   </section>;
 }
 
@@ -110,4 +131,24 @@ export function LiveProvincePanel({ code, name }: { code: string; name: string }
       <Link className="text-link" href={`/participar?provincia=${code}#papeleta`}>Votar en {name} →</Link>
     </>}
   </aside>;
+}
+
+/** Votos y escaños en vivo de una fuerza política en todo el sondeo. */
+export function LivePartyStats({ groupId, name }: { groupId: string; name: string }) {
+  const { data } = useLiveResults();
+  if (!data) return <p className={styles.meta}>Cargando resultados del sondeo…</p>;
+  if (data.blackout) return <p className={styles.insufficient}>Veda electoral: del 24 de noviembre al cierre de los colegios del 29 de noviembre no se publican resultados del sondeo.</p>;
+  let votes = 0, provincesWon = 0;
+  for (const p of Object.values(data.provinces)) {
+    for (const r of p.rows) if (r.groupId === groupId) votes += r.n;
+    if (p.winner?.groupId === groupId) provincesWon++;
+  }
+  const seats = data.hemicycle.groups.find((g) => g.id === groupId)?.seats ?? 0;
+  const share = data.totals.votes ? (votes / data.totals.votes) * 100 : 0;
+  return <dl className={styles.partyStats}>
+    <div><dt>Votos en el sondeo</dt><dd>{fmt.format(votes)}</dd><small>{pct.format(share)} % del total</small></div>
+    <div><dt>Escaños simulados</dt><dd>{seats}</dd><small>de 350 · D&apos;Hondt por provincia</small></div>
+    <div><dt>Provincias donde gana</dt><dd>{provincesWon}</dd><small>de 52 circunscripciones</small></div>
+    <p className={styles.partyNote}>Datos en vivo de {name} en el sondeo voluntario de esta web. No es una encuesta representativa ni una predicción.</p>
+  </dl>;
 }

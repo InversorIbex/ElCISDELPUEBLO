@@ -1,6 +1,9 @@
 import { candidaciesForProvince } from "@/lib/candidacies/registry";
 import Link from "next/link";
 import { EmptyState } from "./EmptyState";
+import { LiveProvincePanel } from "./LiveResults";
+import { groupForCandidacy } from "@/lib/party-groups";
+import { partyBySlug } from "@/lib/parties";
 import { displayName } from "@/lib/territory-format";
 export function TerritoryPage({
   name,
@@ -70,10 +73,20 @@ export function TerritoryPage({
           <strong>INE · 01/01/2026</strong>
         </div>
       </div>
-      <EmptyState
-        title="Todavía no hay respuestas publicadas"
-        text="El catálogo identifica el territorio; no contiene opiniones políticas. La recogida permanece cerrada. Los futuros resultados respetarán el umbral de privacidad y las reglas contra reconstrucción por diferencias."
-      />
+      {candidacyProvinceCode ? (
+        <div className="territory-live">
+          <LiveProvincePanel code={candidacyProvinceCode} name={displayName(name)} />
+          <p>
+            <Link className="button" href={`/participar?provincia=${candidacyProvinceCode}#papeleta`}>Votar en {displayName(name)} ↗</Link>{" "}
+            <Link className="text-link" href={`/resultados?provincia=${candidacyProvinceCode}`}>Ver el mapa y el hemiciclo →</Link>
+          </p>
+        </div>
+      ) : (
+        <EmptyState
+          title="Elige tu provincia para votar"
+          text="Los votos del sondeo y su reparto se muestran por circunscripción (provincia o ciudad autónoma). Selecciona la tuya para ver los resultados en vivo y participar."
+        />
+      )}
       {candidacyProvinceCode && (
         <div className="territory-candidacies">
           <div>
@@ -86,6 +99,16 @@ export function TerritoryPage({
               Consulta las listas de tu provincia, con sus denominaciones
               oficiales y fuentes.
             </p>
+            <ul className="territory-party-list">
+              {candidaciesForProvince(candidacyProvinceCode).map((c) => {
+                const g = groupForCandidacy(c.officialName);
+                const party = partyBySlug(g.id.toLowerCase());
+                return <li key={c.id}>
+                  <span style={{ color: g.color }} aria-hidden="true">● </span>
+                  {party ? <Link href={`/partidos/${party.slug}`}>{c.officialName}</Link> : c.officialName}
+                </li>;
+              })}
+            </ul>
           </div>
           <Link
             className="button"

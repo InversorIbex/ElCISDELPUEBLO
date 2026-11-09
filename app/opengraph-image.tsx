@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 export const alt =
-  "El Pueblo Opina. Candidaturas, territorio y matemática electoral. Participación todavía no abierta.";
+  "El Pueblo Opina. ¿A quién votarías el 29-N? Sondeo ciudadano de las elecciones generales 2026 con resultados en vivo.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export default function Image() {
@@ -31,14 +31,14 @@ export default function Image() {
           lineHeight: 1.1,
         }}
       >
-        <span>La política,</span>
-        <span>con contexto.</span>
+        <span>¿A quién votarías</span>
+        <span>el 29 de noviembre?</span>
       </div>
       <div style={{ display: "flex", fontSize: 27 }}>
-        52 circunscripciones · 350 escaños · Fuentes oficiales
+        Vota en tu provincia · Mapa y hemiciclo en vivo
       </div>
       <div style={{ display: "flex", fontSize: 21, color: "#4e7669" }}>
-        Edición informativa · Participación todavía no abierta
+        Elecciones generales 2026 · Sondeo voluntario, no oficial · laopiniondelpueblo.eu
       </div>
     </div>,
     size,

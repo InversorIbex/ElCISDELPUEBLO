@@ -28,6 +28,15 @@ export type LiveResults = {
   totals: { votes: number };
   provinces: Record<string, LiveProvince>;
   hemicycle: { groups: { id: string; name: string; color: string; seats: number }[]; unassigned: number };
+  /**
+   * Proyección del Congreso completo: provincias con votos → D'Hondt con sus
+   * votos; provincias sin votos → reparto nacional del sondeo aplicado a las
+   * candidaturas que concurren allí (voto uniforme). Siempre con su base.
+   */
+  projection: {
+    groups: { id: string; name: string; color: string; seats: number }[];
+    unassigned: number; basedOnVotes: number; ownProvinces: number; estimatedProvinces: number;
+  };
 };
 
 /**
@@ -65,7 +74,8 @@ export function buildLiveResults(rows: readonly CountInput[], opts: { minCount?:
   }
   const base = { updatedAt: now.toISOString(), minCount, totals: { votes } };
   if (inPollBlackout(now))
-    return { ...base, blackout: true, provinces: {}, hemicycle: { groups: [], unassigned: 350 } };
+    return { ...base, blackout: true, provinces: {}, hemicycle: { groups: [], unassigned: 350 },
+      projection: { groups: [], unassigned: 350, basedOnVotes: votes, ownProvinces: 0, estimatedProvinces: 0 } };
 
   const codes = [...SEATS.keys()].sort();
   const total = (c: string) => [...(byProvince.get(c)?.values() ?? [])].reduce((a, b) => a + b, 0);
@@ -110,6 +120,35 @@ export function buildLiveResults(rows: readonly CountInput[], opts: { minCount?:
     provinces[code] = { total: t, seats, suppressed: null, tie: alloc.tie, rows: out, winner: tie ? null : { groupId: top.groupId, name: top.groupName, color: top.color } };
   }
   const rank = (id: string) => { const i = HEMICYCLE_ORDER.indexOf(id); return i < 0 ? HEMICYCLE_ORDER.length : i; };
-  const groups = [...hemi.values()].sort((a, b) => rank(a.id) - rank(b.id) || b.seats - a.seats);
-  return { ...base, blackout: false, provinces, hemicycle: { groups, unassigned } };
+  const order = (m: Map<string, { id: string; name: string; color: string; seats: number }>) =>
+    [...m.values()].sort((a, b) => rank(a.id) - rank(b.id) || b.seats - a.seats);
+
+  // Proyección: reparto nacional por fuerza política (solo votos publicados).
+  const nationalByGroup = new Map<string, number>();
+  for (const pr of Object.values(provinces)) for (const r of pr.rows) nationalByGroup.set(r.groupId, (nationalByGroup.get(r.groupId) ?? 0) + r.n);
+  const proj = new Map([...hemi.entries()].map(([k, v]) => [k, { ...v }]));
+  let projUnassigned = 0, own = 0, estimated = 0;
+  for (const code of codes) {
+    const pr = provinces[code];
+    if (!pr.suppressed) { own++; projUnassigned += pr.seats - pr.rows.reduce((s, r) => s + r.seats, 0); continue; }
+    const options = candidaciesForProvince(code).map((c) => ({ c, g: groupForCandidacy(c.officialName) }))
+      .map(({ c, g }) => ({ id: c.id, g, votes: nationalByGroup.get(g.id) ?? 0 })).filter((o) => o.votes > 0);
+    if (!options.length || pr.total > 0) { projUnassigned += pr.seats; continue; } // con votos pero ocultos: no se estiman
+    estimated++;
+    const alloc = dhondt(options, pr.seats);
+    let assigned = 0;
+    for (const o of options) {
+      const s = alloc.allocation[o.id] ?? 0;
+      if (!s) continue;
+      assigned += s;
+      const h = proj.get(o.g.id) ?? { id: o.g.id, name: o.g.name, color: o.g.color, seats: 0 };
+      h.seats += s; proj.set(o.g.id, h);
+    }
+    projUnassigned += pr.seats - assigned;
+  }
+  return {
+    ...base, blackout: false, provinces,
+    hemicycle: { groups: order(hemi), unassigned },
+    projection: { groups: order(proj), unassigned: projUnassigned, basedOnVotes: votes, ownProvinces: own, estimatedProvinces: estimated },
+  };
 }
