@@ -255,7 +255,19 @@ em {
   font-weight: 400;
   color: var(--green);
 }
+.hero-brand {
+  font-family: var(--serif);
+  font-size: clamp(42px, 4.5vw, 66px);
+  font-weight: 400;
+  line-height: 1.09;
+  letter-spacing: -2.3px;
+  margin-bottom: 27px;
+  color: var(--ink);
+}
 .hero-question {
+  font-family: inherit;
+  font-weight: 400;
+  letter-spacing: normal;
   font-size: 19px;
   line-height: 1.5;
   color: var(--ink);
@@ -2622,3 +2634,10 @@ caption {
   height: 6px;
   background: var(--green);
 }
+
+.territory-live{margin:1.5rem 0}
+.territory-live>p{margin-top:1rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+.territory-party-list{margin:1rem 0 0;padding:0;list-style:none;display:grid;gap:.35rem;font-size:.92rem}
+.seo-province-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem 2rem;margin:1rem 0 2rem}
+.seo-province-grid h3{margin:0 0 .3rem;font-size:1.05rem}
+.seo-province-grid p{margin:0;font-size:.92rem}

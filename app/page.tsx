@@ -15,19 +15,20 @@ export default function Home() {
         </div>
         <div className="hero-grid">
           <div>
-            <h1>
+            <p className="hero-brand" aria-hidden="true">
               EL PUEBLO
               <br />
               <em>OPINA.</em>
-            </h1>
-            <p className="hero-question">
+            </p>
+            <h1 className="hero-question">
               ¿A quién votarías si hoy fueran
               <br />
-              las elecciones generales?
-            </p>
+              las elecciones generales del 29 de noviembre?
+            </h1>
             <p className="hero-copy">
-              Explora las candidaturas de tu circunscripción y descubre cómo se
-              convierten los votos en escaños.{" "}
+              Encuesta ciudadana de las elecciones generales 2026: vota en tu
+              provincia, mira los resultados en vivo y cómo quedaría el
+              Congreso.{" "}
               {voteOpen
                 ? "El sondeo ciudadano está abierto: elige tu circunscripción y da tu opinión."
                 : "Estamos preparando el sondeo ciudadano; la participación todavía no está abierta."}

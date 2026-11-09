@@ -48,7 +48,7 @@ export function ProvinceMap({ provinces, winners = [], selected, onSelect, live 
     <div className={styles.heading}>
       <div><span className={styles.eyebrow}>MAPA ELECTORAL · 52 CIRCUNSCRIPCIONES</span>
         <h2 id="province-map-title">Resultados por provincia</h2>
-        <p>{live ? "Cada provincia se colorea con la candidatura más votada en el sondeo en cuanto alcanza el mínimo de votos para publicarse. Pulsa una provincia para ver el porcentaje de cada candidatura." : "Cada provincia se colorea únicamente cuando existe un resultado agregado aprobado para publicación. Pulsa para consultar las candidaturas."}</p></div>
+        <p>{live ? "Cada provincia se colorea con la candidatura más votada en el sondeo desde el primer voto. Pulsa una provincia para ver los votos y el porcentaje de cada candidatura." : "Cada provincia se colorea únicamente cuando existe un resultado agregado aprobado para publicación. Pulsa para consultar las candidaturas."}</p></div>
       <span className={styles.status}>{features.length ? `${winners.length} de 52 circunscripciones con resultados` :
         failed ? "Usa el selector de provincias" : "Cargando límites oficiales…"}</span>
     </div>
@@ -79,7 +79,7 @@ export function ProvinceMap({ provinces, winners = [], selected, onSelect, live 
         <text x="36" y="572" className={styles.label}>Geometría simplificada para consulta · No sirve para delimitaciones jurídicas</text>
       </svg>
       <div aria-live="polite" className={styles.selection}>{active ? `${names.get(active)}${byProvince.has(active)?` · Gana: ${byProvince.get(active)!.name}`:""}${onSelect?" · Pulsa para ver los porcentajes":" · Abrir candidaturas ↗"}` :
-        "Gris: todavía sin votos suficientes. Colores: candidatura con más votos."}</div>
+        "Gris: todavía sin votos (o empate). Colores: candidatura con más votos."}</div>
     </div> : <div className={styles.fallback} role="status">
       {failed ? "No se pudieron cargar los límites provinciales oficiales. Puedes acceder igualmente a las 52 circunscripciones con el buscador." :
         "Cargando el mapa provincial. El selector de circunscripciones funciona independientemente."}

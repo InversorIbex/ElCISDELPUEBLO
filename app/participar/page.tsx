@@ -1,6 +1,5 @@
 import { BallotPreview } from "@/components/BallotPreview";
-import { CandidacyResults } from "@/components/CandidacyResults";
-import { approvedProvinceResult } from "@/lib/published-provincial";
+import { LiveProvincePanel } from "@/components/LiveResults";
 import Link from "next/link";
 import { isLiveVoteConfigured } from "@/lib/server/live-vote-configuration";
 import { CommunityMap } from "@/components/CommunityMap";
@@ -13,7 +12,11 @@ import {
   displayName,
 } from "@/lib/territories";
 import { candidaciesForProvince } from "@/lib/candidacies/registry";
-export const metadata = { title: "Participar · Papeleta por circunscripción", robots: { index: false, follow: true } };
+export const metadata = {
+  title: "Vota en la encuesta de las elecciones generales 2026: ¿a quién votarías?",
+  description: "Elige tu provincia y vota a una de las candidaturas oficiales al Congreso en el sondeo ciudadano del 29-N. Gratis, sin registro y sin geolocalización. Mira al instante cómo queda tu provincia.",
+  alternates: { canonical: "/participar" },
+};
 export default async function Participate({
   searchParams,
 }: {
@@ -136,7 +139,7 @@ export default async function Participate({
             </Link>
           </div>
           <BallotPreview candidacies={candidaciesForProvince(province.code)} provinceName={displayName(province.name)} provinceCode={province.code} />
-          <CandidacyResults list={candidaciesForProvince(province.code)} provinceName={displayName(province.name)} release={approvedProvinceResult(province.code)} />
+          <LiveProvincePanel code={province.code} name={displayName(province.name)} />
           <details className="logo-transparency"><summary>Consultar fuentes oficiales y fichas completas de candidaturas</summary><CandidacyList list={candidaciesForProvince(province.code)} /></details>
           <div className="notice">
             <p>

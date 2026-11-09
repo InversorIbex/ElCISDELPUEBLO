@@ -2,7 +2,9 @@ import { ParliamentLab } from "@/components/ParliamentLab";
 import previous from "@/data/elections/congress-2023-results.json";
 import election from "@/data/elections/congress-2026.json";
 export const metadata = {
-  title: "Simulación experimental de escaños · Escenario manual",
+  title: "Simulador de escaños del Congreso 2026 (ley D'Hondt)",
+  description: "Calcula cuántos escaños obtiene cada partido en una provincia con la ley D'Hondt y la barrera del 3 %, y compáralo con el resultado oficial de 2023.",
+  alternates: { canonical: "/simulador" },
 };
 export default function Page() {
   return (

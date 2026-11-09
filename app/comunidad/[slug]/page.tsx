@@ -14,7 +14,13 @@ type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const c = communities.find((c) => slugify(c.name) === slug);
-  return { title: c ? displayName(c.name) : "Comunidad no encontrada" };
+  if (!c) return { title: "Comunidad no encontrada", robots: { index: false } };
+  const n = displayName(c.name);
+  return {
+    title: `Elecciones generales 2026 en ${n}: provincias, candidaturas y encuesta`,
+    description: `Circunscripciones de ${n} en las elecciones generales del 29 de noviembre de 2026: candidaturas al Congreso por provincia, escaños y resultados del sondeo ciudadano en vivo.`,
+    alternates: { canonical: communityPath(c) },
+  };
 }
 export default async function Page({ params }: Props) {
   const { slug } = await params;

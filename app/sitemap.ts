@@ -1,11 +1,24 @@
 import type { MetadataRoute } from "next";
-import { provinces, provincePath } from "@/lib/territories";
-const base = "https://elcisdelpueblo.vercel.app";
+import { communities, communityPath, provinces, provincePath } from "@/lib/territories";
+import { NATIONAL_PARTIES, partyPath } from "@/lib/parties";
+import { SITE_URL } from "@/lib/seo";
+
+/** Páginas con contenido propio. Sin rutas de API ni fichas municipales mínimas. */
 export default function sitemap(): MetadataRoute.Sitemap {
-  // Curated informational pages only: no vote endpoints, empty results or thin municipal listings.
-  const paths = ["/", "/candidaturas", "/simulador", "/mapa", "/espana", "/metodologia", "/fuentes", "/ayuda", "/preguntas"];
+  const now = new Date();
+  const page = (path: string, priority: number, changeFrequency: "hourly" | "daily" | "weekly" = "weekly") =>
+    ({ url: SITE_URL + path, lastModified: now, changeFrequency, priority });
   return [
-    ...paths.map(path => ({url: base + path, changeFrequency: "weekly" as const, priority: path === "/" ? 1 : 0.7})),
-    ...provinces.map(p=>({url: base + provincePath(p), changeFrequency: "weekly" as const, priority: 0.65})),
+    page("/", 1, "hourly"),
+    page("/encuesta-elecciones-generales-2026", 0.95, "hourly"),
+    page("/resultados", 0.9, "hourly"),
+    page("/participar", 0.9, "daily"),
+    page("/partidos", 0.85, "daily"),
+    ...NATIONAL_PARTIES.map((p) => page(partyPath(p), 0.8, "daily")),
+    page("/candidaturas", 0.8),
+    page("/simulador", 0.7),
+    ...provinces.map((p) => page(provincePath(p), 0.75, "daily")),
+    ...communities.map((c) => page(communityPath(c), 0.6)),
+    ...["/mapa", "/espana", "/metodologia", "/fuentes", "/ayuda", "/preguntas"].map((p) => page(p, 0.5)),
   ];
 }

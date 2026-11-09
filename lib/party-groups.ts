@@ -5,7 +5,7 @@
  * se muestra con su propio nombre y color neutro.
  */
 export type PartyGroup = { id: string; name: string; color: string };
-const GROUPS: readonly (PartyGroup & { re: RegExp })[] = [
+export const GROUPS: readonly (PartyGroup & { re: RegExp })[] = [
   { id: "PSOE", name: "PSOE", color: "#E30613", re: /\b(PSOE|PSC|PSDEG|PSIB|PSN|PSE-EE)\b/ },
   { id: "PP", name: "PP", color: "#1D84CE", re: /\b(PP|PARTIDO POPULAR)\b/ },
   { id: "VOX", name: "Vox", color: "#63BE21", re: /\bVOX\b/ },
@@ -22,7 +22,7 @@ const GROUPS: readonly (PartyGroup & { re: RegExp })[] = [
   { id: "UPN", name: "UPN", color: "#2A52BE", re: /\bUPN\b|UNION DEL PUEBLO NAVARRO/ },
 ];
 const OTHER_COLOR = "#8E959C";
-const normalize = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase();
+export const normalize = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase();
 
 export function groupForCandidacy(officialName: string): PartyGroup {
   const n = normalize(officialName);
