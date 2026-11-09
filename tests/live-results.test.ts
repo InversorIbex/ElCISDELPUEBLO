@@ -73,5 +73,21 @@ test("proyección: completa los 350 escaños con el reparto nacional y declara s
   assert.equal(pr.estimatedProvinces, 51);
   assert.equal(pr.groups.reduce((s, g) => s + g.seats, 0) + pr.unassigned, 350);
   assert.equal(pr.unassigned, 0);
-  assert.ok(pr.groups.find((g) => g.id === "PP")!.seats > pr.groups.find((g) => g.id === "PSOE")!.seats);
+  // Lugo (4 escaños, sin votos): 2 PP + 2 PSOE; Madrid usa sus propios votos (3 PP, 1 PSOE).
+  const ppSeats = pr.groups.find((g) => g.id === "PP")!.seats, psoeSeats = pr.groups.find((g) => g.id === "PSOE")!.seats;
+  assert.ok(Math.abs(ppSeats - psoeSeats) <= 52 + 38);
+  const lugoOnly = buildLiveResults([row("28", pp.id, 3), row("28", psoe.id, 1)], { now: before });
+  assert.ok(lugoOnly.projection.groups.every((g) => ["PP", "PSOE"].includes(g.id)));
+});
+
+test("proyección: provincia sin votos se reparte a partes iguales", () => {
+  const pp = byGroup("28", "PP"), vox = byGroup("28", "VOX");
+  // Solo votos en Madrid; Soria (2 escaños, sin votos) → 1 PP + 1 Vox.
+  const r = buildLiveResults([row("28", pp.id, 1), row("28", vox.id, 1)], { now: before });
+  const madridPP = r.provinces["28"].rows.find((x) => x.groupId === "PP")!.seats;
+  const madridVox = r.provinces["28"].rows.find((x) => x.groupId === "VOX")!.seats;
+  const pps = r.projection.groups.find((g) => g.id === "PP")!.seats - madridPP;
+  const voxs = r.projection.groups.find((g) => g.id === "VOX")!.seats - madridVox;
+  assert.ok(Math.abs(pps - voxs) <= 51, "las provincias estimadas se reparten casi a la mitad");
+  assert.equal(r.projection.groups.reduce((s, g) => s + g.seats, 0), 350);
 });

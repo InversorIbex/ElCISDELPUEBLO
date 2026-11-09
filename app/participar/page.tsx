@@ -1,10 +1,8 @@
 import { BallotPreview } from "@/components/BallotPreview";
-import { LiveProvincePanel } from "@/components/LiveResults";
+import { LiveProvincePanel, LiveVoteMap } from "@/components/LiveResults";
 import Link from "next/link";
 import { isLiveVoteConfigured } from "@/lib/server/live-vote-configuration";
-import { CommunityMap } from "@/components/CommunityMap";
 import { CandidacyList } from "@/components/CandidacyList";
-import mapData from "@/data/cartography/communities-svg.json";
 import {
   communityByCode,
   provinces,
@@ -38,17 +36,13 @@ export default async function Participate({
     .sort((a, b) =>
       displayName(a.name).localeCompare(displayName(b.name), "es"),
     );
-  const features = mapData.features.map((f) => ({
-    ...f,
-    href: `/participar?comunidad=${f.code}#circunscripcion`,
-  }));
   return (
     <section className="page-section">
       <div className="eyebrow">TU CIRCUNSCRIPCIÓN, TUS OPCIONES</div>
       <h1>Empieza por tu zona.</h1>
       <p className="lead">
-        Elige la comunidad en el mapa y después tu provincia o ciudad autónoma.
-        No usamos geolocalización ni necesitas indicar municipio.
+        Pulsa tu provincia en el mapa o elígela en la lista. Cada provincia se
+        colorea con el partido más votado. No usamos geolocalización.
       </p>
       <div className="ballot-consultation-note">
         <span className="pill">{voteOpen ? "VOTACIÓN ABIERTA" : "VOTACIÓN TODAVÍA NO ABIERTA"}</span>
@@ -59,7 +53,7 @@ export default async function Participate({
           <Link href="/privacidad">Privacidad y garantías →</Link>
         </p>
       </div>
-      <CommunityMap features={features} selectionMode />
+      <LiveVoteMap provinces={provinces.map((p) => ({ code: p.code, name: displayName(p.name) }))} />
       <section id="circunscripcion" className="constituency-selection">
         <div className="eyebrow">PASO 2 / CIRCUNSCRIPCIÓN</div>
         <h2>
