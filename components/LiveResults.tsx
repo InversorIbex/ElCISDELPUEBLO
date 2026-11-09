@@ -5,6 +5,7 @@ import { Hemicycle } from "./Hemicycle";
 import { ProvinceMap, type Winner } from "./ProvinceMap";
 import type { LiveResults as Data } from "@/lib/live-results";
 import styles from "./LiveResults.module.css";
+import { ShareButtons } from "./ShareButtons";
 
 /* ---------- Un único sondeo de /api/resultados-en-vivo para toda la página ---------- */
 type State = { data: Data | null; error: boolean };
@@ -129,6 +130,7 @@ export function LiveProvincePanel({ code, name }: { code: string; name: string }
           </li>)}
         </ol>}
       <Link className="text-link" href={`/participar?provincia=${code}#papeleta`}>Votar en {name} →</Link>
+      <ShareButtons compact path={`/participar?provincia=${code}`} text={`¿Quién gana en ${name} en el sondeo de las elecciones generales 2026? Vota y míralo en vivo:`} />
     </>}
   </aside>;
 }
@@ -159,4 +161,30 @@ export function LiveVoteMap({ provinces }: { provinces: { code: string; name: st
   const winners: Winner[] = data && !data.blackout ? Object.entries(data.provinces).flatMap(([code, p]) =>
     p.winner ? [{ provinceCode: code, name: p.winner.name, color: p.winner.color, responses: p.rows[0]?.n ?? 0, total: p.total }] : []) : [];
   return <ProvinceMap provinces={provinces} winners={winners} live />;
+}
+
+/** Resumen en una frase: quién lidera el sondeo y la proyección, siempre con su base. */
+export function LiveLeaderSummary() {
+  const { data } = useLiveResults();
+  if (!data) return <p className={styles.basis}>Cargando el sondeo en vivo…</p>;
+  if (data.blackout) return <p className={styles.insufficient}>Veda electoral: del 24 de noviembre al cierre de los colegios del 29 de noviembre no se publican resultados del sondeo.</p>;
+  const votesBy = new Map<string, { name: string; color: string; n: number }>();
+  for (const p of Object.values(data.provinces)) for (const r of p.rows) {
+    const v = votesBy.get(r.groupId) ?? { name: r.groupName, color: r.color, n: 0 };
+    v.n += r.n; votesBy.set(r.groupId, v);
+  }
+  const ranking = [...votesBy.values()].sort((a, b) => b.n - a.n);
+  const seats = [...data.projection.groups].sort((a, b) => b.seats - a.seats);
+  const total = data.totals.votes;
+  if (!total) return <p className={styles.basis}>Todavía no hay votos. <Link href="/participar">Sé el primero en votar →</Link></p>;
+  const lead = ranking[0], first = seats[0];
+  return <div className={styles.summary}>
+    <p>
+      Con <strong>{n1(total, "voto", "votos")}</strong> registrados, <strong style={{ color: lead.color }}>{lead.name}</strong> lidera
+      el sondeo con {pct.format((lead.n / total) * 100)} % de los votos.
+      {first && <> En la proyección del Congreso, <strong style={{ color: first.color }}>{first.name}</strong> obtendría <strong>{first.seats}</strong> escaños
+        {first.seats >= 176 ? " (mayoría absoluta)" : ` (la mayoría absoluta son 176)`}.</>}
+    </p>
+    <ol>{ranking.slice(0, 6).map((r) => <li key={r.name}><span style={{ background: r.color }} aria-hidden="true" />{r.name}: {pct.format((r.n / total) * 100)} % · {n1(r.n, "voto", "votos")}</li>)}</ol>
+  </div>;
 }

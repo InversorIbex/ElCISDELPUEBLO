@@ -48,7 +48,7 @@ export default async function Participate({
         <span className="pill">{voteOpen ? "VOTACIÓN ABIERTA" : "VOTACIÓN TODAVÍA NO ABIERTA"}</span>
         <p>
           {voteOpen
-            ? "Elige tu circunscripción, selecciona una candidatura y confirma. Máximo un voto por navegador y dos por conexión a Internet cada 5 horas. Sondeo voluntario, no oficial ni representativo."
+            ? "Elige tu circunscripción, selecciona una candidatura y confirma. Máximo un voto por navegador y dos por conexión a Internet cada hora. Sondeo voluntario, no oficial ni representativo."
             : "Puedes explorar las candidaturas y sus logos disponibles. El registro real está conectado a un servicio de producción, pero la recogida sigue bloqueada hasta completar y verificar las garantías necesarias."}{" "}
           <Link href="/privacidad">Privacidad y garantías →</Link>
         </p>

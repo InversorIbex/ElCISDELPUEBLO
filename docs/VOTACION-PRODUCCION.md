@@ -23,7 +23,7 @@
 | `RESULTS_MIN_COUNT` | opcional; por defecto 1 |
 
 ## Política solicitada por el promotor
-- **Regla vigente (2026-11-09):** máximo **2 votos aceptados por IP en cualquier ventana de 5 horas** (deslizante, `poll_private.ip_window`, purgada al vencer) y **1 voto por credencial anónima de navegador en toda la campaña** (`poll_private.browser_lifetime`). Ambos se guardan solo como HMAC.
+- **Regla vigente (2026-11-09):** máximo **2 votos aceptados por IP en cualquier ventana de 1 hora (antes 5 h)** (deslizante, `poll_private.ip_window`, purgada al vencer) y **1 voto por credencial anónima de navegador en toda la campaña** (`poll_private.browser_lifetime`). Ambos se guardan solo como HMAC.
 - **Veda electoral (LOREG art. 69.7):** `lib/electoral-blackout.ts` impide en servidor devolver resultados del sondeo del 24-N 00:00 al 29-N 21:00 (hora peninsular). La votación sigue abierta.
 - La web **no obtiene un ID permanente real de un teléfono**. El navegador puede borrar cookies; el User-Agent se puede falsificar; una IP puede pertenecer a varias personas. Por tanto, estos límites son *mitigaciones*, no garantías de identidad individual. No implementar fingerprinting invasivo como sustituto.
 - Los contadores de IP y navegador se almacenarán como HMAC con clave privada; nunca la IP literal. El voto se guarda separado de dichos contadores.

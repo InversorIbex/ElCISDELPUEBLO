@@ -1,46 +1,17 @@
-import { ImageResponse } from "next/og";
-export const alt =
-  "El Pueblo Opina. ¿A quién votarías el 29-N? Sondeo ciudadano de las elecciones generales 2026 con resultados en vivo.";
-export const size = { width: 1200, height: 630 };
+import { OG_FOOTER, OG_SIZE, liveOrNull, ogCard, votesLabel } from "@/lib/server/og-card";
+export const runtime = "nodejs";
+export const revalidate = 300;
+export const alt = "¿A quién votarías el 29 de noviembre? Sondeo ciudadano de las elecciones generales 2026 con proyección de escaños en vivo.";
+export const size = OG_SIZE;
 export const contentType = "image/png";
-export default function Image() {
-  return new ImageResponse(
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        width: "100%",
-        height: "100%",
-        background: "#f8f8f3",
-        color: "#142c3b",
-        padding: "65px 75px",
-        fontFamily: "sans-serif",
-        borderTop: "16px solid #4e7669",
-      }}
-    >
-      <div style={{ display: "flex", fontSize: 24, letterSpacing: 5 }}>
-        EL PUEBLO OPINA
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          fontSize: 70,
-          fontWeight: 700,
-          lineHeight: 1.1,
-        }}
-      >
-        <span>¿A quién votarías</span>
-        <span>el 29 de noviembre?</span>
-      </div>
-      <div style={{ display: "flex", fontSize: 27 }}>
-        Vota en tu provincia · Mapa y hemiciclo en vivo
-      </div>
-      <div style={{ display: "flex", fontSize: 21, color: "#4e7669" }}>
-        Elecciones generales 2026 · Sondeo voluntario, no oficial · laopiniondelpueblo.eu
-      </div>
-    </div>,
-    size,
-  );
+export default async function Image() {
+  const data = await liveOrNull();
+  const groups = data && !data.blackout ? [...data.projection.groups].sort((a, b) => b.seats - a.seats) : [];
+  return ogCard({
+    kicker: "EL PUEBLO OPINA · ELECCIONES GENERALES 29-N",
+    title: "¿A quién votarías el 29 de noviembre?",
+    subtitle: data ? (data.blackout ? "Veda electoral: resultados ocultos hasta el cierre de los colegios" : `Proyección de escaños en vivo con ${votesLabel(data.totals.votes)}`) : "Vota en tu provincia y mira el Congreso en vivo",
+    bars: groups.map((g) => ({ label: g.name, value: `${g.seats} escaños`, color: g.color, width: (g.seats / 350) * 100 })),
+    footer: OG_FOOTER,
+  });
 }

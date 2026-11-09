@@ -5,6 +5,7 @@ import { logoForCandidacy } from "@/lib/candidacies/logos";
 import type { Candidacy } from "@/lib/candidacies/registry";
 import styles from "./BallotPreview.module.css";
 import { refreshLiveResults } from "./LiveResults";
+import { ShareButtons } from "./ShareButtons";
 
 type VoteStatus={enabled:boolean;mode:string;consentVersion?:string;siteKey?:string};
 type TurnstileApi={
@@ -15,7 +16,7 @@ type TurnstileApi={
 declare global { interface Window { turnstile?:TurnstileApi } }
 
 const userErrors:Record<string,string>={
-  IP_WINDOW_LIMIT:"Esta conexión a Internet ya ha registrado dos votos en las últimas 5 horas.",
+  IP_WINDOW_LIMIT:"Esta conexión a Internet ya ha registrado dos votos en la última hora.",
   BROWSER_LIMIT:"Ya se ha registrado una participación desde este navegador. Solo se admite un voto por dispositivo.",
   INVALID_CANDIDACY:"La candidatura no corresponde a la provincia seleccionada.",
   ALREADY_SUBMITTED:"Esta solicitud ya se procesó. Consulta el estado antes de volver a enviarla.",
@@ -77,7 +78,7 @@ export function BallotPreview({candidacies,provinceName,provinceCode}:{
       });
       const data=await response.json() as {recorded?:boolean;code?:string;error?:string;retryAfterSeconds?:number};
       if(response.ok&&data.recorded===true){setSaved(true);refreshLiveResults();return;}
-      const wait=data.code==="IP_WINDOW_LIMIT"&&data.retryAfterSeconds?` Podrás volver a votar en ${Math.floor(data.retryAfterSeconds/3600)} h ${Math.ceil((data.retryAfterSeconds%3600)/60)} min.`:"";
+      const wait=data.code==="IP_WINDOW_LIMIT"&&data.retryAfterSeconds?` Podrás volver a votar en ${data.retryAfterSeconds>=3600?`${Math.floor(data.retryAfterSeconds/3600)} h `:""}${Math.max(1,Math.ceil((data.retryAfterSeconds%3600)/60))} min.`:"";
       setError((userErrors[data.code??data.error??""]??"No se pudo confirmar el registro. No se ha contado tu voto.")+wait);
     }catch{setError("No se pudo confirmar el registro. Comprueba la conexión antes de intentarlo de nuevo.");}
     finally {
@@ -127,6 +128,7 @@ export function BallotPreview({candidacies,provinceName,provinceCode}:{
       </> : !saved && <p role="status" className={styles.legal}><strong>Votación aún no abierta:</strong> puedes seleccionar una candidatura, pero el botón para registrar una respuesta aparecerá únicamente cuando el servidor esté habilitado. Esta selección no se guarda.</p>}
       {error&&<p role="alert" className={styles.error}>{error}</p>}
       {saved&&<p role="status" className={styles.ack}>Respuesta registrada y confirmada por el servidor. Tu selección es definitiva en la web; los derechos de protección de datos se explican en la política de privacidad.</p>}
+      {saved&&<ShareButtons path={`/participar?provincia=${provinceCode}`} text={`Ya he votado en el sondeo ciudadano de las elecciones generales del 29-N en ${provinceName}. ¿Y tú, a quién votarías?`} />}
     </div>
     <p className={styles.legal}><strong>No es una elección oficial.</strong> Sondeo voluntario no representativo, sin inferencias sobre el electorado. La provincia se selecciona manualmente.</p>
   </section>;

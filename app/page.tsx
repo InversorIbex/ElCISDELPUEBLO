@@ -1,5 +1,8 @@
 import { ProvinceQuickPicker } from "@/components/ProvinceQuickPicker";
-import { LiveResultsSection } from "@/components/LiveResults";
+import { LiveLeaderSummary, LiveResultsSection } from "@/components/LiveResults";
+import { ShareButtons } from "@/components/ShareButtons";
+import { NATIONAL_PARTIES, partyPath } from "@/lib/parties";
+import { provincePath } from "@/lib/territories";
 import { TerritorySelector } from "@/components/TerritorySelector";
 import { communities, provinces, municipalities, displayName } from "@/lib/territories";
 import Link from "next/link";
@@ -110,11 +113,32 @@ export default function Home() {
         <div>
           <span>Sondeos abiertos</span>
           <strong>{voteOpen ? 1 : 0}</strong>
-          <small>{voteOpen ? "Máximo 2 votos por conexión cada 5 horas" : "Preparando una participación segura"}</small>
+          <small>{voteOpen ? "Máximo 2 votos por conexión cada hora" : "Preparando una participación segura"}</small>
         </div>
       </section>
       <ProvinceQuickPicker voteOpen={voteOpen} provinces={provinces.map((p) => ({ code: p.code, name: displayName(p.name) }))} />
+      <section className="section home-live-summary">
+        <div className="eyebrow">AHORA MISMO</div>
+        <h2>¿Quién va ganando las elecciones del 29-N?</h2>
+        <LiveLeaderSummary />
+        <ShareButtons path="/" text="¿A quién votarías el 29-N? Sondeo ciudadano de las elecciones generales con resultados en vivo:" />
+      </section>
       <LiveResultsSection provinces={provinces.map((p) => ({ code: p.code, name: displayName(p.name) }))} />
+      <section className="section">
+        <div className="eyebrow">ENCUESTA POR PROVINCIAS</div>
+        <h2>Elecciones generales 2026 en tu provincia</h2>
+        <p className="seo-links">
+          {[...provinces].sort((a, b) => displayName(a.name).localeCompare(displayName(b.name), "es")).map((p, i) => (
+            <span key={p.code}>{i ? " · " : ""}<Link href={provincePath(p)}>{displayName(p.name)}</Link></span>
+          ))}
+        </p>
+        <div className="eyebrow">PARTIDOS</div>
+        <p className="seo-links">
+          {NATIONAL_PARTIES.map((p, i) => <span key={p.id}>{i ? " · " : ""}<Link href={partyPath(p)}>{p.name} en las elecciones 2026</Link></span>)}
+          {" · "}<Link href="/quien-gana-las-elecciones-2026">¿Quién ganará las elecciones?</Link>
+          {" · "}<Link href="/encuesta-elecciones-generales-2026">Encuesta elecciones generales 2026</Link>
+        </p>
+      </section>
       <section
         className="section launch-tools"
         aria-labelledby="herramientas-title"

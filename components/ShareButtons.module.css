@@ -1,0 +1,5 @@
+.share{margin:1rem 0;padding:1rem;border-radius:16px;background:#eef3ef;display:grid;gap:.6rem}
+.compact{background:none;padding:0;margin:.6rem 0}
+.row{display:flex;flex-wrap:wrap;gap:.5rem}
+.row a,.row button{font:inherit;font-size:.85rem;font-weight:600;border:1px solid #142c3b;border-radius:99px;padding:.45rem .9rem;background:#fff;color:#142c3b;text-decoration:none;cursor:pointer}
+.row a:hover,.row button:hover{background:#142c3b;color:#fff}

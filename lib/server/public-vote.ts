@@ -5,12 +5,12 @@ import { candidaciesForProvince } from "../candidacies/registry.ts";
 export const CAMPAIGN = "congress-2026";
 const CONSENT_VERSION = "epov-2026-v1";
 /**
- * Promoter policy (2026-11-09): max 2 accepted votes per IP in any 5-hour
+ * Promoter policy (2026-11-09, window 1 h): max 2 accepted votes per IP in any 1-hour
  * window (sliding), and 1 vote per anonymous browser credential for the whole
  * campaign. The credential is an HttpOnly cookie: it is NOT a hardware ID and
  * can be reset by clearing cookies; these are mitigations, not identity guarantees.
  */
-export const voteLimits = Object.freeze({ perIpWindow: 2, ipWindowSeconds: 5 * 3600, perBrowserCampaign: 1 });
+export const voteLimits = Object.freeze({ perIpWindow: 2, ipWindowSeconds: 3600, perBrowserCampaign: 1 });
 export type Vote = { provinceCode: string; candidacyId: string; browserToken: string; ip: string; requestToken: string };
 export type SaveResult =
   | { accepted: true; code: "RECORDED" }

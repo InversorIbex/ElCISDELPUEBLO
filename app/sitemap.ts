@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     page("/", 1, "hourly"),
     page("/encuesta-elecciones-generales-2026", 0.95, "hourly"),
+    page("/quien-gana-las-elecciones-2026", 0.95, "hourly"),
     page("/resultados", 0.9, "hourly"),
     page("/participar", 0.9, "daily"),
     page("/partidos", 0.85, "daily"),

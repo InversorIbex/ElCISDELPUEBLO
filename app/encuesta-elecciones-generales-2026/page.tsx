@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/JsonLd";
-import { LiveResultsSection } from "@/components/LiveResults";
+import { LiveLeaderSummary, LiveResultsSection } from "@/components/LiveResults";
+import { ShareButtons } from "@/components/ShareButtons";
 import { NATIONAL_PARTIES, partyPath } from "@/lib/parties";
 import { communities, displayName, provinces, provincePath } from "@/lib/territories";
 import { breadcrumbLd, electionEventLd, faqLd } from "@/lib/seo";
@@ -40,7 +41,9 @@ export default function Page() {
         circunscripción y cómo quedaría el Congreso de los Diputados. Todos los datos indican con cuántos votos están
         calculados.
       </p>
-      <p><Link className="button" href="/participar">Votar ahora ↗</Link>{" "}<Link className="text-link" href="/resultados">Resultados por provincia →</Link></p>
+      <LiveLeaderSummary />
+      <p><Link className="button" href="/participar">Votar ahora ↗</Link>{" "}<Link className="text-link" href="/quien-gana-las-elecciones-2026">¿Quién ganará? →</Link></p>
+      <ShareButtons path={PATH} text="Encuesta de las elecciones generales del 29-N: vota y mira los resultados en vivo." />
 
       <LiveResultsSection provinces={provinces.map((p) => ({ code: p.code, name: displayName(p.name) }))} />
 

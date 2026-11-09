@@ -2641,3 +2641,6 @@ caption {
 .seo-province-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem 2rem;margin:1rem 0 2rem}
 .seo-province-grid h3{margin:0 0 .3rem;font-size:1.05rem}
 .seo-province-grid p{margin:0;font-size:.92rem}
+
+.home-live-summary{max-width:1200px;margin:2rem auto 0}
+.seo-links{line-height:1.9;font-size:.95rem;margin-bottom:1.5rem}

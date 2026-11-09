@@ -37,3 +37,8 @@
 .toggle{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.8rem}
 .toggle button{border:1px solid #cfd5d0;background:#fff;border-radius:99px;padding:.45rem .9rem;font:inherit;font-size:.85rem;cursor:pointer;color:#29343b}
 .toggle button[aria-pressed="true"]{background:#142c3b;color:#fff;border-color:#142c3b}
+.summary{background:#fff;border:1px solid #e8e4ed;border-radius:20px;padding:1.3rem 1.5rem;margin:1rem 0 1.5rem;font-size:1.1rem}
+.summary p{margin:0 0 .8rem}
+.summary ol{margin:0;padding:0;list-style:none;display:grid;gap:.35rem;font-size:.95rem}
+.summary li{display:flex;align-items:center;gap:.5rem}
+.summary li span{width:12px;height:12px;border-radius:3px;display:inline-block}

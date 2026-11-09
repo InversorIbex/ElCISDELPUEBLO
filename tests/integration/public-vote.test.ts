@@ -28,13 +28,13 @@ async function existingVotes(ip:string, date:string) {
 }
 test("transactional quota and idempotency against isolated Neon branch",async(t)=>{
   try {
-    await t.test("2 per IP in 5 hours, third rejected with retry time", async()=>{
+    await t.test("2 per IP in 1 hour, third rejected with retry time", async()=>{
       const ip=nextIP();
       assert.equal((await saveApprovedVote(pool,secret,input(ip))).accepted,true);
       assert.equal((await saveApprovedVote(pool,secret,input(ip))).accepted,true);
       const third=await saveApprovedVote(pool,secret,input(ip));
       assert.equal(third.code,"IP_WINDOW_LIMIT");
-      assert.ok("retryAfterSeconds" in third && third.retryAfterSeconds>5*3600-120);
+      assert.ok("retryAfterSeconds" in third && third.retryAfterSeconds>3600-120);
     });
     await t.test("one vote per persistent browser token for the whole campaign",async()=>{
       const id=browser();

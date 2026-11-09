@@ -31,7 +31,7 @@ export async function GET(req: Request) {
     // IP window digests are useless once the 5-hour window has passed.
     // Do not delete ballots, campaign-long browser markers or counters.
     const ip = await client.query(
-      "DELETE FROM poll_private.ip_window WHERE hit_at <= now() - interval '5 hours'",
+      "DELETE FROM poll_private.ip_window WHERE hit_at <= now() - interval '1 hour'",
     );
     // 48h: allows the same request-id to be recognized during retries.
     const idempotency = await client.query(

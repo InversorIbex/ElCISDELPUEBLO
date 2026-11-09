@@ -1,4 +1,6 @@
-import { LiveResultsSection } from "@/components/LiveResults";
+import { LiveLeaderSummary, LiveResultsSection } from "@/components/LiveResults";
+import { JsonLd } from "@/components/JsonLd";
+import { abs, breadcrumbLd } from "@/lib/seo";
 import Link from "next/link";
 import previous from "@/data/elections/congress-2023-results.json";
 import { provinces, provinceByCode, displayName } from "@/lib/territories";
@@ -62,6 +64,11 @@ export default async function Results({
           Consultar resultados →
         </button>
       </form>
+      <JsonLd nodes={[
+        breadcrumbLd([{ name: "Inicio", path: "/" }, { name: "Resultados", path: "/resultados" }]),
+        { "@type": "Dataset", name: "Sondeo ciudadano de las elecciones generales 2026 por circunscripción", description: "Votos del sondeo voluntario de El Pueblo Opina por provincia y candidatura proclamada, con proyección de escaños D'Hondt. Muestra no representativa.", url: abs("/resultados"), isAccessibleForFree: true, temporalCoverage: "2026-11-09/2026-11-29", spatialCoverage: { "@type": "Place", name: "España" }, creator: { "@id": abs("/#organizacion") } },
+      ]} />
+      <LiveLeaderSummary />
       <LiveResultsSection provinces={provinces.map(p=>({code:p.code,name:displayName(p.name)}))} initialProvince={province?.code ?? "28"} />
       {query.provincia && !province && (
         <p role="alert" className="form-error">
