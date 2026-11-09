@@ -1,5 +1,4 @@
-import { ProvinceMap } from "@/components/ProvinceMap";
-import { approvedProvincialWinners } from "@/lib/results/provincial-winners";
+import { LiveResultsSection } from "@/components/LiveResults";
 import { ParticipationAnalysis } from "@/components/ParticipationAnalysis";
 import { CandidacyResults } from "@/components/CandidacyResults";
 import { candidaciesForProvince } from "@/lib/candidacies/registry";
@@ -64,7 +63,7 @@ export default async function Results({
           Consultar resultados →
         </button>
       </form>
-      <ProvinceMap provinces={provinces.map(p=>({code:p.code,name:displayName(p.name)}))} winners={approvedProvincialWinners()} />
+      <LiveResultsSection provinces={provinces.map(p=>({code:p.code,name:displayName(p.name)}))} initialProvince={province?.code ?? "28"} />
       {query.provincia && !province && (
         <p role="alert" className="form-error">
           Código de circunscripción no válido. Se muestra España; selecciona un

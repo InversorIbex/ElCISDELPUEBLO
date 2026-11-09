@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { randomBytes, randomUUID } from "node:crypto";
 import { Pool } from "pg";
 import { saveApprovedVote, type Vote } from "../../lib/server/public-vote.ts";
+import { voteDbConfig } from "../../lib/server/vote-db.ts";
 
 const url=process.env.TEST_VOTE_DATABASE_URL;
 if(!url) throw new Error("TEST_VOTE_DATABASE_URL_REQUIRED");
@@ -11,7 +12,7 @@ if(process.env.TEST_DB_BRANCH_NAME!=="el-pueblo-opina-prelaunch-validation")
   throw new Error("TEST_NEON_BRANCH_REQUIRED");
 if(!url.startsWith("postgresql://") && !url.startsWith("postgres://"))
   throw new Error("INVALID_TEST_DB_URL");
-const pool=new Pool({connectionString:url,max:8,connectionTimeoutMillis:5000,statement_timeout:10000});
+const pool=new Pool({...voteDbConfig(url),max:8});
 const secret=process.env.TEST_VOTE_HMAC_SECRET;
 if(!secret || secret.length<32) throw new Error("TEST_VOTE_HMAC_SECRET_REQUIRED");
 const candidacyId="c52d79f1-37b1-509c-b597-303b410d427d";
@@ -22,16 +23,18 @@ const input=(ip:string,browserToken=browser()):Vote=>({
 });
 async function existingVotes(ip:string, date:string) {
   // For tests prefer assertions about accepted count + commit, never query by a raw client IP in application code.
-  const r=await pool.query("SELECT count(*)::int AS n FROM poll_private.ballots WHERE campaign_id='congress-2026' AND created_at >= $1",[date]);
+  const r=await pool.query("SELECT count(*)::int AS n FROM poll_private.ballots WHERE campaign_id='congress-2026' AND cast_on >= $1",[date]);
   return Number(r.rows[0].n);
 }
 test("transactional quota and idempotency against isolated Neon branch",async(t)=>{
   try {
-    await t.test("2 per IP/day, third rejected", async()=>{
+    await t.test("2 per IP in 5 hours, third rejected with retry time", async()=>{
       const ip=nextIP();
       assert.equal((await saveApprovedVote(pool,secret,input(ip))).accepted,true);
       assert.equal((await saveApprovedVote(pool,secret,input(ip))).accepted,true);
-      assert.deepEqual(await saveApprovedVote(pool,secret,input(ip)),{accepted:false,code:"IP_DAILY_LIMIT"});
+      const third=await saveApprovedVote(pool,secret,input(ip));
+      assert.equal(third.code,"IP_WINDOW_LIMIT");
+      assert.ok("retryAfterSeconds" in third && third.retryAfterSeconds>5*3600-120);
     });
     await t.test("one vote per persistent browser token for the whole campaign",async()=>{
       const id=browser();

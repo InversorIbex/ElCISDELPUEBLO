@@ -1,12 +1,8 @@
 import type { Pool } from "pg";
 import { transaction } from "./db.ts";
 import { candidacies, candidacyInfo } from "../candidacies/registry.ts";
-export async function importTestCandidacyRegistry(pool: Pool) {
-  if (
-    !(
-      await pool.query("SELECT current_database() AS name")
-    ).rows[0].name.endsWith("_test")
-  )
+export async function importTestCandidacyRegistry(pool: Pool, opts: { productionSetup?: boolean } = {}) {
+  if (!opts.productionSetup && !(await pool.query("SELECT current_database() AS name")).rows[0].name.endsWith("_test"))
     throw new Error("TEST_DATABASE_REQUIRED");
   const edition = `congress-2026-${candidacyInfo.asOf}-${candidacyInfo.sources[0].sha256.slice(0, 12)}-${candidacyInfo.sources[1].sha256.slice(0, 12)}`;
   return transaction(pool, async (client) => {

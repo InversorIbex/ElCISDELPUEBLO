@@ -2,9 +2,9 @@ import { readFile, readdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import type { Pool } from "pg";
 import { transaction } from "./db.ts";
-export async function migrateTestDatabase(pool: Pool) {
+export async function migrateTestDatabase(pool: Pool, opts: { productionSetup?: boolean } = {}) {
   const result = await pool.query("SELECT current_database() AS name");
-  if (!String(result.rows[0].name).endsWith("_test"))
+  if (!opts.productionSetup && !String(result.rows[0].name).endsWith("_test"))
     throw new Error("TEST_DATABASE_REQUIRED");
   for (const file of (await readdir("db/migrations"))
     .filter((f) => /^\d+_.+\.sql$/.test(f))

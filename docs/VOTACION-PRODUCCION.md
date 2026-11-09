@@ -1,16 +1,38 @@
-# Preparación del almacenamiento de votos — NO PUBLICADO
-## Estado
-La página pública sigue rechazando POST en `/api/participaciones` con 423; los cambios de esta rama no han activado el servicio. `lib/server/public-vote.ts` es la capa transaccional preparada para una futura integración, con SQL de revisión en `db/drafts/public_vote.sql`. **Ese SQL no pertenece al flujo automático de migraciones y no se ha aplicado a producción.**
+# Votación ciudadana en producción
+
+## Estado (2026-11-09)
+- **Base de datos:** Supabase, región UE (Frankfurt), proyecto `uxoeghnhszqdhiqhzcvu`. Esquema `db/migrations/0001…0005` aplicado, con 52 provincias, 8.132 municipios y 534 candidaturas proclamadas. `0005_live_vote.sql` sustituye a `db/drafts/public_vote.sql`.
+- **Preparar o actualizar la base:** `VOTE_DATABASE_URL=… node --experimental-strip-types scripts/setup-vote-db.ts --confirmo-produccion` (idempotente).
+- **Conexión:** `lib/server/vote-db.ts`, con TLS verificado contra la CA raíz de Supabase (`lib/server/supabase-ca.ts`).
+- **Resultados en vivo:** `/api/resultados-en-vivo` (caché de 10 s en la CDN). Incluye mapa coloreado, porcentajes por circunscripción, hemiciclo D'Hondt y contador de votos en la franja superior. Las reglas están en `lib/live-results.ts`:
+  - mínimo de 50 votos por circunscripción;
+  - supresión complementaria;
+  - dominancia del 95 %;
+  - **veda LOREG**: no se devuelve nada del 24-N 00:00 al 29-N 21:00.
+- **Modo demostración:** `/api/cron/simular`, llamado cada 5 min por `.github/workflows/simulador.yml`. Genera 4 votos simulados por ejecución el primer día y se duplica cada día, hasta `SIMULATION_MAX_PER_TICK`. Se guardan con `simulated = true`, se cuentan aparte y la web los anuncia en todas las vistas de resultados. Con `SIMULATION_ENABLED=false` dejan de contarse. Borrado definitivo: `DELETE FROM poll_private.counts WHERE simulated; DELETE FROM poll_private.ballots WHERE simulated;`.
+
+## Variables en Vercel (Production)
+| Variable | Valor |
+|---|---|
+| `VOTE_DATABASE_URL` | Supabase → Connect → **Transaction pooler** (puerto 6543), con la contraseña de la base |
+| `VOTE_HMAC_SECRET` | ≥ 32 caracteres aleatorios (no cambiar durante la campaña) |
+| `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare Turnstile, widget para `www.laopiniondelpueblo.eu` |
+| `VOTE_ALLOWED_HOSTNAME` | `www.laopiniondelpueblo.eu` |
+| `VOTE_PUBLIC_ENABLED`, `VOTE_PRIVACY_APPROVED`, `VOTE_SECURITY_APPROVED`, `VOTE_RETENTION_APPROVED`, `VOTE_BALLOTS_APPROVED`, `VOTE_RESULTS_POLICY_APPROVED` | `true`, cada una cuando el promotor acepte esa garantía. Mientras falte alguna, la votación sigue cerrada (423) |
+| `VOTE_CLEANUP_DATABASE_URL` | la misma cadena (limpieza de huellas de IP vencidas) |
+| `CRON_SECRET` | ≥ 32 caracteres; el mismo valor como secreto `CRON_SECRET` del repositorio en GitHub |
+| `SIMULATION_ENABLED`, `SIMULATION_START`, `SIMULATION_MAX_PER_TICK` | modo demostración (`true`, `2026-11-09T00:00:00+01:00`, `512`) |
+| `RESULTS_MIN_COUNT` | opcional; nunca por debajo de 50 |
 
 ## Política solicitada por el promotor
-- **Regla vigente (2026-11-08):** máximo **2 votos aceptados por IP y día de calendario de Madrid** y **1 voto por credencial anónima de navegador ("ID de dispositivo") en toda la campaña**, sea ordenador o móvil. Ya no se distingue el tipo de dispositivo por User-Agent. La marca de "ya votó" se guarda (como HMAC) en `poll_private.mobile_lifetime`, nombre conservado por compatibilidad con el esquema ya creado en Neon.
+- **Regla vigente (2026-11-09):** máximo **2 votos aceptados por IP en cualquier ventana de 5 horas** (deslizante, `poll_private.ip_window`, purgada al vencer) y **1 voto por credencial anónima de navegador en toda la campaña** (`poll_private.browser_lifetime`). Ambos se guardan solo como HMAC.
 - **Veda electoral (LOREG art. 69.7):** `lib/electoral-blackout.ts` impide en servidor devolver resultados del sondeo del 24-N 00:00 al 29-N 21:00 (hora peninsular). La votación sigue abierta.
 - La web **no obtiene un ID permanente real de un teléfono**. El navegador puede borrar cookies; el User-Agent se puede falsificar; una IP puede pertenecer a varias personas. Por tanto, estos límites son *mitigaciones*, no garantías de identidad individual. No implementar fingerprinting invasivo como sustituto.
 - Los contadores de IP y navegador se almacenarán como HMAC con clave privada; nunca la IP literal. El voto se guarda separado de dichos contadores.
 - Detección de IP únicamente desde proveedor de proxy confiable y configuración verificada; no aceptar arbitrariamente `X-Forwarded-For` del cliente.
 - Aprobación jurídica: tratamiento de opinión política (RGPD art. 9), identidad del responsable, fundamento, consentimiento explícito, EIPD y borrado probados.
 - Antes de abrir: Turnstile con verificación server-side, CSRF/origen, credencial secreta HttpOnly SameSite, idempotencia, límites transaccionales, protección contra bots, comprobación de amenazas, TTL de IP digests, backups cifrados, control de errores, prueba de carga y auditoría.
-- Publicación: el resultado en tiempo real por provincia no se habilitará hasta aprobar un diseño de privacidad resistente a ataques por diferencias. La política actual solo permite publicación nacional al cierre. El usuario puede ver siempre las candidaturas, no resultados inventados.
+- Publicación (decisión del promotor, 2026-11-09): resultados en tiempo real por circunscripción con umbral de 50, supresión complementaria, dominancia y veda LOREG. Riesgo residual: los ataques por diferencias temporales (comparar dos lecturas consecutivas) no se mitigan del todo con publicación continua; queda documentado para la revisión jurídica y de privacidad.
 
 ## Pendiente para pasar a producción
 Conectar un endpoint autenticado y comprobado, habilitar infraestructura PostgreSQL con credenciales de mínimo privilegio, validar conectividad de base real y cumplimiento de todos los hitos `lib/server/privacy-gates.ts`. Solo entonces sustituir la respuesta HTTP 423 por el servicio de producción.

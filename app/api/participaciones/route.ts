@@ -1,22 +1,16 @@
 import { isIP } from "node:net";
-import { Pool } from "pg";
 import { cookies } from "next/headers";
 import { saveApprovedVote } from "@/lib/server/public-vote";
+import { getVotePool } from "@/lib/server/vote-db";
+import { invalidateLiveResults } from "@/lib/server/live-results-service";
 import { closedParticipationResponse, launchStatus } from "@/lib/server/privacy-gates";
 import { isLiveVoteConfigured, missingLiveVoteSettings, voteConsentVersion } from "@/lib/server/live-vote-configuration";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 const CONSENT_VERSION = voteConsentVersion;
-let pool: Pool | undefined;
 const json=(body:unknown,status=200)=>Response.json(body,{status,headers:{"Cache-Control":"no-store"}});
 
-function getPool() {
-  const url=process.env.VOTE_DATABASE_URL;
-  if(!url) throw new Error("NO_VOTE_DATABASE");
-  pool ??= new Pool({connectionString:url,max:4,connectionTimeoutMillis:4000,statement_timeout:8000,idleTimeoutMillis:10000});
-  return pool;
-}
 function validOrigin(req:Request) {
   const origin=req.headers.get("origin");
   return Boolean(origin && origin===new URL(req.url).origin
@@ -72,10 +66,13 @@ export async function POST(req:Request) {
   if(!cookie||!/^[a-f0-9]{64}$/.test(cookie))return json({error:"SESSION_REQUIRED"},403);
   if(!await verifyChallenge(turnstileToken,ip,requestToken))return json({error:"CHALLENGE_INVALID"},403);
   try {
-    const result=await saveApprovedVote(getPool(),process.env.VOTE_HMAC_SECRET!,{
+    const result=await saveApprovedVote(getVotePool(),process.env.VOTE_HMAC_SECRET!,{
       provinceCode,candidacyId,browserToken:cookie,ip,requestToken,
     });
-    if(result.accepted) return json({recorded:true,code:"RECORDED"});
+    if(result.accepted){invalidateLiveResults();return json({recorded:true,code:"RECORDED"});}
+    if(result.code==="IP_WINDOW_LIMIT")
+      return Response.json({recorded:false,code:result.code,retryAfterSeconds:result.retryAfterSeconds},
+        {status:429,headers:{"Cache-Control":"no-store","Retry-After":String(result.retryAfterSeconds)}});
     const code=result.code;
     return json({recorded:false,code},code==="INVALID_CANDIDACY"?400:409);
   } catch {

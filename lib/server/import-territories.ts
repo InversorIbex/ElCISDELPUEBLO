@@ -6,12 +6,8 @@ import {
   municipalities,
   catalogInfo,
 } from "../territories.ts";
-export async function importTestTerritories(pool: Pool) {
-  if (
-    !(
-      await pool.query("SELECT current_database() AS name")
-    ).rows[0].name.endsWith("_test")
-  )
+export async function importTestTerritories(pool: Pool, opts: { productionSetup?: boolean } = {}) {
+  if (!opts.productionSetup && !(await pool.query("SELECT current_database() AS name")).rows[0].name.endsWith("_test"))
     throw new Error("TEST_DATABASE_REQUIRED");
   return transaction(pool, async (client) => {
     await client.query("SELECT pg_advisory_xact_lock(79421037)");
