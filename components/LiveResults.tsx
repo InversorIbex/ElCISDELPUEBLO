@@ -57,7 +57,7 @@ function LiveHemicycle({ data }: { data: Data }) {
     <p className={styles.basis}>
       Calculada con <strong>{fmt.format(v)} {v === 1 ? "voto" : "votos"}</strong> registrados hasta ahora ·{" "}
       {pr.ownProvinces} {pr.ownProvinces === 1 ? "circunscripción" : "circunscripciones"} con votos propios
-      {mode === "projection" && pr.estimatedProvinces > 0 && <> · {pr.estimatedProvinces} estimadas con el reparto nacional</>}
+      {mode === "projection" && pr.estimatedProvinces > 0 && <> · {pr.estimatedProvinces} sin votos, repartidas a partes iguales</>}
     </p>
     <div className={styles.toggle} role="group" aria-label="Tipo de reparto">
       <button type="button" aria-pressed={mode === "projection"} onClick={() => setMode("projection")}>Proyección de los 350 escaños</button>
@@ -65,7 +65,7 @@ function LiveHemicycle({ data }: { data: Data }) {
     </div>
     <Hemicycle groups={groups} unassigned={unassigned}
       label={mode === "projection"
-        ? "Método: en cada circunscripción con votos se aplica D'Hondt con barrera del 3 % a sus votos; en las que aún no tienen votos se aplica el reparto nacional del sondeo a las candidaturas que se presentan allí. Sondeo voluntario no representativo: no es una predicción."
+        ? "Método: en cada circunscripción con votos se aplica D'Hondt con barrera del 3 % a sus votos; en las que aún no tienen votos, los escaños se reparten a partes iguales entre los partidos que ya tienen votos en el sondeo y se presentan allí (si no es divisible, el escaño sobrante va al de más votos nacionales). Sondeo voluntario no representativo: no es una predicción."
         : "Reparto D'Hondt con barrera del 3 % solo en las circunscripciones que ya tienen votos; el resto queda sin asignar."} />
   </div>;
 }
@@ -151,4 +151,12 @@ export function LivePartyStats({ groupId, name }: { groupId: string; name: strin
     <div><dt>Provincias donde gana</dt><dd>{provincesWon}</dd><small>de 52 circunscripciones</small></div>
     <p className={styles.partyNote}>Datos en vivo de {name} en el sondeo voluntario de esta web. No es una encuesta representativa ni una predicción.</p>
   </dl>;
+}
+
+/** Mapa de provincias coloreado en vivo; al pulsar una provincia se abre su papeleta. */
+export function LiveVoteMap({ provinces }: { provinces: { code: string; name: string }[] }) {
+  const { data } = useLiveResults();
+  const winners: Winner[] = data && !data.blackout ? Object.entries(data.provinces).flatMap(([code, p]) =>
+    p.winner ? [{ provinceCode: code, name: p.winner.name, color: p.winner.color, responses: p.rows[0]?.n ?? 0, total: p.total }] : []) : [];
+  return <ProvinceMap provinces={provinces} winners={winners} live />;
 }

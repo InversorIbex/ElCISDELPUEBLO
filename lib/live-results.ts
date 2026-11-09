@@ -30,8 +30,8 @@ export type LiveResults = {
   hemicycle: { groups: { id: string; name: string; color: string; seats: number }[]; unassigned: number };
   /**
    * Proyección del Congreso completo: provincias con votos → D'Hondt con sus
-   * votos; provincias sin votos → reparto nacional del sondeo aplicado a las
-   * candidaturas que concurren allí (voto uniforme). Siempre con su base.
+   * votos; provincias sin votos → escaños a partes iguales entre las fuerzas
+   * que ya tienen votos en el sondeo y concurren allí. Siempre con su base.
    */
   projection: {
     groups: { id: string; name: string; color: string; seats: number }[];
@@ -131,20 +131,22 @@ export function buildLiveResults(rows: readonly CountInput[], opts: { minCount?:
   for (const code of codes) {
     const pr = provinces[code];
     if (!pr.suppressed) { own++; projUnassigned += pr.seats - pr.rows.reduce((s, r) => s + r.seats, 0); continue; }
-    const options = candidaciesForProvince(code).map((c) => ({ c, g: groupForCandidacy(c.officialName) }))
-      .map(({ c, g }) => ({ id: c.id, g, votes: nationalByGroup.get(g.id) ?? 0 })).filter((o) => o.votes > 0);
+    // Reparto a partes iguales entre las fuerzas que ya tienen votos en el sondeo
+    // y se presentan en esta circunscripción. El resto de la división se asigna
+    // por orden de votos nacionales (desempate determinista y declarado).
+    const options = candidaciesForProvince(code).map((c) => ({ id: c.id, g: groupForCandidacy(c.officialName) }))
+      .filter((o) => (nationalByGroup.get(o.g.id) ?? 0) > 0)
+      .sort((a, b) => (nationalByGroup.get(b.g.id) ?? 0) - (nationalByGroup.get(a.g.id) ?? 0) || a.id.localeCompare(b.id));
     if (!options.length || pr.total > 0) { projUnassigned += pr.seats; continue; } // con votos pero ocultos: no se estiman
     estimated++;
-    const alloc = dhondt(options, pr.seats);
-    let assigned = 0;
-    for (const o of options) {
-      const s = alloc.allocation[o.id] ?? 0;
-      if (!s) continue;
-      assigned += s;
+    const each = Math.floor(pr.seats / options.length);
+    const extra = pr.seats % options.length;
+    options.forEach((o, i) => {
+      const s = each + (i < extra ? 1 : 0);
+      if (!s) return;
       const h = proj.get(o.g.id) ?? { id: o.g.id, name: o.g.name, color: o.g.color, seats: 0 };
       h.seats += s; proj.set(o.g.id, h);
-    }
-    projUnassigned += pr.seats - assigned;
+    });
   }
   return {
     ...base, blackout: false, provinces,
