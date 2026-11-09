@@ -4,6 +4,7 @@ import Script from "next/script";
 import { logoForCandidacy } from "@/lib/candidacies/logos";
 import type { Candidacy } from "@/lib/candidacies/registry";
 import styles from "./BallotPreview.module.css";
+import { refreshLiveResults } from "./LiveResults";
 
 type VoteStatus={enabled:boolean;mode:string;consentVersion?:string;siteKey?:string};
 type TurnstileApi={
@@ -14,7 +15,7 @@ type TurnstileApi={
 declare global { interface Window { turnstile?:TurnstileApi } }
 
 const userErrors:Record<string,string>={
-  IP_DAILY_LIMIT:"Esta conexión a Internet ya ha alcanzado el límite de dos participaciones de hoy.",
+  IP_WINDOW_LIMIT:"Esta conexión a Internet ya ha registrado dos votos en las últimas 5 horas.",
   BROWSER_LIMIT:"Ya se ha registrado una participación desde este navegador. Solo se admite un voto por dispositivo.",
   INVALID_CANDIDACY:"La candidatura no corresponde a la provincia seleccionada.",
   ALREADY_SUBMITTED:"Esta solicitud ya se procesó. Consulta el estado antes de volver a enviarla.",
@@ -74,9 +75,10 @@ export function BallotPreview({candidacies,provinceName,provinceCode}:{
         body:JSON.stringify({provinceCode,candidacyId:chosen.id,requestToken:crypto.randomUUID(),
           turnstileToken:token,explicitConsent:true,consentVersion:status.consentVersion}),
       });
-      const data=await response.json() as {recorded?:boolean;code?:string;error?:string};
-      if(response.ok&&data.recorded===true){setSaved(true);return;}
-      setError(userErrors[data.code??data.error??""]??"No se pudo confirmar el registro. No se ha contado tu voto.");
+      const data=await response.json() as {recorded?:boolean;code?:string;error?:string;retryAfterSeconds?:number};
+      if(response.ok&&data.recorded===true){setSaved(true);refreshLiveResults();return;}
+      const wait=data.code==="IP_WINDOW_LIMIT"&&data.retryAfterSeconds?` Podrás volver a votar en ${Math.floor(data.retryAfterSeconds/3600)} h ${Math.ceil((data.retryAfterSeconds%3600)/60)} min.`:"";
+      setError((userErrors[data.code??data.error??""]??"No se pudo confirmar el registro. No se ha contado tu voto.")+wait);
     }catch{setError("No se pudo confirmar el registro. Comprueba la conexión antes de intentarlo de nuevo.");}
     finally {
       setBusy(false);pending.current=false;setToken("");

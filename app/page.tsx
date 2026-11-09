@@ -1,5 +1,5 @@
 import { ProvinceQuickPicker } from "@/components/ProvinceQuickPicker";
-import { ProvinceMap } from "@/components/ProvinceMap";
+import { LiveResultsSection } from "@/components/LiveResults";
 import { TerritorySelector } from "@/components/TerritorySelector";
 import { communities, provinces, municipalities, displayName } from "@/lib/territories";
 import Link from "next/link";
@@ -108,12 +108,12 @@ export default function Home() {
         </div>
         <div>
           <span>Sondeos abiertos</span>
-          <strong>0</strong>
-          <small>Preparando una participación segura</small>
+          <strong>{voteOpen ? 1 : 0}</strong>
+          <small>{voteOpen ? "Máximo 2 votos por conexión cada 5 horas" : "Preparando una participación segura"}</small>
         </div>
       </section>
       <ProvinceQuickPicker voteOpen={voteOpen} provinces={provinces.map((p) => ({ code: p.code, name: displayName(p.name) }))} />
-      <ProvinceMap provinces={provinces.map((p) => ({ code: p.code, name: displayName(p.name) }))} />
+      <LiveResultsSection provinces={provinces.map((p) => ({ code: p.code, name: displayName(p.name) }))} />
       <section
         className="section launch-tools"
         aria-labelledby="herramientas-title"

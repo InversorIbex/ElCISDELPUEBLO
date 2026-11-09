@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
 import { isLiveVoteConfigured } from "@/lib/server/live-vote-configuration";
+import { LiveVotersCount } from "@/components/LiveResults";
 export const metadata: Metadata = {
   metadataBase: new URL("https://elcisdelpueblo.vercel.app"),
   alternates: { canonical: "/" },
@@ -37,6 +38,7 @@ export default function Layout({
           ) : (
             <>EDICIÓN PÚBLICA INFORMATIVA{" "}<span>· Sin recogida de respuestas políticas</span></>
           )}
+          <LiveVotersCount />
         </div>
         <header>
           <Link

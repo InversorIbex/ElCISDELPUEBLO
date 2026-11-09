@@ -22,7 +22,11 @@ function draw(geo: Geometry): string {
     return `${idx===0?"M":"L"}${px.toFixed(1)},${py.toFixed(1)}`;
   }).join(" ")+"Z").join(" ")).join(" ");
 }
-export function ProvinceMap({ provinces, winners = [] }: { provinces: Province[]; winners?: Winner[] }) {
+export function ProvinceMap({ provinces, winners = [], selected, onSelect, live = false }: {
+  provinces: Province[]; winners?: Winner[];
+  /** Modo en vivo: pulsar una provincia la selecciona en lugar de navegar. */
+  selected?: string; onSelect?: (code: string) => void; live?: boolean;
+}) {
   const [features,setFeatures] = useState<Feature[]>([]);
   const [failed,setFailed] = useState(false);
   const [active,setActive] = useState("");
@@ -44,8 +48,8 @@ export function ProvinceMap({ provinces, winners = [] }: { provinces: Province[]
     <div className={styles.heading}>
       <div><span className={styles.eyebrow}>MAPA ELECTORAL · 52 CIRCUNSCRIPCIONES</span>
         <h2 id="province-map-title">Resultados por provincia</h2>
-        <p>Cada provincia se colorea únicamente cuando existe un resultado agregado aprobado para publicación. Pulsa para consultar las candidaturas.</p></div>
-      <span className={styles.status}>{features.length ? `${winners.length} provincias con resultados publicados` :
+        <p>{live ? "Cada provincia se colorea con la candidatura más votada en el sondeo en cuanto alcanza el mínimo de votos para publicarse. Pulsa una provincia para ver el porcentaje de cada candidatura." : "Cada provincia se colorea únicamente cuando existe un resultado agregado aprobado para publicación. Pulsa para consultar las candidaturas."}</p></div>
+      <span className={styles.status}>{features.length ? `${winners.length} de 52 circunscripciones con resultados` :
         failed ? "Usa el selector de provincias" : "Cargando límites oficiales…"}</span>
     </div>
     {features.length>0 ? <div className={styles.canvas}>
@@ -57,25 +61,29 @@ export function ProvinceMap({ provinces, winners = [] }: { provinces: Province[]
           href={`/participar?provincia=${encodeURIComponent(f.code)}#papeleta`}
           aria-label={`${names.get(f.code)||f.name}: ${byProvince.has(f.code)?`Candidatura con más respuestas: ${byProvince.get(f.code)!.name}`:"sin resultado publicable"}`}
           onMouseEnter={()=>setActive(f.code)} onMouseLeave={()=>setActive("")}
-          onFocus={()=>setActive(f.code)} onBlur={()=>setActive("")}>
+          onFocus={()=>setActive(f.code)} onBlur={()=>setActive("")}
+          onClick={onSelect?(e)=>{e.preventDefault();onSelect(f.code);}:undefined}
+          aria-current={selected===f.code?"true":undefined}>
           <path d={draw(f.geometry)} fill={byProvince.get(f.code)?.color??undisclosedColor}
-            stroke="#fff" strokeWidth="1.1" fillRule="evenodd" className={styles.shape}/>
+            stroke={selected===f.code?"#142c3b":"#fff"} strokeWidth={selected===f.code?2.4:1.1} fillRule="evenodd" className={styles.shape}/>
           <title>{names.get(f.code)||f.name}{byProvince.has(f.code)?` · Más respuestas: ${byProvince.get(f.code)!.name}`:" · Sin resultado publicable"}</title>
         </a>)}
         {(["51","52"] as const).map((code,i)=><a key={code}
           href={`/participar?provincia=${code}#papeleta`}
+          onClick={onSelect?(e)=>{e.preventDefault();onSelect(code);}:undefined}
+          aria-current={selected===code?"true":undefined}
           aria-label={`Ver candidaturas de ${names.get(code)}`}>
           <rect x={308+i*205} y="470" width="176" height="54" rx="12" fill={byProvince.get(code)?.color??undisclosedColor} stroke="#a99cc7"/>
           <text x={396+i*205} y="502" textAnchor="middle" className={styles.city}>{names.get(code)}</text>
         </a>)}
         <text x="36" y="572" className={styles.label}>Geometría simplificada para consulta · No sirve para delimitaciones jurídicas</text>
       </svg>
-      <div aria-live="polite" className={styles.selection}>{active ? `Seleccionado: ${names.get(active)} · Abrir candidaturas ↗` :
-        "Gris: sin resultados publicables. Colores: candidatura con más respuestas verificadas."}</div>
+      <div aria-live="polite" className={styles.selection}>{active ? `${names.get(active)}${byProvince.has(active)?` · Gana: ${byProvince.get(active)!.name}`:""}${onSelect?" · Pulsa para ver los porcentajes":" · Abrir candidaturas ↗"}` :
+        "Gris: todavía sin votos suficientes. Colores: candidatura con más votos."}</div>
     </div> : <div className={styles.fallback} role="status">
       {failed ? "No se pudieron cargar los límites provinciales oficiales. Puedes acceder igualmente a las 52 circunscripciones con el buscador." :
         "Cargando el mapa provincial. El selector de circunscripciones funciona independientemente."}
     </div>}
-    <p className={styles.credit}>Cartografía de referencia: <a href="https://centrodedescargas.cnig.es/CentroDescargas/limites-municipales-provinciales-autonomicos">IGN/CNIG</a>. Obra derivada de datos administrativos, CC BY 4.0 ign.es. Los colores representan únicamente resultados aprobados del sondeo voluntario; no son resultados oficiales ni estimaciones representativas.</p>
+    <p className={styles.credit}>Cartografía de referencia: <a href="https://centrodedescargas.cnig.es/CentroDescargas/limites-municipales-provinciales-autonomicos">IGN/CNIG</a>. Obra derivada de datos administrativos, CC BY 4.0 ign.es. Los colores representan resultados del sondeo voluntario; no son resultados oficiales ni estimaciones representativas.</p>
   </section>;
 }
