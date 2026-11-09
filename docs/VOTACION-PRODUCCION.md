@@ -4,12 +4,11 @@
 - **Base de datos:** Supabase, región UE (Frankfurt), proyecto `uxoeghnhszqdhiqhzcvu`. Esquema `db/migrations/0001…0005` aplicado, con 52 provincias, 8.132 municipios y 534 candidaturas proclamadas. `0005_live_vote.sql` sustituye a `db/drafts/public_vote.sql`.
 - **Preparar o actualizar la base:** `VOTE_DATABASE_URL=… node --experimental-strip-types scripts/setup-vote-db.ts --confirmo-produccion` (idempotente).
 - **Conexión:** `lib/server/vote-db.ts`, con TLS verificado contra la CA raíz de Supabase (`lib/server/supabase-ca.ts`).
-- **Resultados en vivo:** `/api/resultados-en-vivo` (caché de 10 s en la CDN). Incluye mapa coloreado, porcentajes por circunscripción, hemiciclo D'Hondt y contador de votos en la franja superior. Las reglas están en `lib/live-results.ts`:
-  - mínimo de 50 votos por circunscripción;
-  - supresión complementaria;
-  - dominancia del 95 %;
-  - **veda LOREG**: no se devuelve nada del 24-N 00:00 al 29-N 21:00.
-- **Modo demostración:** `/api/cron/simular`, llamado cada 5 min por `.github/workflows/simulador.yml`. Genera 4 votos simulados por ejecución el primer día y se duplica cada día, hasta `SIMULATION_MAX_PER_TICK`. Se guardan con `simulated = true`, se cuentan aparte y la web los anuncia en todas las vistas de resultados. Con `SIMULATION_ENABLED=false` dejan de contarse. Borrado definitivo: `DELETE FROM poll_private.counts WHERE simulated; DELETE FROM poll_private.ballots WHERE simulated;`.
+- **Resultados en vivo:** `/api/resultados-en-vivo` (caché de 10 s en la CDN). Incluye mapa coloreado, votos y porcentajes por circunscripción, hemiciclo D'Hondt y contador de votos en la franja superior. Las reglas están en `lib/live-results.ts`:
+  - **Desde el primer voto** (decisión del promotor, 2026-11-09). `RESULTS_MIN_COUNT` permite volver a exigir un mínimo; con más de 1 se aplican también supresión complementaria y dominancia del 95 %.
+  - **Riesgo aceptado:** con muy pocos votos en una provincia, alguien que sepa que otra persona acaba de votar allí podría deducir su voto. Debe constar en la EIPD.
+  - **Veda LOREG**: no se devuelve nada del 24-N 00:00 al 29-N 21:00.
+- **Sin votos simulados:** el simulador se retiró el 2026-11-09 y los resultados leen solo votos reales (`NOT simulated`).
 
 ## Variables en Vercel (Production)
 | Variable | Valor |
@@ -20,9 +19,8 @@
 | `VOTE_ALLOWED_HOSTNAME` | `www.laopiniondelpueblo.eu` |
 | `VOTE_PUBLIC_ENABLED`, `VOTE_PRIVACY_APPROVED`, `VOTE_SECURITY_APPROVED`, `VOTE_RETENTION_APPROVED`, `VOTE_BALLOTS_APPROVED`, `VOTE_RESULTS_POLICY_APPROVED` | `true`, cada una cuando el promotor acepte esa garantía. Mientras falte alguna, la votación sigue cerrada (423) |
 | `VOTE_CLEANUP_DATABASE_URL` | la misma cadena (limpieza de huellas de IP vencidas) |
-| `CRON_SECRET` | ≥ 32 caracteres; el mismo valor como secreto `CRON_SECRET` del repositorio en GitHub |
-| `SIMULATION_ENABLED`, `SIMULATION_START`, `SIMULATION_MAX_PER_TICK` | modo demostración (`true`, `2026-11-09T00:00:00+01:00`, `512`) |
-| `RESULTS_MIN_COUNT` | opcional; nunca por debajo de 50 |
+| `CRON_SECRET` | ≥ 32 caracteres (limpieza de huellas de IP) |
+| `RESULTS_MIN_COUNT` | opcional; por defecto 1 |
 
 ## Política solicitada por el promotor
 - **Regla vigente (2026-11-09):** máximo **2 votos aceptados por IP en cualquier ventana de 5 horas** (deslizante, `poll_private.ip_window`, purgada al vencer) y **1 voto por credencial anónima de navegador en toda la campaña** (`poll_private.browser_lifetime`). Ambos se guardan solo como HMAC.
@@ -32,7 +30,7 @@
 - Detección de IP únicamente desde proveedor de proxy confiable y configuración verificada; no aceptar arbitrariamente `X-Forwarded-For` del cliente.
 - Aprobación jurídica: tratamiento de opinión política (RGPD art. 9), identidad del responsable, fundamento, consentimiento explícito, EIPD y borrado probados.
 - Antes de abrir: Turnstile con verificación server-side, CSRF/origen, credencial secreta HttpOnly SameSite, idempotencia, límites transaccionales, protección contra bots, comprobación de amenazas, TTL de IP digests, backups cifrados, control de errores, prueba de carga y auditoría.
-- Publicación (decisión del promotor, 2026-11-09): resultados en tiempo real por circunscripción con umbral de 50, supresión complementaria, dominancia y veda LOREG. Riesgo residual: los ataques por diferencias temporales (comparar dos lecturas consecutivas) no se mitigan del todo con publicación continua; queda documentado para la revisión jurídica y de privacidad.
+- Publicación (decisión del promotor, 2026-11-09): resultados en tiempo real por circunscripción desde el primer voto, con veda LOREG. Riesgo residual: con recuentos pequeños y publicación continua, comparar dos lecturas consecutivas puede revelar el voto de una persona concreta. Queda documentado para la revisión jurídica y de privacidad.
 
 ## Pendiente para pasar a producción
 Conectar un endpoint autenticado y comprobado, habilitar infraestructura PostgreSQL con credenciales de mínimo privilegio, validar conectividad de base real y cumplimiento de todos los hitos `lib/server/privacy-gates.ts`. Solo entonces sustituir la respuesta HTTP 423 por el servicio de producción.

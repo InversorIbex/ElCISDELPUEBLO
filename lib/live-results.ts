@@ -1,14 +1,11 @@
 /**
  * Resultados en vivo del sondeo ciudadano (puro, sin acceso a base de datos).
  *
- * Reglas de publicación:
+ * Reglas de publicación (decisión del promotor, 2026-11-09):
  * - Veda LOREG art. 69.7: durante la veda no se devuelve ningún resultado.
- * - Una circunscripción publica su reparto con al menos `minCount` votos.
- * - Supresión complementaria: el conjunto de circunscripciones con votos pero
- *   sin publicar debe sumar 0 o ≥ minCount (si no, el nacional menos lo
- *   publicado revelaría su reparto); se suprimen las publicadas más pequeñas.
- * - Dominancia: si una candidatura supera el 95 %, solo se publica el total.
- * - Los votos simulados (modo demostración) solo se suman si includeSimulated.
+ * - Por defecto (`minCount` = 1) cada circunscripción muestra su reparto desde
+ *   el primer voto. Si se configura un mínimo mayor, se aplican umbral,
+ *   supresión complementaria y dominancia del 95 %.
  * Porcentajes sobre votos a candidaturas de la circunscripción.
  */
 import { candidaciesForProvince } from "./candidacies/registry.ts";
@@ -16,7 +13,7 @@ import { groupForCandidacy, HEMICYCLE_ORDER } from "./party-groups.ts";
 import { inPollBlackout } from "./electoral-blackout.ts";
 import election from "../data/elections/congress-2026.json" with { type: "json" };
 
-export type CountInput = { province_code: string; candidacy_id: string; real_n: number; simulated_n: number };
+export type CountInput = { province_code: string; candidacy_id: string; n: number };
 export type Suppression = "insufficient" | "complementary" | "dominance" | null;
 export type LiveRow = { id: string; name: string; groupId: string; groupName: string; color: string; n: number; pct: number; seats: number };
 export type LiveProvince = {
@@ -27,9 +24,8 @@ export type LiveProvince = {
 export type LiveResults = {
   updatedAt: string;
   blackout: boolean;
-  includeSimulated: boolean;
   minCount: number;
-  totals: { real: number; simulated: number; shown: number };
+  totals: { votes: number };
   provinces: Record<string, LiveProvince>;
   hemicycle: { groups: { id: string; name: string; color: string; seats: number }[]; unassigned: number };
 };
@@ -54,20 +50,20 @@ export function dhondt(options: readonly { id: string; votes: number }[], seats:
 const SEATS = new Map(election.constituencies.map((c) => [c.provinceCode, c.seats]));
 const MAX_DOMINANT = 0.95;
 
-export function buildLiveResults(rows: readonly CountInput[], opts: { includeSimulated: boolean; minCount: number; now?: Date }): LiveResults {
+export function buildLiveResults(rows: readonly CountInput[], opts: { minCount?: number; now?: Date } = {}): LiveResults {
   const now = opts.now ?? new Date();
-  let real = 0, simulated = 0;
+  const minCount = Math.max(1, Math.floor(opts.minCount ?? 1));
+  let votes = 0;
   const byProvince = new Map<string, Map<string, number>>();
   for (const r of rows) {
-    real += r.real_n; simulated += r.simulated_n;
-    const n = r.real_n + (opts.includeSimulated ? r.simulated_n : 0);
+    const n = r.n;
     if (n <= 0) continue;
+    votes += n;
     const m = byProvince.get(r.province_code) ?? new Map<string, number>();
     m.set(r.candidacy_id, (m.get(r.candidacy_id) ?? 0) + n);
     byProvince.set(r.province_code, m);
   }
-  const totals = { real, simulated, shown: real + (opts.includeSimulated ? simulated : 0) };
-  const base = { updatedAt: now.toISOString(), includeSimulated: opts.includeSimulated, minCount: opts.minCount, totals };
+  const base = { updatedAt: now.toISOString(), minCount, totals: { votes } };
   if (inPollBlackout(now))
     return { ...base, blackout: true, provinces: {}, hemicycle: { groups: [], unassigned: 350 } };
 
@@ -77,10 +73,10 @@ export function buildLiveResults(rows: readonly CountInput[], opts: { includeSim
   let residual = 0, residualUnits = 0;
   for (const c of codes) {
     const t = total(c);
-    if (t > 0 && t < opts.minCount) { status.set(c, "insufficient"); residual += t; residualUnits++; }
+    if (t > 0 && t < minCount) { status.set(c, "insufficient"); residual += t; residualUnits++; }
   }
-  const candidatesForSecondary = codes.filter((c) => total(c) >= opts.minCount).sort((a, b) => total(a) - total(b) || a.localeCompare(b));
-  for (let i = 0; residualUnits > 0 && residual < opts.minCount && i < candidatesForSecondary.length; i++) {
+  const candidatesForSecondary = codes.filter((c) => total(c) >= minCount).sort((a, b) => total(a) - total(b) || a.localeCompare(b));
+  for (let i = 0; residualUnits > 0 && residual < minCount && i < candidatesForSecondary.length; i++) {
     const c = candidatesForSecondary[i];
     status.set(c, "complementary"); residual += total(c); residualUnits++;
   }
@@ -93,7 +89,7 @@ export function buildLiveResults(rows: readonly CountInput[], opts: { includeSim
     const t = total(code);
     const counts = byProvince.get(code) ?? new Map<string, number>();
     let suppressed: Suppression = t === 0 ? "insufficient" : status.get(code) ?? null;
-    if (!suppressed && Math.max(...counts.values()) > MAX_DOMINANT * t) suppressed = "dominance";
+    if (!suppressed && minCount > 1 && Math.max(...counts.values()) > MAX_DOMINANT * t) suppressed = "dominance";
     if (suppressed) { provinces[code] = { total: t, seats, suppressed, winner: null, rows: [] }; unassigned += seats; continue; }
 
     const list = candidaciesForProvince(code).filter((c) => (counts.get(c.id) ?? 0) > 0);
@@ -116,22 +112,4 @@ export function buildLiveResults(rows: readonly CountInput[], opts: { includeSim
   const rank = (id: string) => { const i = HEMICYCLE_ORDER.indexOf(id); return i < 0 ? HEMICYCLE_ORDER.length : i; };
   const groups = [...hemi.values()].sort((a, b) => rank(a.id) - rank(b.id) || b.seats - a.seats);
   return { ...base, blackout: false, provinces, hemicycle: { groups, unassigned } };
-}
-
-/** 4 votos simulados por ejecución el primer día, ×2 cada día, con tope. */
-export function simulatedVotesPerTick(start: Date, now: Date, base = 4, max = 512): number {
-  const days = Math.max(0, Math.floor((now.getTime() - start.getTime()) / 86_400_000));
-  return Math.min(max, base * 2 ** Math.min(days, 30));
-}
-
-/** Votos simulados: provincia ponderada por escaños y candidatura al azar entre las proclamadas. */
-export function randomSimulatedVotes(n: number, rand: () => number = Math.random) {
-  const entries = [...SEATS.entries()];
-  const sum = entries.reduce((s, [, v]) => s + v, 0);
-  return Array.from({ length: n }, () => {
-    let x = rand() * sum, code = entries[entries.length - 1][0];
-    for (const [c, s] of entries) { if ((x -= s) < 0) { code = c; break; } }
-    const list = candidaciesForProvince(code);
-    return { provinceCode: code, candidacyId: list[Math.floor(rand() * list.length)].id };
-  });
 }

@@ -41,18 +41,8 @@ export function LiveVotersCount() {
   if (!data) return null;
   return <span className={styles.counter} aria-live="polite">
     <span className={styles.dot} aria-hidden="true" />
-    <strong>{fmt.format(data.totals.shown)}</strong> votos registrados
-    {data.includeSimulated && data.totals.simulated > 0 && <em> · demostración: {fmt.format(data.totals.simulated)} simulados</em>}
+    <strong>{fmt.format(data.totals.votes)}</strong> {data.totals.votes === 1 ? "voto registrado" : "votos registrados"}
   </span>;
-}
-
-export function DemoNotice() {
-  const { data } = useLiveResults();
-  if (!data?.includeSimulated || !data.totals.simulated) return null;
-  return <p className={styles.demo} role="note">
-    <strong>Modo demostración.</strong> Estos resultados incluyen {fmt.format(data.totals.simulated)} votos
-    simulados generados automáticamente y {fmt.format(data.totals.real)} votos reales. No reflejan la opinión de nadie.
-  </p>;
 }
 
 /* ---------- Mapa + panel de circunscripción + hemiciclo ---------- */
@@ -62,7 +52,6 @@ export function LiveResultsSection({ provinces, initialProvince = "28" }: { prov
   const names = new Map(provinces.map((p) => [p.code, p.name]));
   const winners: Winner[] = data ? Object.entries(data.provinces).flatMap(([code, p]) =>
     p.winner ? [{ provinceCode: code, name: p.winner.name, color: p.winner.color, responses: p.rows[0]?.n ?? 0, total: p.total }] : []) : [];
-  const p = data?.provinces[selected];
 
   if (data?.blackout) return <section className={styles.blackout} role="status">
     <span className="pill">VEDA ELECTORAL</span>
@@ -78,36 +67,47 @@ export function LiveResultsSection({ provinces, initialProvince = "28" }: { prov
       </div>
       <Link className="button" href="/participar">Votar ↗</Link>
     </div>
-    <DemoNotice />
     <div className={styles.grid}>
       <ProvinceMap provinces={provinces} winners={winners} selected={selected} onSelect={setSelected} live />
-      <aside className={styles.panel} aria-live="polite">
-        <div className="eyebrow">CIRCUNSCRIPCIÓN</div>
-        <h3>{names.get(selected) ?? selected}</h3>
-        {!data ? <p>{error ? "Resultados no disponibles en este momento." : "Cargando resultados…"}</p> : p && <>
-          <p className={styles.meta}>{p.seats} {p.seats === 1 ? "escaño" : "escaños"} · {fmt.format(p.total)} votos</p>
-          {p.suppressed ? <p className={styles.insufficient}>
-            {p.suppressed === "dominance" ? "Una candidatura concentra casi todos los votos: por privacidad solo se publica el total."
-              : `Todavía no hay votos suficientes para publicar el reparto (mínimo ${data.minCount}, y también lo deben alcanzar en conjunto las provincias sin publicar).`}
-          </p> : <ol className={styles.rows}>
-            {p.rows.map((r) => <li key={r.id}>
-              <div className={styles.rowHead}>
-                <span className={styles.swatch} style={{ background: r.color }} aria-hidden="true" />
-                <span className={styles.name} title={r.name}>{r.name}</span>
-                <strong>{pct.format(r.pct)} %</strong>
-              </div>
-              <div className={styles.bar} aria-hidden="true"><span style={{ width: `${r.pct}%`, background: r.color }} /></div>
-              <small>{fmt.format(r.n)} votos{r.seats ? ` · ${r.seats} ${r.seats === 1 ? "escaño" : "escaños"}` : ""}</small>
-            </li>)}
-          </ol>}
-          <Link className="text-link" href={`/participar?provincia=${selected}#papeleta`}>Votar en {names.get(selected)} →</Link>
-        </>}
-      </aside>
+      <LiveProvincePanel code={selected} name={names.get(selected) ?? selected} />
     </div>
     {data && <div className={styles.hemi}>
       <div className="eyebrow">CONGRESO · SIMULACIÓN CON LOS VOTOS DE ESTA WEB</div>
       <Hemicycle groups={data.hemicycle.groups} unassigned={data.hemicycle.unassigned}
-        label={`Reparto D'Hondt por circunscripción con barrera del 3 %. Las circunscripciones sin votos suficientes quedan sin asignar. No es una predicción.`} />
+        label={`Reparto D'Hondt por circunscripción con barrera del 3 % según los votos de esta web. Las circunscripciones sin votos quedan sin asignar. No es una predicción.`} />
     </div>}
   </section>;
+}
+
+const n1 = (n: number, one: string, many: string) => `${fmt.format(n)} ${n === 1 ? one : many}`;
+
+/** Votos y porcentaje de cada candidatura en una circunscripción, en vivo. */
+export function LiveProvincePanel({ code, name }: { code: string; name: string }) {
+  const { data, error } = useLiveResults();
+  const p = data?.provinces[code];
+  return <aside className={styles.panel} aria-live="polite">
+    <div className="eyebrow">CIRCUNSCRIPCIÓN · EN VIVO</div>
+    <h3>{name}</h3>
+    {!data ? <p>{error ? "Resultados no disponibles en este momento." : "Cargando resultados…"}</p>
+      : data.blackout ? <p className={styles.insufficient}>Veda electoral: del 24 de noviembre al cierre de los colegios del 29 de noviembre no se publican resultados del sondeo.</p>
+      : p && <>
+      <p className={styles.meta}>{n1(p.seats, "escaño", "escaños")} · {n1(p.total, "voto", "votos")}</p>
+      {p.total === 0 ? <p className={styles.insufficient}>Todavía nadie ha votado en {name}. ¡Sé el primero!</p>
+        : p.suppressed ? <p className={styles.insufficient}>
+          {p.suppressed === "dominance" ? "Una candidatura concentra casi todos los votos: por privacidad solo se publica el total."
+            : `El reparto se muestra a partir de ${data.minCount} votos.`}
+        </p> : <ol className={styles.rows}>
+          {p.rows.map((r) => <li key={r.id}>
+            <div className={styles.rowHead}>
+              <span className={styles.swatch} style={{ background: r.color }} aria-hidden="true" />
+              <span className={styles.name} title={r.name}>{r.name}</span>
+              <strong>{pct.format(r.pct)} %</strong>
+            </div>
+            <div className={styles.bar} aria-hidden="true"><span style={{ width: `${r.pct}%`, background: r.color }} /></div>
+            <small>{n1(r.n, "voto", "votos")}{r.seats ? ` · ${n1(r.seats, "escaño", "escaños")}` : ""}</small>
+          </li>)}
+        </ol>}
+      <Link className="text-link" href={`/participar?provincia=${code}#papeleta`}>Votar en {name} →</Link>
+    </>}
+  </aside>;
 }

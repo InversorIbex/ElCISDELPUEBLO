@@ -30,7 +30,8 @@ function hmac(secret: string, scope: string, value: string) {
 function allowedChoice(provinceCode: string, candidacyId: string) {
   return candidaciesForProvince(provinceCode).some((c) => c.id === candidacyId);
 }
-async function insertBallot(client: PoolClient, provinceCode: string, candidacyId: string, simulated: boolean) {
+async function insertBallot(client: PoolClient, provinceCode: string, candidacyId: string) {
+  const simulated = false;
   // Do not link stored ballot rows to browser or IP identifiers.
   await client.query(
     "INSERT INTO poll_private.ballots(id,campaign_id,province_code,candidacy_id,consent_version,simulated) VALUES($1,$2,$3,$4,$5,$6)",
@@ -80,47 +81,20 @@ export async function saveApprovedVote(pool: Pool, secret: string, vote: Vote): 
     if (already.rowCount) { await client.query("ROLLBACK"); return { accepted: false, code: "BROWSER_LIMIT" }; }
     await client.query("INSERT INTO poll_private.ip_window(campaign_id,ip_digest) VALUES($1,$2)", [CAMPAIGN, ipHash]);
     await client.query("INSERT INTO poll_private.browser_lifetime(campaign_id,browser_digest) VALUES($1,$2)", [CAMPAIGN, browserHash]);
-    await insertBallot(client, vote.provinceCode, vote.candidacyId, false);
+    await insertBallot(client, vote.provinceCode, vote.candidacyId);
     await client.query("INSERT INTO poll_private.idempotency(campaign_id,request_digest) VALUES($1,$2)", [CAMPAIGN, requestHash]);
     await client.query("COMMIT");
     return { accepted: true, code: "RECORDED" };
   } catch (e) { await client.query("ROLLBACK"); throw e; } finally { client.release(); }
 }
 
-/** Demo-mode votes. Always stored with simulated=true; never mixed silently with real ones. */
-export async function saveSimulatedVotes(pool: Pool, votes: readonly { provinceCode: string; candidacyId: string }[]) {
-  if (votes.length > 5000) throw new Error("TOO_MANY_SIMULATED_VOTES");
-  if (votes.some((v) => !allowedChoice(v.provinceCode, v.candidacyId))) throw new Error("INVALID_CANDIDACY");
-  const client = await pool.connect();
-  try {
-    await client.query("BEGIN");
-    const ids = votes.map(() => randomUUID());
-    const prov = votes.map((v) => v.provinceCode);
-    const cand = votes.map((v) => v.candidacyId);
-    await client.query(
-      `INSERT INTO poll_private.ballots(id,campaign_id,province_code,candidacy_id,consent_version,simulated)
-       SELECT id,$4,p,c,$5,true FROM unnest($1::uuid[],$2::char(2)[],$3::uuid[]) AS t(id,p,c)`,
-      [ids, prov, cand, CAMPAIGN, CONSENT_VERSION],
-    );
-    await client.query(
-      `INSERT INTO poll_private.counts(campaign_id,province_code,candidacy_id,simulated,n)
-       SELECT $3,p,c,true,count(*) FROM unnest($1::char(2)[],$2::uuid[]) AS t(p,c) GROUP BY p,c
-       ON CONFLICT(campaign_id,province_code,candidacy_id,simulated) DO UPDATE SET n=poll_private.counts.n+excluded.n`,
-      [prov, cand, CAMPAIGN],
-    );
-    await client.query("COMMIT");
-    return votes.length;
-  } catch (e) { await client.query("ROLLBACK"); throw e; } finally { client.release(); }
-}
-
-export type CountRow = { province_code: string; candidacy_id: string; real_n: number; simulated_n: number };
+export type CountRow = { province_code: string; candidacy_id: string; n: number };
+/** Only real votes are ever read for results. */
 export async function readCounts(pool: Pool): Promise<CountRow[]> {
-  const r = await pool.query<{ province_code: string; candidacy_id: string; real_n: string; simulated_n: string }>(
-    `SELECT province_code, candidacy_id::text,
-            coalesce(sum(n) FILTER (WHERE NOT simulated),0)::text AS real_n,
-            coalesce(sum(n) FILTER (WHERE simulated),0)::text AS simulated_n
-       FROM poll_private.counts WHERE campaign_id=$1 GROUP BY 1,2`,
+  const r = await pool.query<{ province_code: string; candidacy_id: string; n: string }>(
+    `SELECT province_code, candidacy_id::text, sum(n)::text AS n
+       FROM poll_private.counts WHERE campaign_id=$1 AND NOT simulated GROUP BY 1,2`,
     [CAMPAIGN],
   );
-  return r.rows.map((x) => ({ ...x, real_n: Number(x.real_n), simulated_n: Number(x.simulated_n) }));
+  return r.rows.map((x) => ({ ...x, n: Number(x.n) }));
 }
