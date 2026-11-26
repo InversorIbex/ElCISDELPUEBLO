@@ -13,6 +13,12 @@ export const KEYWORDS = [
   "votar online sondeo", "a quién votarías", "candidaturas Congreso 2026", "partidos políticos 2026",
   "listas electorales", "escaños Congreso", "hemiciclo", "D'Hondt", "resultados por provincia",
   "circunscripciones", "PP", "PSOE", "Vox", "Sumar", "Podemos", "Frente Amplio", "SALF",
+  // Debate a cuatro del 26-N (añadidas el 2026-11-26).
+  "debate electoral", "debate a cuatro", "debate electoral 2026", "debate 26 noviembre",
+  "quién ganó el debate", "quién ha ganado el debate", "ganador del debate", "encuesta debate electoral",
+  "votación debate", "debate RTVE elecciones", "candidatos elecciones generales 2026",
+  "candidatos a la presidencia del Gobierno", "Pedro Sánchez", "Alberto Núñez Feijóo",
+  "Santiago Abascal", "Ada Colau", "debate Sánchez Feijóo Abascal Colau",
 ];
 
 export const abs = (path = "/") => `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
@@ -49,6 +55,34 @@ export const electionEventLd: JsonLd = {
   location: { "@type": "Country", name: "España" },
   organizer: { "@type": "GovernmentOrganization", name: "Junta Electoral Central", url: "https://www.juntaelectoralcentral.es" },
   description: "Elecciones a Cortes Generales convocadas por el Real Decreto 806/2026 (BOE de 6 de octubre de 2026). 350 diputados en 52 circunscripciones.",
+};
+
+/** Debate a cuatro del 26-N: cada candidato con su partido. */
+export const debateEventLd: JsonLd = {
+  "@type": "Event",
+  "@id": abs("/quien-gano-el-debate#debate"),
+  name: "Debate electoral a cuatro de las elecciones generales 2026",
+  description:
+    "Último debate de la campaña de las elecciones generales del 29 de noviembre de 2026, entre Pedro Sánchez (PSOE), Alberto Núñez Feijóo (PP), Santiago Abascal (Vox) y Ada Colau (Frente Amplio). Temas: vivienda; economía y fiscalidad; políticas sociales y servicios públicos; corrupción y regeneración democrática; migración y política exterior.",
+  startDate: "2026-11-26T22:00:00+01:00",
+  endDate: "2026-11-27T00:00:00+01:00",
+  eventStatus: "https://schema.org/EventScheduled",
+  eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode",
+  location: { "@type": "VirtualLocation", url: "https://www.rtve.es/play/" },
+  inLanguage: "es-ES",
+  image: abs("/debate/og-debate.jpg"),
+  url: abs("/quien-gano-el-debate"),
+  superEvent: { "@id": abs("/#elecciones-2026") },
+  performer: [
+    ["Pedro Sánchez", "Partido Socialista Obrero Español", "PSOE"],
+    ["Alberto Núñez Feijóo", "Partido Popular", "PP"],
+    ["Santiago Abascal", "Vox", "Vox"],
+    ["Ada Colau", "Frente Amplio", "FA"],
+  ].map(([name, party, short]) => ({
+    "@type": "Person",
+    name,
+    affiliation: { "@type": "Organization", name: party, alternateName: short },
+  })),
 };
 
 export function breadcrumbLd(items: { name: string; path: string }[]): JsonLd {

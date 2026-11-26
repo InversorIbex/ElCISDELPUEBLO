@@ -5,10 +5,12 @@ import { communities, provinces, municipalities, displayName } from "@/lib/terri
 import Link from "next/link";
 import { EmptyState } from "@/components/EmptyState";
 import { isLiveVoteConfigured } from "@/lib/server/live-vote-configuration";
+import { DebatePoll } from "@/components/DebatePoll";
 export default function Home() {
   const voteOpen = isLiveVoteConfigured();
   return (
     <>
+      <DebatePoll />
       <section className="hero">
         <div className="eyebrow">
           <span className="dot" /> EL PUEBLO OPINA · OBSERVATORIO INDEPENDIENTE
