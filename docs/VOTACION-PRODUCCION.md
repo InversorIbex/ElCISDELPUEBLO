@@ -10,6 +10,13 @@
   - **Veda LOREG**: no se devuelve nada del 24-N 00:00 al 29-N 21:00.
 - **Sin votos simulados:** el simulador se retiró el 2026-11-09 y los resultados leen solo votos reales (`NOT simulated`).
 
+## Votación «¿Quién ganó el debate?» (2026-11-26)
+- **Qué es:** pregunta sobre el debate a cuatro del 26-N (Sánchez, Feijóo, Abascal, Colau o Ninguno). No pregunta intención de voto. Bloque en la portada (`components/DebatePoll.tsx`) y página `/quien-gano-el-debate`.
+- **Plazo:** hasta el sábado 28-N a las 23:59 (hora peninsular), `lib/debate.ts`.
+- **Publicación:** solo porcentajes, nunca el número de votos (`GET /api/debate`). **Decisión del promotor (2026-11-26):** estos porcentajes se muestran también durante la veda del sondeo de intención de voto, por tratarse de una valoración del debate. Riesgo jurídico residual: la Junta Electoral podría considerarlo un sondeo electoral (LOREG art. 69.7). Los resultados del sondeo de intención de voto siguen ocultos en la veda.
+- **Datos:** `db/migrations/0006_debate_vote.sql`. Solo contadores por opción; el voto no se relaciona con la IP ni con la cookie. La API crea estas tablas al arrancar si aún no existen (`ensureDebateSchema`).
+- **Límites:** 1 voto por credencial anónima de navegador y 2 por IP cada 5 horas (HMAC), Turnstile con acción `debate_vote`, consentimiento explícito y comprobación de origen. Se abre solo si la votación principal está configurada (`isLiveVoteConfigured`).
+
 ## Variables en Vercel (Production)
 | Variable | Valor |
 |---|---|

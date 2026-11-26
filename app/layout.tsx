@@ -4,7 +4,7 @@ import "./globals.css";
 import { isLiveVoteConfigured } from "@/lib/server/live-vote-configuration";
 import { LiveVotersCount } from "@/components/LiveResults";
 import { JsonLd } from "@/components/JsonLd";
-import { KEYWORDS, SITE_NAME, SITE_URL, electionEventLd, organizationLd, websiteLd } from "@/lib/seo";
+import { KEYWORDS, SITE_NAME, SITE_URL, debateEventLd, electionEventLd, organizationLd, websiteLd } from "@/lib/seo";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: SITE_NAME,
@@ -43,7 +43,7 @@ export default function Layout({
   return (
     <html lang="es">
       <body>
-        <JsonLd nodes={[organizationLd, websiteLd, electionEventLd]} />
+        <JsonLd nodes={[organizationLd, websiteLd, electionEventLd, debateEventLd]} />
         <a className="skip" href="#contenido">
           Saltar al contenido
         </a>
@@ -69,6 +69,7 @@ export default function Layout({
           <nav aria-label="Navegación principal">
             <Link href="/">Inicio</Link>
             <Link href="/encuesta-elecciones-generales-2026">Encuesta 2026</Link>
+            <Link href="/quien-gano-el-debate">Debate</Link>
             <Link href="/resultados">Resultados</Link>
             <Link href="/partidos">Partidos</Link>
             <Link href="/simulador">Simulador</Link>
