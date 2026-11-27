@@ -1,0 +1,55 @@
+.share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+.label {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  color: var(--green);
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--ink);
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn:hover {
+  background: var(--ink);
+  color: #fff;
+}
+.whatsapp {
+  background: #1f7a4d;
+  border-color: #1f7a4d;
+  color: #fff;
+}
+.whatsapp:hover {
+  background: #17603c;
+  border-color: #17603c;
+}
+.btn:focus-visible {
+  outline: 3px solid #b36824;
+  outline-offset: 3px;
+}
+@media (max-width: 600px) {
+  .btn {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+  .label {
+    width: 100%;
+  }
+}

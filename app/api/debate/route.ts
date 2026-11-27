@@ -4,6 +4,7 @@ import { getVotePool } from "@/lib/server/vote-db";
 import { readDebateShares, saveDebateVote } from "@/lib/server/debate-vote";
 import { isLiveVoteConfigured } from "@/lib/server/live-vote-configuration";
 import { DEBATE_ID, DEBATE_VOTE_CLOSES_AT, debatePercentages, isDebateVoteOpen } from "@/lib/debate";
+import { inPollBlackout } from "@/lib/electoral-blackout";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -20,7 +21,7 @@ export async function GET() {
   try {
     if (!enabled) {
       const empty = debatePercentages({});
-      return json({ debateId: DEBATE_ID, enabled, open: isDebateVoteOpen(), closesAt: DEBATE_VOTE_CLOSES_AT.toISOString(), ...empty });
+      return json({ debateId: DEBATE_ID, enabled, open: isDebateVoteOpen(), blackout: inPollBlackout(), closesAt: DEBATE_VOTE_CLOSES_AT.toISOString(), ...empty });
     }
     if (!cache || Date.now() - cache.at > CACHE_MS) {
       cache = { at: Date.now(), body: { ...(await readDebateShares(getVotePool())), enabled } };

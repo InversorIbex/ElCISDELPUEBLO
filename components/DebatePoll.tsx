@@ -17,7 +17,7 @@ type TurnstileApi = {
 };
 declare global { interface Window { turnstile?: TurnstileApi } }
 
-type Shares = { enabled?: boolean; open: boolean; hasVotes: boolean; shares: Record<DebateOptionId, number> };
+type Shares = { enabled?: boolean; open: boolean; blackout?: boolean; hasVotes: boolean; shares: Record<DebateOptionId, number> };
 type VoteStatus = { enabled: boolean; siteKey?: string };
 
 const pct = new Intl.NumberFormat("es-ES", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
@@ -107,7 +107,10 @@ export function DebatePoll({ headingLevel = 2, showPageLink = true }: { headingL
   }
 
   const Heading = headingLevel === 1 ? "h1" : "h2";
-  const statusText = !open
+  const blackout = Boolean(data?.blackout);
+  const statusText = !open && blackout
+    ? "La votación cerró al terminar la campaña. Por la veda electoral, el resultado se publica a partir de las 21:00 del domingo 29-N."
+    : !open
     ? "La votación está cerrada. Este es el resultado final."
     : voted
       ? "Gracias. Tu voto está registrado."
@@ -166,7 +169,7 @@ export function DebatePoll({ headingLevel = 2, showPageLink = true }: { headingL
       {error && <p role="alert" className={styles.error}>{error}</p>}
 
       <figure className={styles.chart}>
-        <figcaption>{data?.hasVotes ? "Porcentaje de votos de cada opción" : "Todavía no hay votos. El gráfico se llena con el primero."}</figcaption>
+        <figcaption>{blackout ? "Resultado oculto durante la veda electoral (hasta las 21:00 del 29-N)." : data?.hasVotes ? "Porcentaje de votos de cada opción" : "Todavía no hay votos. El gráfico se llena con el primero."}</figcaption>
         <div className={styles.cols} aria-hidden="true">
           {DEBATE_OPTIONS.map((o) => {
             const value = data?.hasVotes ? data.shares[o.id] : 0;

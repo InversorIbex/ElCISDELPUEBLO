@@ -4,11 +4,11 @@ import { JsonLd } from "@/components/JsonLd";
 import { DebatePoll } from "@/components/DebatePoll";
 import { DEBATE_OPTIONS, DEBATE_PATH, DEBATE_TOPICS } from "@/lib/debate";
 import { NATIONAL_PARTIES, partyPath } from "@/lib/parties";
-import { breadcrumbLd, faqLd } from "@/lib/seo";
+import { breadcrumbLd, debateEventLd, faqLd } from "@/lib/seo";
 
-const TITLE = "¿Quién ganó el debate a cuatro? Vota: Sánchez, Feijóo, Abascal o Colau";
+const TITLE = "¿Quién ganó el debate a cuatro? Sánchez, Feijóo, Abascal o Colau";
 const DESCRIPTION =
-  "Debate electoral de las elecciones generales del 29-N (26 de noviembre de 2026): Pedro Sánchez (PSOE), Alberto Núñez Feijóo (PP), Santiago Abascal (Vox) y Ada Colau (Frente Amplio). Vota quién crees que ganó y mira el porcentaje de cada candidato.";
+  "Debate electoral de las elecciones generales del 29-N (26 de noviembre de 2026): Pedro Sánchez (PSOE), Alberto Núñez Feijóo (PP), Santiago Abascal (Vox) y Ada Colau (Frente Amplio). La votación ya está cerrada: el resultado se publica tras la veda electoral, a las 21:00 del 29-N.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -24,13 +24,13 @@ export const metadata: Metadata = {
     type: "website",
     url: DEBATE_PATH,
     title: TITLE,
-    description: "Elige quién crees que ganó el debate electoral del 26-N (o ninguno) y mira el porcentaje de cada candidato.",
+    description: "Quién ganó el debate electoral del 26-N según los internautas: resultado a partir de las 21:00 del 29-N.",
     images: [{ url: "/debate/og-debate.jpg", width: 1200, height: 630, alt: "Pedro Sánchez, Alberto Núñez Feijóo, Santiago Abascal y Ada Colau: ¿quién ganó el debate?" }],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
-    description: "Vota quién ganó el debate electoral del 26-N y mira el porcentaje de cada candidato.",
+    description: "Quién ganó el debate electoral del 26-N: resultado a partir de las 21:00 del 29-N.",
     images: ["/debate/og-debate.jpg"],
   },
 };
@@ -39,7 +39,7 @@ const FAQ = [
   ["¿Cuándo es el debate a cuatro?", "El jueves 26 de noviembre de 2026 a las 22:00, tres días antes de las elecciones generales del domingo 29 de noviembre, en TVE, el Canal 24 Horas y RTVE Play."],
   ["¿Quiénes participaron en el debate?", "Pedro Sánchez (PSOE), Alberto Núñez Feijóo (PP), Santiago Abascal (Vox) y Ada Colau (Frente Amplio)."],
   ["¿De qué se habló en el debate?", `El debate se dividió en cinco bloques: ${DEBATE_TOPICS.join(", ").toLowerCase()}.`],
-  ["¿Hasta cuándo se puede votar quién ganó el debate?", "Hasta el sábado 28 de noviembre de 2026 a las 23:59, hora peninsular. Se admite un voto por navegador."],
+  ["¿Hasta cuándo se pudo votar quién ganó el debate?", "Hasta el final de la campaña, el viernes 27 de noviembre de 2026 a las 23:59 (hora peninsular). El resultado se publica a partir de las 21:00 del domingo 29-N, cuando termina la veda electoral."],
   ["¿Es una encuesta de intención de voto?", "No. Solo pregunta quién crees que lo hizo mejor en el debate. Es una votación voluntaria de internautas, no representativa, y solo se publica el porcentaje de cada opción, nunca el número de votos."],
 ] as const;
 
@@ -51,6 +51,7 @@ export default function Page() {
       <JsonLd nodes={[
         breadcrumbLd([{ name: "Inicio", path: "/" }, { name: "¿Quién ganó el debate?", path: DEBATE_PATH }]),
         faqLd(FAQ),
+        debateEventLd,
       ]} />
       <DebatePoll headingLevel={1} showPageLink={false} />
       <section className="page-section">

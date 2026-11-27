@@ -2,9 +2,9 @@
  * Votación «¿Quién ganó el debate?» del debate a cuatro del 26-N de 2026.
  *
  * Es una pregunta sobre la actuación en el debate, no sobre intención de voto.
- * Decisión del promotor (2026-11-26): se publican los porcentajes de esta
- * votación durante la campaña; los resultados del sondeo de intención de voto
- * siguen sujetos a la veda de `lib/electoral-blackout.ts`.
+ * Cambio del 2026-11-27: los porcentajes también quedan ocultos durante la
+ * veda de `lib/electoral-blackout.ts` (hasta las 21:00 del 29-N), por si la
+ * Junta Electoral lo considerase un sondeo (LOREG art. 69.7).
  *
  * Nunca se publica el número de votos: solo el porcentaje de cada opción.
  */
@@ -12,8 +12,11 @@ export const DEBATE_ID = "debate-2026-11-26";
 export const DEBATE_PATH = "/quien-gano-el-debate";
 export const DEBATE_START = "2026-11-26T22:00:00+01:00";
 export const DEBATE_END = "2026-11-27T00:00:00+01:00";
-/** Sábado 28-N a las 23:59:59 en la península (CET, UTC+1). */
-export const DEBATE_VOTE_CLOSES_AT = new Date("2026-11-28T22:59:59.999Z");
+/**
+ * Cierra al terminar la campaña: viernes 27-N a las 23:59:59 en la península
+ * (CET, UTC+1). Así no se vota durante la jornada de reflexión.
+ */
+export const DEBATE_VOTE_CLOSES_AT = new Date("2026-11-27T22:59:59.999Z");
 
 export type DebateOptionId = "sanchez" | "feijoo" | "abascal" | "colau" | "ninguno";
 export type DebateOption = {
@@ -53,6 +56,8 @@ export function isDebateVoteOpen(now = new Date()): boolean {
 export type DebateShares = {
   debateId: string;
   open: boolean;
+  /** true durante la veda: no se publican porcentajes. */
+  blackout: boolean;
   closesAt: string;
   hasVotes: boolean;
   /** Porcentaje con un decimal por opción. Suman 100,0 cuando hay votos. */

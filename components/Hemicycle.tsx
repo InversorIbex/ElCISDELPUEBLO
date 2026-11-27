@@ -9,10 +9,12 @@ export function Hemicycle({
   groups,
   unassigned = 0,
   label,
+  unassignedLabel = "Sin modelizar",
 }: {
   groups: SeatGroup[];
   unassigned?: number;
   label: string;
+  unassignedLabel?: string;
 }) {
   const assigned = groups.reduce((n, g) => n + g.seats, 0);
   if (assigned + unassigned !== 350)
@@ -21,7 +23,7 @@ export function Hemicycle({
     ...groups.flatMap((g) => Array.from({ length: g.seats }, () => g)),
     ...Array.from({ length: unassigned }, () => ({
       id: "unassigned",
-      name: "Sin modelizar",
+      name: unassignedLabel,
       color: "#dce2d7",
       seats: unassigned,
     })),
@@ -31,7 +33,7 @@ export function Hemicycle({
       <svg
         viewBox="0 0 420 250"
         role="img"
-        aria-label={`${label}. ${assigned} escaños asignados y ${unassigned} sin modelizar.`}
+        aria-label={`${label}. ${assigned} escaños asignados y ${unassigned} ${unassignedLabel.toLowerCase()}.`}
       >
         {hemicyclePoints(350).map((p, i) => (
           <circle key={i} cx={p.x} cy={p.y} r={4.1} fill={colors[i].color}>
@@ -67,7 +69,7 @@ export function Hemicycle({
               style={{ background: "#dce2d7" }}
               aria-hidden="true"
             />
-            <span>Sin modelizar</span>
+            <span>{unassignedLabel}</span>
             <strong>{unassigned}</strong>
           </div>
         )}

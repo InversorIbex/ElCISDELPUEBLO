@@ -4,16 +4,16 @@ import "./globals.css";
 import { isLiveVoteConfigured } from "@/lib/server/live-vote-configuration";
 import { LiveVotersCount } from "@/components/LiveResults";
 import { JsonLd } from "@/components/JsonLd";
-import { KEYWORDS, SITE_NAME, SITE_URL, debateEventLd, electionEventLd, organizationLd, websiteLd } from "@/lib/seo";
+import { KEYWORDS, SITE_NAME, SITE_URL, electionEventLd, organizationLd, websiteLd } from "@/lib/seo";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: SITE_NAME,
   title: {
-    default: "Encuesta elecciones generales 2026: vota y mira los resultados en vivo · El Pueblo Opina",
+    default: "Elecciones generales 2026: porra, resultados en directo y tu papeleta del 29-N · El Pueblo Opina",
     template: "%s · El Pueblo Opina",
   },
   description:
-    "¿A quién votarías en las elecciones generales del 29 de noviembre de 2026? Vota en el sondeo ciudadano, mira los resultados por provincia en vivo, el hemiciclo y las candidaturas oficiales de los partidos en tu circunscripción.",
+    "Elecciones generales del 29 de noviembre de 2026: haz tu porra del Congreso, descubre cuánto vale tu voto, mira tu papeleta y sigue el recuento en directo desde las 21:00. Candidaturas oficiales en las 52 circunscripciones.",
   keywords: KEYWORDS,
   alternates: { canonical: "/", languages: { "es-ES": "/" } },
   openGraph: {
@@ -21,13 +21,13 @@ export const metadata: Metadata = {
     locale: "es_ES",
     url: "/",
     siteName: SITE_NAME,
-    title: "¿A quién votarías el 29-N? Sondeo ciudadano de las elecciones generales 2026",
-    description: "Vota en tu provincia y mira en vivo cómo quedaría el Congreso. Candidaturas oficiales de todos los partidos en las 52 circunscripciones.",
+    title: "Haz tu porra del 29-N: ¿cómo quedará el Congreso?",
+    description: "Reparte los 350 escaños, compártelo y compáralo con el recuento oficial en directo. Cuánto vale tu voto, tu papeleta y la brújula electoral.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "¿A quién votarías el 29-N? · El Pueblo Opina",
-    description: "Sondeo ciudadano de las elecciones generales 2026: mapa por provincias, hemiciclo en vivo y candidaturas oficiales.",
+    title: "Haz tu porra del 29-N · El Pueblo Opina",
+    description: "Porra del Congreso, cuánto vale tu voto, tu papeleta y el recuento en directo de las elecciones generales 2026.",
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
   verification: {
@@ -43,7 +43,7 @@ export default function Layout({
   return (
     <html lang="es">
       <body>
-        <JsonLd nodes={[organizationLd, websiteLd, electionEventLd, debateEventLd]} />
+        <JsonLd nodes={[organizationLd, websiteLd, electionEventLd]} />
         <a className="skip" href="#contenido">
           Saltar al contenido
         </a>
@@ -68,16 +68,16 @@ export default function Layout({
           </Link>
           <nav aria-label="Navegación principal">
             <Link href="/">Inicio</Link>
+            <Link href="/porra-elecciones-2026">Porra 29-N</Link>
+            <Link href="/noche-electoral">Recuento en directo</Link>
+            <Link href="/cuanto-vale-mi-voto">Tu voto</Link>
+            <Link href="/mi-papeleta">Tu papeleta</Link>
+            <Link href="/brujula-electoral">Brújula</Link>
             <Link href="/encuesta-elecciones-generales-2026">Encuesta 2026</Link>
-            <Link href="/quien-gano-el-debate">Debate</Link>
-            <Link href="/resultados">Resultados</Link>
             <Link href="/partidos">Partidos</Link>
-            <Link href="/simulador">Simulador</Link>
-            <Link href="/candidaturas">Candidaturas</Link>
-            <Link href="/metodologia">Metodología</Link>
           </nav>
-          <Link className="button small" href="/participar">
-            Elegir mi zona <span>↗</span>
+          <Link className="button small" href="/porra-elecciones-2026">
+            Haz tu porra <span>↗</span>
           </Link>
         </header>
         <main id="contenido">{children}</main>
@@ -93,6 +93,18 @@ export default function Layout({
               </p>
               <p>
                 <Link href="/partidos">Partidos políticos 2026 ↗</Link>
+              </p>
+              <p>
+                <Link href="/simulador">Simulador de escaños D&apos;Hondt ↗</Link>
+              </p>
+              <p>
+                <Link href="/candidaturas">Candidaturas por provincia ↗</Link>
+              </p>
+              <p>
+                <Link href="/resultados">Resultados del sondeo ↗</Link>
+              </p>
+              <p>
+                <Link href="/quien-gano-el-debate">¿Quién ganó el debate? ↗</Link>
               </p>
               <p>
                 <Link href="/mapa">Explorador territorial ↗</Link>
