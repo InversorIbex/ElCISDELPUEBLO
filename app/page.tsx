@@ -5,12 +5,20 @@ import { communities, provinces, municipalities, displayName } from "@/lib/terri
 import Link from "next/link";
 import { EmptyState } from "@/components/EmptyState";
 import { isLiveVoteConfigured } from "@/lib/server/live-vote-configuration";
-import { DebatePoll } from "@/components/DebatePoll";
+import { PorraHemiciclo } from "@/components/PorraHemiciclo";
+import { VoteWeight } from "@/components/VoteWeight";
+import { Papeleta } from "@/components/Papeleta";
+import { NocheElectoral } from "@/components/NocheElectoral";
+import { BrujulaTeaser } from "@/components/Brujula";
 export default function Home() {
   const voteOpen = isLiveVoteConfigured();
   return (
     <>
-      <DebatePoll />
+      <PorraHemiciclo />
+      <VoteWeight />
+      <Papeleta />
+      <NocheElectoral />
+      <BrujulaTeaser />
       <section className="hero">
         <div className="eyebrow">
           <span className="dot" /> EL PUEBLO OPINA · OBSERVATORIO INDEPENDIENTE

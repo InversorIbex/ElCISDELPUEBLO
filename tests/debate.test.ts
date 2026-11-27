@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { DEBATE_OPTIONS, debatePercentages, isDebateOption, isDebateVoteOpen } from "../lib/debate.ts";
-import { DEBATE_SCHEMA_SQL, saveDebateVote } from "../lib/server/debate-vote.ts";
+import { DEBATE_SCHEMA_SQL, readDebateShares, saveDebateVote } from "../lib/server/debate-vote.ts";
 import { KEYWORDS, debateEventLd, ldJson } from "../lib/seo.ts";
 
 test("debate: cuatro candidatos y la opción Ninguno", () => {
@@ -22,9 +22,17 @@ test("debate: porcentajes con un decimal que suman 100", () => {
   assert.equal(debatePercentages({ otro: 5 }).hasVotes, false);
 });
 
-test("debate: la votación cierra el sábado 28-N a las 23:59 (hora peninsular)", () => {
-  assert.equal(isDebateVoteOpen(new Date("2026-11-28T22:59:59Z")), true);
-  assert.equal(isDebateVoteOpen(new Date("2026-11-28T23:00:00Z")), false);
+test("debate: la votación cierra al acabar la campaña, viernes 27-N a las 23:59 (hora peninsular)", () => {
+  assert.equal(isDebateVoteOpen(new Date("2026-11-27T22:59:59Z")), true);
+  assert.equal(isDebateVoteOpen(new Date("2026-11-27T23:00:00Z")), false);
+});
+
+test("debate: durante la veda no se leen ni publican porcentajes", async () => {
+  const pool = { connect: () => { throw new Error("NO_DB"); }, query: () => { throw new Error("NO_DB"); } } as never;
+  const r = await readDebateShares(pool, new Date("2026-11-28T12:00:00Z"));
+  assert.equal(r.blackout, true);
+  assert.equal(r.hasVotes, false);
+  assert.equal(r.open, false);
 });
 
 test("debate: el guardado rechaza fuera de plazo y opciones inválidas sin tocar la base", async () => {
@@ -47,10 +55,10 @@ test("debate: la migración y el esquema de arranque crean las mismas tablas", (
   for (const t of tables(migration)) assert.match(migration, new RegExp(`ALTER TABLE ${t.replace(".", "\\.")} ENABLE ROW LEVEL SECURITY`));
 });
 
-test("SEO del debate: palabras clave y datos estructurados", () => {
-  for (const k of ["quién ganó el debate", "debate a cuatro", "Pedro Sánchez", "Alberto Núñez Feijóo", "Santiago Abascal", "Ada Colau"])
+test("SEO: el debate sale de las palabras clave globales y conserva sus datos estructurados", () => {
+  for (const k of ["quién ganó el debate", "debate a cuatro"]) assert.ok(!KEYWORDS.includes(k), k);
+  for (const k of ["elecciones generales 2026", "resultados elecciones generales 2026", "porra elecciones", "cuánto vale mi voto", "dónde voto", "brújula electoral", "PSOE"])
     assert.ok(KEYWORDS.includes(k), k);
-  for (const k of ["elecciones generales 2026", "intención de voto", "PSOE"]) assert.ok(KEYWORDS.includes(k), k);
   const parsed = JSON.parse(ldJson(debateEventLd));
   assert.equal(parsed["@graph"][0].performer.length, 4);
   assert.equal(parsed["@graph"][0].startDate, "2026-11-26T22:00:00+01:00");

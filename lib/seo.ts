@@ -8,17 +8,23 @@ export const ELECTION_DATE = "2026-11-29";
 export const ELECTION_NAME = "Elecciones generales 2026";
 
 export const KEYWORDS = [
-  "elecciones generales 2026", "elecciones 29 noviembre 2026", "encuesta elecciones generales",
-  "sondeo elecciones 2026", "sondeo electoral", "encuesta online elecciones", "intención de voto",
-  "votar online sondeo", "a quién votarías", "candidaturas Congreso 2026", "partidos políticos 2026",
-  "listas electorales", "escaños Congreso", "hemiciclo", "D'Hondt", "resultados por provincia",
+  // Noche electoral y resultados (búsquedas del 29-N; actualizadas el 2026-11-27).
+  "resultados elecciones generales 2026", "resultados elecciones 29 noviembre", "resultados elecciones 29N",
+  "elecciones generales 2026 en directo", "recuento elecciones en directo", "escrutinio elecciones generales",
+  "noche electoral", "quién ha ganado las elecciones", "quién ganará las elecciones", "participación elecciones 2026",
+  "mayoría absoluta 176", "escaños Congreso 2026", "hemiciclo", "D'Hondt",
+  // Porra y predicción.
+  "porra elecciones", "porra elecciones generales 2026", "predicción elecciones 2026", "pronóstico elecciones",
+  // Herramientas de la jornada de reflexión.
+  "jornada de reflexión", "dónde voto", "mi colegio electoral", "horario colegios electorales",
+  "qué documento necesito para votar", "mi papeleta", "candidaturas por provincia", "listas electorales",
+  "cuánto vale mi voto", "habitantes por escaño", "valor del voto por provincia",
+  "brújula electoral", "test político", "a quién votar",
+  // Base.
+  "elecciones generales 2026", "elecciones 29 noviembre 2026", "encuesta elecciones generales", "sondeo elecciones 2026",
+  "intención de voto", "candidaturas Congreso 2026", "partidos políticos 2026", "resultados por provincia",
   "circunscripciones", "PP", "PSOE", "Vox", "Sumar", "Podemos", "Frente Amplio", "SALF",
-  // Debate a cuatro del 26-N (añadidas el 2026-11-26).
-  "debate electoral", "debate a cuatro", "debate electoral 2026", "debate 26 noviembre",
-  "quién ganó el debate", "quién ha ganado el debate", "ganador del debate", "encuesta debate electoral",
-  "votación debate", "debate RTVE elecciones", "candidatos elecciones generales 2026",
-  "candidatos a la presidencia del Gobierno", "Pedro Sánchez", "Alberto Núñez Feijóo",
-  "Santiago Abascal", "Ada Colau", "debate Sánchez Feijóo Abascal Colau",
+  "Pedro Sánchez", "Alberto Núñez Feijóo", "Santiago Abascal", "Ada Colau",
 ];
 
 export const abs = (path = "/") => `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;

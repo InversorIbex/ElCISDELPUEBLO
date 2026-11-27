@@ -9,6 +9,7 @@ import {
   isDebateVoteOpen,
   type DebateShares,
 } from "../debate.ts";
+import { inPollBlackout } from "../electoral-blackout.ts";
 
 /**
  * Límites de la votación del debate: 1 voto por credencial anónima de
@@ -135,8 +136,10 @@ export async function saveDebateVote(pool: Pool, secret: string, vote: DebateVot
   }
 }
 
-/** Lee los contadores y devuelve solo porcentajes: el recuento no sale de aquí. */
+/** Lee los contadores y devuelve solo porcentajes: el recuento no sale de aquí. Nada durante la veda. */
 export async function readDebateShares(pool: Pool, now = new Date()): Promise<DebateShares> {
+  const base = { debateId: DEBATE_ID, open: isDebateVoteOpen(now), closesAt: DEBATE_VOTE_CLOSES_AT.toISOString() };
+  if (inPollBlackout(now)) return { ...base, blackout: true, ...debatePercentages({}) };
   await ensureDebateSchema(pool);
   const r = await pool.query<{ option_id: string; n: string }>(
     "SELECT option_id, n::text AS n FROM poll_private.debate_counts WHERE debate_id=$1",
@@ -144,5 +147,5 @@ export async function readDebateShares(pool: Pool, now = new Date()): Promise<De
   );
   const counts = Object.fromEntries(r.rows.map((row) => [row.option_id, Number(row.n)]));
   const { hasVotes, shares } = debatePercentages(counts);
-  return { debateId: DEBATE_ID, open: isDebateVoteOpen(now), closesAt: DEBATE_VOTE_CLOSES_AT.toISOString(), hasVotes, shares };
+  return { ...base, blackout: false, hasVotes, shares };
 }
