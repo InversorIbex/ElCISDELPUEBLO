@@ -82,6 +82,66 @@
   border-bottom: 1px solid var(--line);
   font-size: 14px;
 }
+.who {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.bar {
+  display: flex;
+  height: 10px;
+  background: #e3e7e1;
+  overflow: hidden;
+}
+.bar > span {
+  display: block;
+  height: 100%;
+}
+.split {
+  font-size: 11px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.search {
+  display: grid;
+  gap: 4px;
+  max-width: 320px;
+  margin-top: 12px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.search input {
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  font: inherit;
+  font-size: 14px;
+  background: #fff;
+  color: var(--ink);
+}
+.more {
+  margin-top: 12px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--ink);
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.more:hover {
+  background: var(--ink);
+  color: #fff;
+}
+.search input:focus-visible,
+.more:focus-visible {
+  outline: 3px solid #b36824;
+  outline-offset: 2px;
+}
 .me {
   background: #e8ece4;
 }

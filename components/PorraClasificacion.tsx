@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Script from "next/script";
-import { PORRA_CLOSES_AT, PORRA_PATH, cleanAlias } from "@/lib/porra";
+import { PORRA_CLOSES_AT, PORRA_PATH, TOTAL_SEATS, cleanAlias, decodePrediction, ranking as seatsOf } from "@/lib/porra";
 import styles from "./PorraClasificacion.module.css";
 
 type TurnstileApi = {
@@ -16,7 +16,7 @@ type State = {
   enabled: boolean; open: boolean; rankingFrom: string;
   mine: { alias: string; code: string } | null;
   recuentoStatus?: string | null; scrutinized?: number | null;
-  ranking: Row[]; total: number; myPosition: Row | null;
+  ranking: Row[]; matches?: number; total: number; myPosition: Row | null;
 };
 
 const userErrors: Record<string, string> = {
@@ -47,25 +47,47 @@ export function PorraClasificacion({ code, onLoad }: { code: string | null; onLo
   const [msg, setMsg] = useState("");
   const [error, setError] = useState("");
   const [scriptReady, setScriptReady] = useState(false);
+  const [rows, setRows] = useState<Row[]>([]);
+  const [query, setQuery] = useState("");
+  const [loadingMore, setLoadingMore] = useState(false);
   const widgetRef = useRef<HTMLDivElement | null>(null);
   const widgetId = useRef<string | null>(null);
 
-  const load = useCallback(() => fetch("/api/porra", { cache: "no-store", credentials: "same-origin" })
-    .then((r) => r.json())
-    .then((d) => { if (d && typeof d.open === "boolean") setState(d as State); })
-    .catch(() => {}), []);
+  const fetchPage = useCallback((from: number, q: string) =>
+    fetch(`/api/porra?desde=${from}&q=${encodeURIComponent(q)}`, { cache: "no-store", credentials: "same-origin" })
+      .then((r) => r.json() as Promise<State>), []);
+  const load = useCallback(() => fetchPage(0, query)
+    .then((d) => { if (d && typeof d.open === "boolean") { setState(d); setRows(d.ranking); } })
+    .catch(() => {}), [fetchPage, query]);
+  async function more() {
+    setLoadingMore(true);
+    try {
+      const d = await fetchPage(rows.length, query);
+      setRows((prev) => [...prev, ...d.ranking.filter((r) => !prev.some((x) => x.alias === r.alias))]);
+    } catch { /* sin conexión */ } finally { setLoadingMore(false); }
+  }
 
+  // Una vez al cargar: estado de la votación.
   useEffect(() => {
-    void load();
     fetch("/api/participaciones", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((s) => setSiteKey(s?.enabled ? s.siteKey : undefined))
       .catch(() => {});
+  }, []);
+  // Porras: al cargar y al buscar (con pausa al escribir).
+  useEffect(() => {
+    const t = setTimeout(() => void load(), query ? 300 : 0);
+    return () => clearTimeout(t);
+  }, [load, query]);
+  // Durante el recuento se refresca cada minuto, salvo si alguien está mirando más allá de la primera página.
+  const refreshing = Boolean(state && Date.now() >= Date.parse(state.rankingFrom));
+  useEffect(() => {
+    if (!refreshing) return;
     const t = setInterval(() => {
-      if (document.visibilityState === "visible" && Date.now() >= Date.parse(state?.rankingFrom ?? "2100-01-01")) void load();
+      if (document.visibilityState === "visible" && rows.length <= 50) void load();
     }, 60_000);
     return () => clearInterval(t);
-  }, [load, state?.rankingFrom]);
+  }, [refreshing, load, rows.length]);
 
   useEffect(() => { if (state?.mine && !alias) setAlias(state.mine.alias); }, [state?.mine, alias]);
 
@@ -160,7 +182,7 @@ export function PorraClasificacion({ code, onLoad }: { code: string | null; onLo
         <p className={styles.note}>Ya no se pueden apuntar porras. La clasificación se publica a partir de las 21:00 (hora peninsular), con el recuento.</p>
       )}
 
-      {rankingOpen && (state.ranking.length ? (
+      {rankingOpen && (state.total ? (
         <>
           <p className={styles.note}>
             {state.recuentoStatus === "final" ? "Con el 100 % escrutado" : `Con el ${state.scrutinized ?? 0} % escrutado`} · {state.total} porras.
@@ -169,16 +191,35 @@ export function PorraClasificacion({ code, onLoad }: { code: string | null; onLo
           {state.myPosition && (
             <p className={styles.mine}>Vas <strong>{state.myPosition.position}.º</strong> de {state.total} con <strong>{state.myPosition.points}</strong> puntos.</p>
           )}
+          <label className={styles.search}>
+            <span>Busca un apodo</span>
+            <input type="search" value={query} maxLength={24} onChange={(e) => setQuery(e.target.value)} placeholder="Ej.: tu cuñado" />
+          </label>
           <ol className={styles.table}>
-            {state.ranking.map((r) => (
-              <li key={r.alias} className={state.mine?.alias === r.alias ? styles.me : undefined}>
-                <span className={styles.pos}>{r.position}</span>
-                <a className={styles.alias} href={`${PORRA_PATH}?p=${r.code}`}>{r.alias}</a>
-                <span className={styles.pts}>{r.points}<small> pts</small></span>
-                <span className={styles.hits}>{r.hits} escaños</span>
-              </li>
-            ))}
+            {rows.map((r) => {
+              const seats = seatsOf(decodePrediction(r.code) ?? {});
+              return (
+                <li key={r.alias} className={state.mine?.alias === r.alias ? styles.me : undefined}>
+                  <span className={styles.pos}>{r.position}</span>
+                  <span className={styles.who}>
+                    <a className={styles.alias} href={`${PORRA_PATH}?p=${r.code}`}>{r.alias}</a>
+                    <span className={styles.bar} role="img" aria-label={seats.map((x) => `${x.name} ${x.seats}`).join(", ")}>
+                      {seats.map((x) => <span key={x.id} style={{ width: `${(x.seats / TOTAL_SEATS) * 100}%`, background: x.color }} title={`${x.name} ${x.seats}`} />)}
+                    </span>
+                    <span className={styles.split}>{seats.slice(0, 4).map((x) => `${x.name} ${x.seats}`).join(" · ")}</span>
+                  </span>
+                  <span className={styles.pts}>{r.points}<small> pts</small></span>
+                  <span className={styles.hits}>{r.hits} escaños</span>
+                </li>
+              );
+            })}
           </ol>
+          {!rows.length && <p className={styles.note}>Ningún apodo coincide con «{query}».</p>}
+          {rows.length < (state.matches ?? state.total) && (
+            <button type="button" className={styles.more} onClick={more} disabled={loadingMore}>
+              {loadingMore ? "Cargando…" : `Ver más (${(state.matches ?? state.total) - rows.length} porras)`}
+            </button>
+          )}
         </>
       ) : <p className={styles.note}>La clasificación aparece en cuanto el recuento oficial tenga escaños.</p>)}
     </section>
