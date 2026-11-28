@@ -32,4 +32,13 @@ Ejemplo de `recuento.json` en la cabecera de `scripts/push-recuento.mjs`. Los pa
 
 ## Porra
 
-La porra no se guarda en el servidor. Cada persona la tiene en su navegador y en su enlace. Cuando el recuento tiene escaños, la porra calcula su puntuación: el 80 % del total va por escaños bien colocados, 12 puntos por acertar el primer partido y 8 por acertar si hay mayoría absoluta.
+Cada porra vive en su enlace. Sumar no se presenta con marca propia: no está en la porra, y sus escaños de 2023 y los enlaces antiguos con `SUMAR` pasan a Frente Amplio. Compromís va en `OTROS` en el recuento. Cuando el recuento tiene escaños, la porra calcula su puntuación: el 80 % del total va por escaños bien colocados, 12 puntos por acertar el primer partido y 8 por acertar si hay mayoría absoluta.
+
+### Clasificación
+
+- Quien quiere apunta su porra con un apodo (`POST /api/porra`, con Turnstile y la credencial anónima del navegador). Una porra por navegador y se puede cambiar hasta las 20:00 peninsulares (`PORRA_CLOSES_AT`), cuando salen los sondeos a pie de urna. Máximo 5 porras nuevas por conexión y hora. Los apodos no se repiten.
+- Se guarda en `poll_private.porra_entries`: apodo, porra y HMAC del navegador. La IP solo como HMAC en `porra_ip_window`.
+- Antes de las 21:00 (`BLACKOUT_END`) `GET /api/porra` solo devuelve la porra apuntada desde ese navegador: ni porras ajenas ni cuántas hay. Después, y con escaños en el recuento, devuelve las 100 primeras y la posición propia. Nunca devuelve sumas ni medias.
+- Desempate: menos escaños de error y, después, quien la apuntó (o cambió) antes.
+- Para quitar un apodo ofensivo: `UPDATE poll_private.porra_entries SET hidden=true WHERE porra_id='congreso-2026-11-29' AND lower(alias)=lower('…');`
+

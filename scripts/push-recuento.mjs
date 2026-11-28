@@ -4,7 +4,7 @@
  *
  *   RECUENTO_ADMIN_TOKEN=... node scripts/push-recuento.mjs recuento.json [https://www.laopiniondelpueblo.eu]
  *
- * recuento.json (ids de partido: PSOE, PP, VOX, FA, SUMAR, PODEMOS, SALF, ERC,
+ * recuento.json (ids de partido: PSOE, PP, VOX, FA, PODEMOS, SALF, ERC,
  * JUNTS, BILDU, PNV, BNG, CC, UPN, OTROS):
  * {
  *   "scrutinized": 62.4,

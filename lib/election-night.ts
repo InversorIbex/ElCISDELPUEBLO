@@ -115,3 +115,11 @@ export function publicRecuento(payload: RecuentoPayload | null, configured: bool
     parties,
   };
 }
+
+/** Escaños del recuento en el formato de la porra, o null si aún no hay escaños publicados. */
+export function recuentoAsPrediction(r: RecuentoPublic | null): Record<string, number> | null {
+  if (!r || (r.status !== "live" && r.status !== "final") || !r.parties.length) return null;
+  const out: Record<string, number> = Object.fromEntries(PORRA_PARTIES.map((p) => [p.id, 0]));
+  for (const p of r.parties) out[p.id in out ? p.id : "OTROS"] += p.seats;
+  return out;
+}

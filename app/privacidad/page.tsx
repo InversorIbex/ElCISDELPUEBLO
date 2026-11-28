@@ -102,6 +102,13 @@ export default function Page() {
             consentimiento.
           </p>
         </details>
+        <h2>La porra del hemiciclo</h2>
+        <p>
+          Si apuntas tu porra en la clasificación, guardamos el apodo que eliges, tu reparto de escaños y un hash de tu navegador
+          (para que puedas cambiarla) y, aparte, un hash de tu conexión durante una hora para frenar abusos. El apodo y la porra se
+          publican en la clasificación a partir de las 21:00 del 29-N. No hace falta dar tu nombre real. Para que la retiremos, escríbenos
+          indicando el apodo. Es una predicción, no una opinión de voto, y nunca se publican sumas ni medias de porras.
+        </p>
         <h2>Conservación y retirada</h2>
         <p>
           Para prevenir duplicados se prevé conservar por separado hashes de IP y navegador durante el día civil de Madrid, y los hashes de solicitudes hasta 48 horas, con un proceso de limpieza pendiente de activar y verificar. Los identificadores móviles antifraude y las respuestas requieren plazos de fin de campaña y retirada todavía pendientes. Los plazos definitivos deben aprobarse antes de abrir. La versión pública aún no dispone de un procedimiento comprobado para localizar y suprimir una papeleta individual tras retirar el consentimiento. Antes de recoger opiniones políticas deben definirse la retirada del consentimiento, la gestión de derechos, las copias de seguridad y las publicaciones agregadas. No prometemos identificar una papeleta si técnicamente no es posible.

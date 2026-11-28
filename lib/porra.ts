@@ -1,24 +1,41 @@
 /**
  * La porra del hemiciclo: cada persona reparte los 350 escaños como cree que
  * quedarán el 29-N. Es una predicción individual, no un sondeo:
- * - No se guarda en el servidor ni se agrega con las de otras personas.
- * - Vive en el navegador y en el enlace que cada uno decide compartir.
- * - Tras el escrutinio oficial se compara con el resultado (puntuación propia).
+ * - Vive en el enlace que cada uno decide compartir.
+ * - Quien quiera la apunta con un apodo para entrar en la clasificación. Las
+ *   porras apuntadas no se publican ni se agregan hasta el cierre de los
+ *   colegios (fin de la veda); después solo se publica la clasificación.
+ * - Tras el escrutinio oficial se compara con el resultado.
  */
 import { GROUPS, HEMICYCLE_ORDER, normalize } from "./party-groups.ts";
+import { BLACKOUT_END } from "./electoral-blackout.ts";
 import previous from "../data/elections/congress-2023-results.json" with { type: "json" };
 
 export const TOTAL_SEATS = 350;
 export const MAJORITY = 176;
 export const PORRA_PATH = "/porra-elecciones-2026";
+/** Se pueden apuntar porras hasta las 20:00 peninsulares, cuando salen los sondeos a pie de urna. */
+export const PORRA_CLOSES_AT = new Date("2026-11-29T19:00:00Z");
+/** La clasificación se publica al terminar la veda (21:00 peninsulares). */
+export const PORRA_RANKING_FROM = BLACKOUT_END;
+export const isPorraOpen = (now = new Date()) => now < PORRA_CLOSES_AT;
 
 export type PorraParty = { id: string; name: string; color: string };
 
 const OTHERS: PorraParty = { id: "OTROS", name: "Otros", color: "#8E959C" };
 
+/**
+ * Sumar no se presenta con marca propia el 29-N (BOE de candidaturas
+ * proclamadas): su espacio concurre como Frente Amplio. Compromís y las
+ * coaliciones canarias que lo citan cuentan en «Otros».
+ */
+const NOT_RUNNING = new Set(["SUMAR"]);
+/** Grupo que hereda los escaños de 2023 y las porras antiguas de un partido que ya no se presenta. */
+const SUCCESSOR: Record<string, string> = { SUMAR: "FA" };
+
 /** Orden izquierda → derecha del hemiciclo, y «Otros» al final. */
 export const PORRA_PARTIES: readonly PorraParty[] = [
-  ...HEMICYCLE_ORDER.map((id) => {
+  ...HEMICYCLE_ORDER.filter((id) => !NOT_RUNNING.has(id)).map((id) => {
     const g = GROUPS.find((x) => x.id === id)!;
     return { id: g.id, name: g.name, color: g.color };
   }),
@@ -37,7 +54,8 @@ export const RESULT_2023: Prediction = (() => {
   for (const party of previous.parties) {
     const n = normalize(party.name);
     const g = GROUPS.find((x) => x.re.test(n));
-    out[g ? g.id : OTHERS.id] += party.seats;
+    const id = g ? (SUCCESSOR[g.id] ?? g.id) : OTHERS.id;
+    out[IDS.has(id) ? id : OTHERS.id] += party.seats;
   }
   return out;
 })();
@@ -52,18 +70,52 @@ export function encodePrediction(p: Prediction): string {
     .join(".");
 }
 
-/** Lee una porra del enlace. Devuelve null si no es válida o no suma 350. */
+/**
+ * Lee una porra del enlace. Devuelve null si no es válida o no suma 350.
+ * Los enlaces antiguos con «SUMAR» siguen valiendo: sus escaños pasan a Frente Amplio.
+ */
 export function decodePrediction(text: string | null | undefined): Prediction | null {
   if (!text || text.length > 300) return null;
   const out = emptyPrediction();
+  const seen = new Set<string>();
   for (const part of text.split(".")) {
     const m = /^([A-Z]{2,8})-(\d{1,3})$/.exec(part);
-    if (!m || !IDS.has(m[1])) return null;
+    if (!m || seen.has(m[1])) return null;
+    seen.add(m[1]);
+    const id = SUCCESSOR[m[1]] ?? m[1];
+    if (!IDS.has(id)) return null;
     const n = Number(m[2]);
-    if (n > TOTAL_SEATS || out[m[1]] !== 0) return null;
-    out[m[1]] = n;
+    if (n > TOTAL_SEATS) return null;
+    out[id] += n;
   }
   return isComplete(out) ? out : null;
+}
+
+/** Apodo para la clasificación: 2-24 caracteres, letras, números, espacios y . _ - */
+export function cleanAlias(input: unknown): string | null {
+  if (typeof input !== "string") return null;
+  const alias = input.normalize("NFC").replace(/\s+/g, " ").trim();
+  if (alias.length < 2 || alias.length > 24) return null;
+  if (!/^[\p{L}\p{N}][\p{L}\p{N} ._-]*$/u.test(alias)) return null;
+  if (/https?|www\.|\.(com|es|net|org|eu)\b/i.test(alias)) return null;
+  return alias;
+}
+
+export type RankedEntry = { alias: string; code: string; points: number; hits: number; error: number; at: string };
+
+/**
+ * Clasificación: más puntos; a igualdad, menos escaños de error; y si sigue el
+ * empate, quien la apuntó antes.
+ */
+export function rankEntries(entries: { alias: string; code: string; at: string }[], actual: Prediction): RankedEntry[] {
+  return entries
+    .flatMap((e) => {
+      const p = decodePrediction(e.code);
+      if (!p) return [];
+      const s = scorePrediction(p, actual);
+      return [{ alias: e.alias, code: encodePrediction(p), points: s.points, hits: s.hits, error: s.error, at: e.at }];
+    })
+    .sort((a, b) => b.points - a.points || a.error - b.error || a.at.localeCompare(b.at));
 }
 
 /** Partidos de la porra ordenados por escaños (para textos e imágenes). */
