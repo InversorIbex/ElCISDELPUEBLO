@@ -12,6 +12,13 @@
   align-items: flex-start;
   gap: 20px;
 }
+.headLinks {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  flex: none;
+}
 .title {
   font-family: var(--serif);
   font-weight: 400;
@@ -228,6 +235,9 @@
   .head {
     flex-direction: column;
     gap: 6px;
+  }
+  .headLinks {
+    align-items: flex-start;
   }
   .rows li {
     grid-template-columns: 10px 1fr 34px 34px 46px 34px 34px;

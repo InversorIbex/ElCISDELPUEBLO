@@ -15,7 +15,7 @@ const PAGE = 50;
 const json = (body: unknown, status = 200, extra: Record<string, string> = {}) =>
   Response.json(body, { status, headers: { "Cache-Control": "no-store", ...extra } });
 
-let cache: { at: number; ranking: RankedEntry[]; status: string; scrutinized: number | null } | null = null;
+let cache: { at: number; ranking: RankedEntry[]; status: string; scrutinized: number | null; scored: boolean } | null = null;
 const CACHE_MS = 20_000;
 
 async function ranking() {
@@ -23,8 +23,8 @@ async function ranking() {
   const pool = getVotePool();
   const recuento = publicRecuento(await readRecuento(pool), true);
   const actual = recuentoAsPrediction(recuento);
-  const list = actual ? await readPorraRanking(pool, actual) : [];
-  cache = { at: Date.now(), ranking: list, status: recuento.status, scrutinized: recuento.scrutinized };
+  const list = await readPorraRanking(pool, actual);
+  cache = { at: Date.now(), ranking: list, status: recuento.status, scrutinized: recuento.scrutinized, scored: Boolean(actual) };
   return cache;
 }
 
@@ -50,7 +50,7 @@ export async function GET(req: Request) {
     const found = q ? all.filter((x) => x.alias.toLowerCase().includes(q)) : all;
     return json({
       ...base, mine,
-      recuentoStatus: r?.status ?? null, scrutinized: r?.scrutinized ?? null,
+      recuentoStatus: r?.status ?? null, scrutinized: r?.scrutinized ?? null, scored: r?.scored ?? false,
       ranking: found.slice(from, from + PAGE),
       matches: found.length,
       total: list.length,

@@ -14,6 +14,7 @@ import previous from "../data/elections/congress-2023-results.json" with { type:
 export const TOTAL_SEATS = 350;
 export const MAJORITY = 176;
 export const PORRA_PATH = "/porra-elecciones-2026";
+export const PORRA_RANKING_PATH = "/porra-elecciones-2026/clasificacion";
 /** Se pueden apuntar porras hasta las 20:00 peninsulares, cuando salen los sondeos a pie de urna. */
 export const PORRA_CLOSES_AT = new Date("2026-11-29T19:00:00Z");
 /** La clasificación se publica al terminar la veda (21:00 peninsulares). */
@@ -101,21 +102,22 @@ export function cleanAlias(input: unknown): string | null {
   return alias;
 }
 
-export type RankedEntry = { alias: string; code: string; points: number; hits: number; error: number; at: string };
+/** points/hits/error son null mientras el recuento no tenga escaños. */
+export type RankedEntry = { alias: string; code: string; points: number | null; hits: number | null; error: number | null; at: string };
 
 /**
  * Clasificación: más puntos; a igualdad, menos escaños de error; y si sigue el
- * empate, quien la apuntó antes.
+ * empate, quien la apuntó antes. Sin recuento, por orden de llegada.
  */
-export function rankEntries(entries: { alias: string; code: string; at: string }[], actual: Prediction): RankedEntry[] {
+export function rankEntries(entries: { alias: string; code: string; at: string }[], actual: Prediction | null): RankedEntry[] {
   return entries
     .flatMap((e) => {
       const p = decodePrediction(e.code);
       if (!p) return [];
-      const s = scorePrediction(p, actual);
-      return [{ alias: e.alias, code: encodePrediction(p), points: s.points, hits: s.hits, error: s.error, at: e.at }];
+      const s = actual ? scorePrediction(p, actual) : null;
+      return [{ alias: e.alias, code: encodePrediction(p), points: s?.points ?? null, hits: s?.hits ?? null, error: s?.error ?? null, at: e.at }];
     })
-    .sort((a, b) => b.points - a.points || a.error - b.error || a.at.localeCompare(b.at));
+    .sort((a, b) => (b.points ?? 0) - (a.points ?? 0) || (a.error ?? 0) - (b.error ?? 0) || a.at.localeCompare(b.at));
 }
 
 /** Partidos de la porra ordenados por escaños (para textos e imágenes). */

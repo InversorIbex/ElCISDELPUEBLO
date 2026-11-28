@@ -56,3 +56,13 @@ test("porra: plazos y recuento", () => {
   assert.deepEqual(Object.keys(a).sort(), Object.keys(emptyPrediction()).sort());
   assert.ok(PORRA_SCHEMA_SQL.some((s) => s.includes("REVOKE ALL")));
 });
+
+test("porra: sin recuento se listan todas por orden de llegada y sin puntos", () => {
+  const code = encodePrediction(RESULT_2023);
+  const r = rankEntries([
+    { alias: "segunda", code, at: "2026-11-28T10:00:00.000Z" },
+    { alias: "primera", code, at: "2026-11-28T09:00:00.000Z" },
+  ], null);
+  assert.deepEqual(r.map((x) => x.alias), ["primera", "segunda"]);
+  assert.equal(r[0].points, null);
+});

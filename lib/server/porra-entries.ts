@@ -139,8 +139,8 @@ export async function readMyPorra(pool: Pool, secret: string, browserToken: stri
   return r.rows[0] ?? null;
 }
 
-/** Clasificación completa frente al recuento. Vacía antes de que acabe la veda. */
-export async function readPorraRanking(pool: Pool, actual: Prediction, now = new Date()): Promise<RankedEntry[]> {
+/** Todas las porras, puntuadas si ya hay recuento. Vacía antes de que acabe la veda. */
+export async function readPorraRanking(pool: Pool, actual: Prediction | null, now = new Date()): Promise<RankedEntry[]> {
   if (now < PORRA_RANKING_FROM) return [];
   await ensurePorraSchema(pool);
   const r = await pool.query<{ alias: string; code: string; at: Date }>(

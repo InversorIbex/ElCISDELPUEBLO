@@ -24,6 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     page("/", 1, "hourly", { live: true, images: ["/opengraph-image"] }),
     page("/noche-electoral", 1, "hourly", { live: true }),
     page("/porra-elecciones-2026", 0.95, "hourly", { live: true, images: ["/api/porra-imagen"] }),
+    page("/porra-elecciones-2026/clasificacion", 0.9, "hourly", { live: true }),
     page("/mi-papeleta", 0.95, "daily"),
     page("/cuanto-vale-mi-voto", 0.9, "daily"),
     page("/brujula-electoral", 0.9, "daily"),
