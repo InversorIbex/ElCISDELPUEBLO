@@ -3,13 +3,14 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Hemicycle } from "@/components/Hemicycle";
 import { ShareButtons } from "@/components/ShareButtons";
+import { PorraClasificacion } from "@/components/PorraClasificacion";
 import {
   MAJORITY, PORRA_PARTIES, PORRA_PATH, RESULT_2023, TOTAL_SEATS,
   assigned, decodePrediction, emptyPrediction, encodePrediction, ranking, scorePrediction, summaryText,
   type Prediction,
 } from "@/lib/porra";
 import { SITE_URL } from "@/lib/seo";
-import type { RecuentoPublic } from "@/lib/election-night";
+import { recuentoAsPrediction, type RecuentoPublic } from "@/lib/election-night";
 import styles from "./PorraHemiciclo.module.css";
 
 export function PorraHemiciclo({ headingLevel = 2, initial = null, showPageLink = true }: {
@@ -22,8 +23,8 @@ export function PorraHemiciclo({ headingLevel = 2, initial = null, showPageLink 
   const [touched, setTouched] = useState(false);
   const [recuento, setRecuento] = useState<RecuentoPublic | null>(null);
 
-  // La porra no se guarda en ningún sitio: vive en el enlace. En la página de la
-  // porra, la dirección se actualiza para que recargar o guardar el enlace la conserve.
+  // La porra vive en el enlace (y, si la persona quiere, en la clasificación).
+  // En la página de la porra, la dirección se actualiza para que recargar o guardar el enlace la conserve.
   useEffect(() => {
     if (!touched || !isPage || assigned(p) !== TOTAL_SEATS) return;
     window.history.replaceState(null, "", `${PORRA_PATH}?p=${encodePrediction(p)}`);
@@ -54,11 +55,16 @@ export function PorraHemiciclo({ headingLevel = 2, initial = null, showPageLink 
     });
   };
   const fillOthers = () => edit("OTROS", p.OTROS + left);
-  const url = `${SITE_URL}${PORRA_PATH}?p=${encodePrediction(p)}`;
+  const code = encodePrediction(p);
+  const url = `${SITE_URL}${PORRA_PATH}?p=${code}`;
+  const image = { url: `/api/porra-imagen?p=${code}`, filename: "mi-porra-29N.png" };
+  const loadCode = (c: string) => {
+    const q = decodePrediction(c);
+    if (!q) return;
+    setFromLink(false); setTouched(true); setP(q);
+  };
 
-  const actual: Prediction | null = recuento && (recuento.status === "live" || recuento.status === "final") && recuento.parties.length
-    ? { ...emptyPrediction(), ...Object.fromEntries(recuento.parties.map((x) => [x.id, x.seats])) }
-    : null;
+  const actual: Prediction | null = recuentoAsPrediction(recuento);
   const score = actual && complete ? scorePrediction(p, actual) : null;
 
   const Heading = headingLevel === 1 ? "h1" : "h2";
@@ -98,7 +104,7 @@ export function PorraHemiciclo({ headingLevel = 2, initial = null, showPageLink 
             </p>
           </div>
           {complete ? (
-            <ShareButtons label="Comparte tu porra" text={summaryText(p)} url={url} />
+            <ShareButtons label="Comparte tu porra" text={summaryText(p)} url={url} image={image} />
           ) : (
             <p className={styles.pending}>
               Faltan <strong>{left}</strong> escaños.{" "}
@@ -128,8 +134,9 @@ export function PorraHemiciclo({ headingLevel = 2, initial = null, showPageLink 
             ))}
           </ul>
           <p className={styles.note}>
-            «Partir de 2023» carga los escaños oficiales de las generales de 2023 (PSC dentro de PSOE). Tu porra solo existe en su enlace:
-            guárdalo o compártelo y ábrelo el domingo a partir de las 21:00 para ver tu puntuación. No recogemos porras.
+            «Partir de 2023» carga los escaños oficiales de las generales de 2023 (PSC dentro de PSOE; los de Sumar, en Frente Amplio,
+            porque Sumar no se presenta con marca propia el 29-N). Tu porra vive en su enlace: guárdalo o compártelo
+            {isPage ? ", o apúntala abajo con un apodo para entrar en la clasificación." : "."}
           </p>
         </div>
       </div>
@@ -145,14 +152,16 @@ export function PorraHemiciclo({ headingLevel = 2, initial = null, showPageLink 
                 {score.winnerRight ? " Acertaste quién queda primero." : " Fallaste el primer partido."}
                 {score.majorityRight ? " Y acertaste si hay mayoría absoluta." : " Y fallaste si hay mayoría absoluta."}
               </p>
-              <ShareButtons label="Presume de porra" text={`He sacado ${score.points}/100 en la porra del 29-N con ${score.hits} escaños acertados. ¿Y tú?`} url={url} />
+              <ShareButtons label="Presume de porra" text={`He sacado ${score.points}/100 en la porra del 29-N con ${score.hits} escaños acertados. ¿Y tú?`} url={url} image={image} />
             </>
           ) : <p>Completa los 350 escaños para ver tu puntuación frente al recuento.</p>}
           <Link className="text-link" href="/noche-electoral">Ver el recuento completo ↗</Link>
         </div>
       )}
+      {isPage && <PorraClasificacion code={complete ? code : null} onLoad={loadCode} />}
       <p className={styles.legal}>
-        <strong>Predicción personal, no un sondeo.</strong> No guardamos porras en el servidor ni publicamos agregados.
+        <strong>Predicción personal, no un sondeo.</strong> Solo guardamos las porras que alguien apunta con un apodo, y nunca publicamos
+        sumas ni medias. La clasificación se publica a partir de las 21:00 del 29-N.
       </p>
     </section>
   );
