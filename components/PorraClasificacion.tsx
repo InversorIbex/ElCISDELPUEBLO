@@ -1,7 +1,8 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Script from "next/script";
-import { PORRA_CLOSES_AT, PORRA_PATH, TOTAL_SEATS, cleanAlias, decodePrediction, ranking as seatsOf } from "@/lib/porra";
+import Link from "next/link";
+import { PORRA_CLOSES_AT, PORRA_RANKING_PATH, cleanAlias } from "@/lib/porra";
 import styles from "./PorraClasificacion.module.css";
 
 type TurnstileApi = {
@@ -11,12 +12,12 @@ type TurnstileApi = {
 };
 declare global { interface Window { turnstile?: TurnstileApi } }
 
-type Row = { position: number; alias: string; code: string; points: number; hits: number; error: number };
+type Row = { position: number; alias: string; points: number | null };
 type State = {
   enabled: boolean; open: boolean; rankingFrom: string;
   mine: { alias: string; code: string } | null;
   recuentoStatus?: string | null; scrutinized?: number | null;
-  ranking: Row[]; matches?: number; total: number; myPosition: Row | null;
+  scored?: boolean; total: number; myPosition: Row | null;
 };
 
 const userErrors: Record<string, string> = {
@@ -34,8 +35,8 @@ const closesText = PORRA_CLOSES_AT.toLocaleString("es-ES", {
 });
 
 /**
- * Apuntarse a la clasificación de la porra y, tras la veda, verla. Antes de
- * las 21:00 del 29-N no se muestra ninguna porra ajena ni cuántas hay.
+ * Apuntarse a la clasificación de la porra y botón a la página con la porra de
+ * todos. Antes de las 21:00 del 29-N no se muestra ninguna porra ajena ni cuántas hay.
  */
 export function PorraClasificacion({ code, onLoad }: { code: string | null; onLoad?: (code: string) => void }) {
   const [state, setState] = useState<State | null>(null);
@@ -47,25 +48,13 @@ export function PorraClasificacion({ code, onLoad }: { code: string | null; onLo
   const [msg, setMsg] = useState("");
   const [error, setError] = useState("");
   const [scriptReady, setScriptReady] = useState(false);
-  const [rows, setRows] = useState<Row[]>([]);
-  const [query, setQuery] = useState("");
-  const [loadingMore, setLoadingMore] = useState(false);
   const widgetRef = useRef<HTMLDivElement | null>(null);
   const widgetId = useRef<string | null>(null);
 
-  const fetchPage = useCallback((from: number, q: string) =>
-    fetch(`/api/porra?desde=${from}&q=${encodeURIComponent(q)}`, { cache: "no-store", credentials: "same-origin" })
-      .then((r) => r.json() as Promise<State>), []);
-  const load = useCallback(() => fetchPage(0, query)
-    .then((d) => { if (d && typeof d.open === "boolean") { setState(d); setRows(d.ranking); } })
-    .catch(() => {}), [fetchPage, query]);
-  async function more() {
-    setLoadingMore(true);
-    try {
-      const d = await fetchPage(rows.length, query);
-      setRows((prev) => [...prev, ...d.ranking.filter((r) => !prev.some((x) => x.alias === r.alias))]);
-    } catch { /* sin conexión */ } finally { setLoadingMore(false); }
-  }
+  const load = useCallback(() => fetch("/api/porra", { cache: "no-store", credentials: "same-origin" })
+    .then((r) => r.json() as Promise<State>)
+    .then((d) => { if (d && typeof d.open === "boolean") setState(d); })
+    .catch(() => {}), []);
 
   // Una vez al cargar: estado de la votación.
   useEffect(() => {
@@ -74,20 +63,14 @@ export function PorraClasificacion({ code, onLoad }: { code: string | null; onLo
       .then((s) => setSiteKey(s?.enabled ? s.siteKey : undefined))
       .catch(() => {});
   }, []);
-  // Porras: al cargar y al buscar (con pausa al escribir).
-  useEffect(() => {
-    const t = setTimeout(() => void load(), query ? 300 : 0);
-    return () => clearTimeout(t);
-  }, [load, query]);
-  // Durante el recuento se refresca cada minuto, salvo si alguien está mirando más allá de la primera página.
+  useEffect(() => { void load(); }, [load]);
+  // Durante el recuento, la posición propia se refresca cada minuto.
   const refreshing = Boolean(state && Date.now() >= Date.parse(state.rankingFrom));
   useEffect(() => {
     if (!refreshing) return;
-    const t = setInterval(() => {
-      if (document.visibilityState === "visible" && rows.length <= 50) void load();
-    }, 60_000);
+    const t = setInterval(() => { if (document.visibilityState === "visible") void load(); }, 60_000);
     return () => clearInterval(t);
-  }, [refreshing, load, rows.length]);
+  }, [refreshing, load]);
 
   useEffect(() => { if (state?.mine && !alias) setAlias(state.mine.alias); }, [state?.mine, alias]);
 
@@ -179,49 +162,16 @@ export function PorraClasificacion({ code, onLoad }: { code: string | null; onLo
         <p className={styles.note}>La clasificación todavía no está abierta. Mientras tanto, guarda el enlace de tu porra.</p>
       )}
       {!state.open && !rankingOpen && (
-        <p className={styles.note}>Ya no se pueden apuntar porras. La clasificación se publica a partir de las 21:00 (hora peninsular), con el recuento.</p>
+        <p className={styles.note}>Ya no se pueden apuntar porras.</p>
       )}
 
-      {rankingOpen && (state.total ? (
-        <>
-          <p className={styles.note}>
-            {state.recuentoStatus === "final" ? "Con el 100 % escrutado" : `Con el ${state.scrutinized ?? 0} % escrutado`} · {state.total} porras.
-            Puntos sobre 100: escaños bien colocados, más bonus por acertar el primer partido y si hay mayoría absoluta.
-          </p>
-          {state.myPosition && (
-            <p className={styles.mine}>Vas <strong>{state.myPosition.position}.º</strong> de {state.total} con <strong>{state.myPosition.points}</strong> puntos.</p>
-          )}
-          <label className={styles.search}>
-            <span>Busca un apodo</span>
-            <input type="search" value={query} maxLength={24} onChange={(e) => setQuery(e.target.value)} placeholder="Ej.: tu cuñado" />
-          </label>
-          <ol className={styles.table}>
-            {rows.map((r) => {
-              const seats = seatsOf(decodePrediction(r.code) ?? {});
-              return (
-                <li key={r.alias} className={state.mine?.alias === r.alias ? styles.me : undefined}>
-                  <span className={styles.pos}>{r.position}</span>
-                  <span className={styles.who}>
-                    <a className={styles.alias} href={`${PORRA_PATH}?p=${r.code}`}>{r.alias}</a>
-                    <span className={styles.bar} role="img" aria-label={seats.map((x) => `${x.name} ${x.seats}`).join(", ")}>
-                      {seats.map((x) => <span key={x.id} style={{ width: `${(x.seats / TOTAL_SEATS) * 100}%`, background: x.color }} title={`${x.name} ${x.seats}`} />)}
-                    </span>
-                    <span className={styles.split}>{seats.slice(0, 4).map((x) => `${x.name} ${x.seats}`).join(" · ")}</span>
-                  </span>
-                  <span className={styles.pts}>{r.points}<small> pts</small></span>
-                  <span className={styles.hits}>{r.hits} escaños</span>
-                </li>
-              );
-            })}
-          </ol>
-          {!rows.length && <p className={styles.note}>Ningún apodo coincide con «{query}».</p>}
-          {rows.length < (state.matches ?? state.total) && (
-            <button type="button" className={styles.more} onClick={more} disabled={loadingMore}>
-              {loadingMore ? "Cargando…" : `Ver más (${(state.matches ?? state.total) - rows.length} porras)`}
-            </button>
-          )}
-        </>
-      ) : <p className={styles.note}>La clasificación aparece en cuanto el recuento oficial tenga escaños.</p>)}
+      {rankingOpen && state.myPosition && state.scored && (
+        <p className={styles.mine}>Vas <strong>{state.myPosition.position}.º</strong> de {state.total} con <strong>{state.myPosition.points}</strong> puntos.</p>
+      )}
+      <p className={styles.cta}>
+        <Link className="button" href={PORRA_RANKING_PATH}>Ver la porra de todos →</Link>
+        <span>{rankingOpen ? "Cada participante con su hemiciclo y quién se acerca más." : "Se publica a partir de las 21:00 del 29-N."}</span>
+      </p>
     </section>
   );
 }

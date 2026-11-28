@@ -5,7 +5,7 @@ import { Hemicycle } from "@/components/Hemicycle";
 import { ShareButtons } from "@/components/ShareButtons";
 import { PorraClasificacion } from "@/components/PorraClasificacion";
 import {
-  MAJORITY, PORRA_PARTIES, PORRA_PATH, RESULT_2023, TOTAL_SEATS,
+  MAJORITY, PORRA_PARTIES, PORRA_PATH, PORRA_RANKING_PATH, RESULT_2023, TOTAL_SEATS,
   assigned, decodePrediction, emptyPrediction, encodePrediction, ranking, scorePrediction, summaryText,
   type Prediction,
 } from "@/lib/porra";
@@ -79,7 +79,10 @@ export function PorraHemiciclo({ headingLevel = 2, initial = null, showPageLink 
             compáralo con el recuento oficial.
           </p>
         </div>
-        {showPageLink && <Link className="text-link" href={PORRA_PATH}>Abrir la porra ↗</Link>}
+        <div className={styles.headLinks}>
+          {showPageLink && <Link className="text-link" href={PORRA_PATH}>Abrir la porra ↗</Link>}
+          <Link className="button small" href={PORRA_RANKING_PATH}>Ver la porra de todos →</Link>
+        </div>
       </div>
 
       {fromLink && (

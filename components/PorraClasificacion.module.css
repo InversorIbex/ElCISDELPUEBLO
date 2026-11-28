@@ -184,3 +184,12 @@
     display: none;
   }
 }
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--muted);
+}
