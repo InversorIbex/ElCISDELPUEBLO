@@ -11,7 +11,7 @@ import type { RankedEntry } from "@/lib/porra";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const TOP = 100;
+const PAGE = 50;
 const json = (body: unknown, status = 200, extra: Record<string, string> = {}) =>
   Response.json(body, { status, headers: { "Cache-Control": "no-store", ...extra } });
 
@@ -33,7 +33,10 @@ async function ranking() {
  * y con escaños en el recuento, la clasificación. Nunca devuelve medias ni
  * sumas de las porras.
  */
-export async function GET() {
+export async function GET(req: Request) {
+  const params = new URL(req.url).searchParams;
+  const from = Math.max(0, Math.min(1_000_000, Number.parseInt(params.get("desde") ?? "0", 10) || 0));
+  const q = (params.get("q") ?? "").normalize("NFC").trim().toLowerCase().slice(0, 24);
   const enabled = isLiveVoteConfigured();
   const base = { enabled, open: isPorraOpen(), closesAt: PORRA_CLOSES_AT.toISOString(), rankingFrom: PORRA_RANKING_FROM.toISOString() };
   if (!enabled) return json({ ...base, mine: null, ranking: [], total: 0, myPosition: null });
@@ -43,10 +46,13 @@ export async function GET() {
     const r = Date.now() >= PORRA_RANKING_FROM.getTime() ? await ranking() : null;
     const list = r?.ranking ?? [];
     const pos = mine ? list.findIndex((x) => x.alias === mine.alias) : -1;
+    const all = list.map((x, i) => ({ position: i + 1, ...x }));
+    const found = q ? all.filter((x) => x.alias.toLowerCase().includes(q)) : all;
     return json({
       ...base, mine,
       recuentoStatus: r?.status ?? null, scrutinized: r?.scrutinized ?? null,
-      ranking: list.slice(0, TOP).map((x, i) => ({ position: i + 1, ...x })),
+      ranking: found.slice(from, from + PAGE),
+      matches: found.length,
       total: list.length,
       myPosition: pos >= 0 ? { position: pos + 1, ...list[pos] } : null,
     });

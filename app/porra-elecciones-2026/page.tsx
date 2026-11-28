@@ -13,7 +13,10 @@ type Props = { searchParams: Promise<{ p?: string }> };
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const p = decodePrediction((await searchParams).p);
-  const image = p ? `/api/porra-imagen?p=${encodePrediction(p)}` : "/api/porra-imagen";
+  const code = p ? encodePrediction(p) : null;
+  const image = code ? `/api/porra-imagen?p=${code}` : "/api/porra-imagen";
+  // og:url con la porra: WhatsApp y Facebook vuelven a leer esa dirección y, sin ?p, enseñarían la porra vacía.
+  const shareUrl = code ? `${PORRA_PATH}?p=${code}` : PORRA_PATH;
   const title = p ? summaryText(p) : TITLE;
   return {
     title: p ? "Mi porra del 29-N" : TITLE,
@@ -24,7 +27,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     ],
     alternates: { canonical: PORRA_PATH },
     robots: p ? { index: false, follow: true } : undefined,
-    openGraph: { type: "website", url: PORRA_PATH, title, description: "¿Y la tuya? Reparte los 350 escaños y compárala con el recuento del 29-N.", images: [{ url: image, width: 1200, height: 630, alt: "Hemiciclo del Congreso con una porra de escaños" }] },
+    openGraph: { type: "website", url: shareUrl, title, description: "¿Y la tuya? Reparte los 350 escaños y compárala con el recuento del 29-N.", images: [{ url: image, width: 1200, height: 630, alt: "Hemiciclo del Congreso con una porra de escaños" }] },
     twitter: { card: "summary_large_image", title, description: "Haz tu porra del Congreso para el 29-N.", images: [image] },
   };
 }

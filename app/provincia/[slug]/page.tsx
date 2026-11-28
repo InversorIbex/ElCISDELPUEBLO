@@ -24,9 +24,9 @@ export async function generateMetadata({ params }: Props) {
   const n = displayName(p.name);
   const seats = SEATS.get(p.code);
   return {
-    title: `Elecciones generales 2026 en ${n}: candidaturas, escaños y encuesta en vivo`,
-    description: `¿A quién votarías en ${n} el 29 de noviembre? ${candidaciesForProvince(p.code).length} candidaturas proclamadas al Congreso${seats ? `, ${seats} ${seats === 1 ? "escaño" : "escaños"} en juego` : ""}. Vota en el sondeo ciudadano y mira los resultados de ${n} en vivo.`,
-    keywords: [`elecciones ${n} 2026`, `encuesta ${n}`, `candidatos ${n} Congreso`, `sondeo elecciones ${n}`, `escaños ${n}`, `listas electorales ${n}`],
+    title: `Elecciones generales 29-N en ${n}: candidaturas, escaños en juego y cómo votar`,
+    description: `¿A quién votarías en ${n} el 29 de noviembre? ${candidaciesForProvince(p.code).length} candidaturas proclamadas al Congreso${seats ? `, ${seats} ${seats === 1 ? "escaño" : "escaños"} en juego` : ""}. Mira tu papeleta, cuánto vale tu voto en ${n}, haz tu porra y sigue el recuento en directo desde las 21:00.`,
+    keywords: [`elecciones ${n} 2026`, `elecciones generales ${n}`, `resultados elecciones ${n}`, `papeleta ${n}`, `quién se presenta en ${n}`, `encuesta ${n}`, `candidatos ${n} Congreso`, `sondeo elecciones ${n}`, `escaños ${n}`, `listas electorales ${n}`],
     alternates: { canonical: provincePath(p) },
     openGraph: { url: provincePath(p), title: `Elecciones generales 2026 en ${n}` },
   };
